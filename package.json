@@ -4,16 +4,24 @@
   "description": "Taking a very big 3d game, and making it 2d, small and bad woooooooohoooooooooo",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Robiis/2DCSGO.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Robiis/2DCSGO/issues"
   },
-  "homepage": "https://github.com/Robiis/2DCSGO#readme"
+  "homepage": "https://github.com/Robiis/2DCSGO#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "path": "^0.12.7",
+    "socket.io": "^4.0.1"
+  }
 }
