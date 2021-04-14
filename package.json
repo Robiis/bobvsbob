@@ -1,0 +1,19 @@
+{
+  "name": "epic",
+  "version": "1.0.0",
+  "description": "Taking a very big 3d game, and making it 2d, small and bad woooooooohoooooooooo",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robiis/2DCSGO.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Robiis/2DCSGO/issues"
+  },
+  "homepage": "https://github.com/Robiis/2DCSGO#readme"
+}
