@@ -1,13 +1,14 @@
 // settings
 focus();
-player = new client(50, 50, "#F38181", "hehe");
-let canvas = document.getElementById('myCanvas');
+let player = new client(50, 50, "#F38181", "hehe");
+let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 let rightPressed = false;
 let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
+
 // constants
 const KeyboardHelper = {
   left: 65,
@@ -15,11 +16,11 @@ const KeyboardHelper = {
   up: 87,
   down: 83,
   reload: 82
-}; //A,D,W,S
+}; // A, D, W, S
 
 // eventListeners
-document.addEventListener('keydown', keyDownChecker, false);
-document.addEventListener('keyup', keyUpChecker, false);
+document.addEventListener("keydown", keyDownChecker, false);
+document.addEventListener("keyup", keyUpChecker, false);
 
 // loop--------------------------------------------------------------------------------------------------------------
 function redraw() {
