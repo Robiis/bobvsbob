@@ -3,6 +3,14 @@ const { room, newroom } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
+// generate a random username
+const num = Math.floor(Math.random() * 9999);
+document.getElementById("username").placeholder = `coolusername${num}`;
+
+// write to the lobby link
+const link = window.location.href;
+document.getElementById("lobby-link").innerHTML = link;
+
 // connect to socket.io
 const socket = io();
 
@@ -16,6 +24,10 @@ if (newroom !== undefined) {
 // if user joins a room
 socket.on("joined-room", function(data) {
   console.log(`Joined room: ${data.roomId}, admin: ${data.admin}`);
+
+  if (data.admin) {
+    document.getElementById("admin").style.display = "block";
+  }
 });
 
 // if another user joins the room

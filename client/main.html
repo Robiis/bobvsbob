@@ -4,14 +4,48 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <script src="socket.io/socket.io.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js" integrity="sha512-aTKlYRb1QfU1jlF3k+aS4AqTpnTXci4R79mkdie/bp6Xm51O5O3ESAYhvg6zoicj/PD6VYY0XrYwsWLcvGiKZQ==" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css">
-  <title>Document</title>
+
+  <title>Lobby - 2DCSGO</title>
 </head>
 <body>
+  <div id="lobby" class="box lobby">
+    <h1>Lobby</h1>
+    <h3>Lobby link</h3>
+    <p id="lobby-link"></p>
+    <input type="submit" value="Copy" class="button" onclick="copyTextToClipboard(window.location.href); return false;">
+    <h3>Players</h3>
+    <ul>
+      <li>
+        Roberts
+      </li>
+      <li>
+        Roberts
+      </li>
+      <li>
+        Roberts
+      </li>
+      <li>
+        Roberts
+      </li>
+    </ul>
+    <h3>Username</h3>
+    <input type="username" class="input" id="username" autocomplete="off">
+    <input type="submit" value="Change Username" class="button" onclick="return false;">
+
+    <div id="admin">
+      <h3>Start</h3>
+      <input type="submit" value="Start the Game" class="button" onclick="return false;">
+    </div>
+  </div>
+
   <canvas id="myCanvas" width=1600 height=900></canvas>
+
   <script src="client.js"></script>
+  <script src="functions/clientFunctions.js"></script>
   <!--classes-->
   <script src="classes/player.js"></script>
   <!--functions-->

@@ -4,12 +4,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../style.css">
   <title>Join a room - 2D CSGO</title>
 </head>
 <body>
-  <form action="../main.html">
-    <input type="text" name="room" id="room" placeholder="Enter room id...">
-    <button>Join room</button>
-  </form>
+  <div class="box">
+    <h1>Join a room</h1>
+    <form action="../main.html">
+      <input type="text" name="room" class="input" placeholder="Enter room id..." autocomplete="off">
+      <input type="submit" class="button" value="Join">
+    </form>
+    <a href="./createRoom.html">Create a new room instead</a>
+  </div>
 </body>
 </html>
