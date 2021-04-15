@@ -27,9 +27,21 @@ function redraw() {
   let now = performance.now();
   let dt = now - lastUpdate;
 
+  ctx.setTransform(1,0,0,1,0,0);//////////////matrix
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+ // const camX = (-player.x + canvas.width / 2) / 1.2;//
+  //const camY = (-player.y + canvas.height / 2) / 1.2;//
+  var camX = clamp(-player.x + canvas.width/2, 0, 3000 - canvas.width);
+  var camY = clamp(-player.y + canvas.height/2, 0, 2000 - canvas.height);
+  ctx.translate(camX, camY);///
+
+
   map(50);
   dirChange();
+
+
+  player.draw_body();
 
   lastUpdate = now;
   requestAnimationFrame(redraw);

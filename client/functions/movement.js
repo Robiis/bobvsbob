@@ -1,5 +1,5 @@
 // changes the player's direction
-function dirChange(){
+/*function dirChange(){
   if (rightPressed){
     player.movement.dir = 1;
   }
@@ -15,6 +15,30 @@ function dirChange(){
   if (reloadPressed){
     console.log(5);
   }
+}*/
+
+function dirChange(){
+  if (rightPressed){
+    player.x += 5;
+  }
+  if (leftPressed){
+    player.x -= 5;
+  }
+  if (upPressed){
+    player.y -= 5;
+  }
+  if (downPressed){
+    player.y += 5;
+  }
+  if (reloadPressed){
+    console.log(5);
+  }
+}
+
+function clamp(value, min, max){
+  if(value < min) return min;
+  else if(value > max) return max;
+  return value;
 }
 
 /*

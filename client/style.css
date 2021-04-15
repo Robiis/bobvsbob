@@ -10,7 +10,7 @@ body {
 }
 
 #myCanvas {
-  display: none;
+  display: block;/*none/block*/
 }
 
 #admin { 
@@ -18,7 +18,7 @@ body {
 }
 
 #lobby { 
-  display: block;
+  display: none;/*none/block*/
 }
 
 .box {
