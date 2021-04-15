@@ -23,7 +23,6 @@ function copyTextToClipboard(text) {
   // Avoid flash of the white box if rendered for any reason.
   textArea.style.background = "transparent";
 
-
   textArea.value = text;
 
   document.body.appendChild(textArea);
@@ -31,25 +30,12 @@ function copyTextToClipboard(text) {
   textArea.select();
 
   try {
-    var successful = document.execCommand("copy");
-    var msg = successful ? "successful" : "unsuccessful";
-    console.log("Copying text command was " + msg);
+    let successful = document.execCommand("copy");
+    let msg = successful ? "successful" : "unsuccessful";
+    console.log("Copying was " + msg);
   } catch (err) {
-    console.log("Oops, unable to copy");
+    console.log("There was a problem copying");
   }
 
   document.body.removeChild(textArea);
 }
-
-
-let copyBobBtn = document.querySelector(".js-copy-bob-btn");
-let copyJaneBtn = document.querySelector(".js-copy-jane-btn");
-
-copyBobBtn.addEventListener("click", function(event) {
-  copyTextToClipboard("Bob");
-});
-
-
-copyJaneBtn.addEventListener("click", function(event) {
-  copyTextToClipboard("Jane");
-});

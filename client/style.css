@@ -9,8 +9,16 @@ body {
   font-family: sans-serif;
 }
 
-#myCanvas, #admin {
+#myCanvas {
   display: none;
+}
+
+#admin { 
+  display: none;
+}
+
+#lobby { 
+  display: block;
 }
 
 .box {
