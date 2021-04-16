@@ -13,6 +13,20 @@ body {
   display: none;/*none/block*/
 }
 
+@media screen and (max-width: 1600px) {
+  canvas {
+    width: 1200px;/*Robert tu labāk neaiztiec šo citādāk būs ļoti slikti*/
+    height: 675px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  canvas {
+    width: 800px;/*šo arī neaiztiec*/
+    height: 450px;
+  }
+}
+
 #admin { 
   display: none;
 }

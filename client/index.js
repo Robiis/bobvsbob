@@ -9,6 +9,7 @@ let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
 let canvasMagnificationRatio = 2;
+
 // constants
 const KeyboardHelper = {
   left: 65,
@@ -17,6 +18,12 @@ const KeyboardHelper = {
   down: 83,
   reload: 82
 }; // A, D, W, S
+
+//images
+const grass = new Image();
+grass.src = "grass.png";
+
+gaidaAtteluIeladi(function(){},grass);
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
@@ -39,7 +46,7 @@ function redraw() {
   ctx.translate(camX, camY);///
 
   //draws map
-  map(50, canvasMagnificationRatio);
+  map(50, canvasMagnificationRatio, grass);
   dirChange();
 
   ctx.fillRect(-25,-25,50,50)
@@ -55,14 +62,14 @@ redraw();
 
 
 /*
-camera movement
-map design
-map store
-border
-shooting
-HP
-obsticles
-ieroči
+camera movement -- done
+map design -- 
+map store --
+border --
+shooting --
+HP -- 
+obsticles --
+ieroči --
 
 
 */
