@@ -51,6 +51,11 @@ socket.on("redirect", function(destination) {
   window.location.href = destination;
 });
 
+// if server makes you admin
+socket.on("new-admin", function() {
+  console.log("You are now an admin");
+});
+
 // if user is diconnected from the server
 socket.on("disconnect", function() {
   console.log("disconnected");
