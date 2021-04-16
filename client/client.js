@@ -3,9 +3,12 @@ const { room, newroom } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
+const user = {};
+let users = [];
+
 // generate a random username
-const num = Math.floor(Math.random() * 9999);
-document.getElementById("username").placeholder = `coolusername${num}`;
+user.username = `coolusername${Math.floor(Math.random() * 9999)}`;
+document.getElementById("username").placeholder = user.username;
 
 // write to the lobby link
 const link = window.location.href;
@@ -16,28 +19,52 @@ const socket = io();
 
 // send room id req to server
 if (newroom !== undefined) {
-  socket.emit("new-room-id", newroom);
+  socket.emit("new-room-id", { roomId: newroom, username: user.username });
 } else {
-  socket.emit("room-id", room);
+  socket.emit("room-id", { roomId: room, username: user.username });
 }
 
 // if user joins a room
-socket.on("joined-room", function(data) {
-  console.log(`Joined room: ${data.roomId}, admin: ${data.admin}`);
+socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
+  console.log(`Joined room: ${roomId}, admin: ${admin}`);
 
-  if (data.admin) {
+  users = newUsers;
+  user.id = id;
+
+  createAPlayerUsername(id, user.username);
+  if (admin) {
+    user.admin = true;
     document.getElementById("admin").style.display = "block";
+    adminPlayerCrown(id, user.username);
+  } else {
+    user.admin = false;
   }
+
+  newUsers.forEach(function(cuser) {
+    createAPlayerUsername(cuser.id, cuser.username);
+
+    if (cuser.admin) {
+      adminPlayerCrown(cuser.id, cuser.username);
+    }
+  });
 });
 
 // if another user joins the room
-socket.on("connect-user", function(id) {
-  console.log(`User ${id} connected`);
+socket.on("connect-user", function({ id, username, admin }) {
+  console.log(`User ${username} connected`);
+  createAPlayerUsername(id, username);
+  users.push({ id, username, admin });
+  console.log(user);
+  console.log(users);
 });
 
 // if a user disconnects from the room
 socket.on("disconnect-user", function(id) {
-  console.log(`User ${id} disconnected`);
+  console.log(`User ${getUserById(users, id).username} disconnected`);
+  removeAPlayerUsername(id);
+  users = users.filter(cuser => cuser.id !== id);
+  console.log(user);
+  console.log(users);
 });
 
 // if a message from the server is sent
@@ -51,10 +78,31 @@ socket.on("redirect", function(destination) {
   window.location.href = destination;
 });
 
-// if server makes you admin
-socket.on("new-admin", function() {
-  console.log("You are now an admin");
+// if admin changes...
+socket.on("admin-change", function(id) {
+  if (user.id !== id) {
+    const username = getUserById(users, id).username;
+    adminPlayerCrown(id, username);
+  } else {
+    console.log("You are now an admin");
+    document.getElementById("admin").style.display = "block";
+    user.admin = true;
+    adminPlayerCrown(id, user.username);
+  }
+  console.log(user);
+  console.log(users);
 });
+
+// if a player updates their username
+socket.on("change-username", function({ id, newUsername }) {
+  getUserById(users, id).username = newUsername;
+  updatePlayerUsername(id, newUsername);
+  if (getUserById(users, id).admin) {
+    adminPlayerCrown(id, newUsername);
+  } 
+  console.log(user);
+  console.log(users);
+}); 
 
 // if user is diconnected from the server
 socket.on("disconnect", function() {

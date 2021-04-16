@@ -7,6 +7,7 @@
 
   <script src="socket.io/socket.io.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js" integrity="sha512-aTKlYRb1QfU1jlF3k+aS4AqTpnTXci4R79mkdie/bp6Xm51O5O3ESAYhvg6zoicj/PD6VYY0XrYwsWLcvGiKZQ==" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
   <link rel="stylesheet" href="style.css">
 
   <title>Lobby - 2DCSGO</title>
@@ -14,27 +15,17 @@
 <body>
   <div id="lobby" class="box lobby">
     <h1>Lobby</h1>
+
     <h3>Lobby link</h3>
     <p id="lobby-link"></p>
     <input type="submit" value="Copy" class="button" onclick="copyTextToClipboard(window.location.href); return false;">
+
     <h3>Players</h3>
-    <ul>
-      <li>
-        Roberts
-      </li>
-      <li>
-        Roberts
-      </li>
-      <li>
-        Roberts
-      </li>
-      <li>
-        Roberts
-      </li>
-    </ul>
+    <ul id="players-list"></ul>
+
     <h3>Username</h3>
     <input type="username" class="input" id="username" autocomplete="off">
-    <input type="submit" value="Change Username" class="button" onclick="return false;">
+    <input type="submit" value="Change Username" class="button" onclick="changeUsername(); return false;">
 
     <div id="admin">
       <h3>Start</h3>
@@ -42,7 +33,7 @@
     </div>
   </div>
 
-  <canvas id="myCanvas" width=800 height=450></canvas>
+  <canvas id="myCanvas" width=1600 height=900></canvas>
 
   <script src="client.js"></script>
   <script src="functions/clientFunctions.js"></script>

@@ -1,4 +1,4 @@
-// taken from https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+// copy the text to clipboard
 function copyTextToClipboard(text) {
   var textArea = document.createElement("textarea");
 
@@ -38,4 +38,59 @@ function copyTextToClipboard(text) {
   }
 
   document.body.removeChild(textArea);
+}
+
+// create a new player username under the "players" in lobby
+function createAPlayerUsername(id, username) {
+  const userTag = document.createElement("li");
+  const userText = document.createTextNode(username);
+
+  userTag.appendChild(userText);
+  userTag.id = `id-${id}`;
+  document.getElementById("players-list").appendChild(userTag);
+}
+
+// remove a new player username under the "players" in lobby
+function removeAPlayerUsername(id) {
+  document.getElementById("players-list").removeChild(document.getElementById(`id-${id}`));
+}
+
+// if an user updates their username
+function updatePlayerUsername(id, newUsername) {
+  const userTag = document.getElementById(`id-${id}`);
+  console.log(userTag);
+  userTag.innerHTML = newUsername;
+  userTag.id = `id-${id}`;
+}
+
+// create a new icon for the admin username under the "players" in lobby
+function adminPlayerCrown(id, username) {
+  const userTag = document.createElement("i");
+  const userText = document.createTextNode("");
+  const parent = document.getElementById(`id-${id}`);
+
+  parent.innerHTML = username + " "; 
+  userTag.appendChild(userText);
+  userTag.className = "fas fa-crown crown";
+  parent.appendChild(userTag);
+}
+
+// when the client changes their username
+function changeUsername() {
+  const input = document.getElementById("username");
+  user.username = input.value;
+
+  socket.emit("change-username", input.value);
+  input.placeholder = input.value;
+  input.value = "";
+
+  updatePlayerUsername(user.id, user.username);
+  if (user.admin) {
+    adminPlayerCrown(user.id, user.username);
+  } 
+}
+
+// get user object by id
+function getUserById(users, id) {
+  return users.find(user => user.id === id);
 }

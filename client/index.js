@@ -8,7 +8,7 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
-let canvasMagnificationRatio = 3;
+let canvasMagnificationRatio = 2;
 // constants
 const KeyboardHelper = {
   left: 65,

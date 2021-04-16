@@ -19,20 +19,30 @@ let users = [];
 // when user connects
 io.on("connection", function(socket) {
   // when user joins a room
-  socket.on("room-id", function(roomId) {
+  socket.on("room-id", function({ roomId, username }) {
+    console.log(getRoomById(rooms, roomId));
     if (getRoomById(rooms, roomId)) {
       // add user to users
       users.push({
         id: socket.id,
-        roomId: roomId,
+        roomId,
+        username,
         admin: false
       });
 
       // connect user to the room
       getRoomById(rooms, roomId).users.push(socket.id);
       socket.join(roomId);
-      socket.emit("joined-room", { roomId, admin: false });
-      io.to(roomId).emit("connect-user", socket.id);
+
+      const usersForClient = [];
+      users.forEach(function(user) { 
+        if (user.roomId === roomId && user.id !== socket.id) {
+          usersForClient.push({ id: user.id, username: user.username, admin: user.admin }) ;
+        }
+      });
+
+      socket.emit("joined-room", { id: socket.id, roomId, admin: false, newUsers: usersForClient });
+      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: false });
 
       console.log(rooms);
       console.log(users);
@@ -42,20 +52,28 @@ io.on("connection", function(socket) {
   });
 
   // when user creates a new room
-  socket.on("new-room-id", function(roomId) {
+  socket.on("new-room-id", function({ roomId, username }) {
     if (!getRoomById(rooms, roomId)) {
       // add user to users
       users.push({
         id: socket.id,
-        roomId: roomId,
+        roomId,
+        username,
         admin: true
+      });
+
+      const usersForClient = [];
+      users.forEach(function(user) { 
+        if (user.roomId === roomId && user.id !== socket.id) {
+          usersForClient.push({ id: user.id, username: user.username, admin: user.admin }) ;
+        }
       });
       
       // create a new room and join the user to it
       rooms.push({ roomId, users: [socket.id] });
       socket.join(roomId);
-      socket.emit("joined-room", { roomId, admin: true });
-      io.to(roomId).emit("connect-user", socket.id);
+      socket.emit("joined-room", { id: socket.id, roomId, admin: true, newUsers: usersForClient });
+      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: true });
 
       console.log(rooms);
       console.log(users);
@@ -64,6 +82,13 @@ io.on("connection", function(socket) {
       socket.emit("redirect", `/main.html?room=${roomId}`);
     }
   });
+
+  // when a socket changes their username
+  socket.on("change-username", function(username) {
+    const user = getUserById(users, socket.id);
+    socket.broadcast.to(user.roomId).emit("change-username", { id: socket.id, newUsername: username });
+    user.username = username;
+  }); 
 
   // when user disconnects
   socket.on("disconnect", function() {
@@ -81,15 +106,15 @@ io.on("connection", function(socket) {
         // set another player to admin, if player was admin
         if (user.admin) {
           const newAdminId = room.users[Math.floor(Math.random() * room.users.length)];
-          io.to(newAdminId).emit("new-admin");
+
+          io.to(room.roomId).emit("admin-change", newAdminId);
           getUserById(users, newAdminId).admin = true;
-          console.log("new admin");
         }
       }
 
       // delete user from users
       users = users.filter(cuser => cuser.id !== user.id);
-      io.to(user.roomId).emit("msg", `User ${socket.id} disconnected`);
+      io.to(user.roomId).emit("disconnect-user", user.id);
     }
     console.log(rooms);
     console.log(users);
