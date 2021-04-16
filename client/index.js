@@ -8,7 +8,7 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
-
+let canvasMagnificationRatio = 3;
 // constants
 const KeyboardHelper = {
   left: 65,
@@ -32,15 +32,17 @@ function redraw() {
 
  // const camX = (-player.x + canvas.width / 2) / 1.2;//
   //const camY = (-player.y + canvas.height / 2) / 1.2;//
-  var camX = clamp(-player.x + canvas.width/2, 0, 1600 - canvas.width);
-  var camY = clamp(-player.y + canvas.height/2, 0, 900 - canvas.height);
+  // this "if the "
+  var camX = clamp(-player.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
+  var camY = clamp(-player.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);///
 
 
-  map(50);
+  map(50, canvasMagnificationRatio);
   dirChange();
 
   ctx.fillRect(-25,-25,50,50)
+  ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
   player.draw_body();
 
   lastUpdate = now;
