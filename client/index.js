@@ -32,15 +32,15 @@ function redraw() {
 
  // const camX = (-player.x + canvas.width / 2) / 1.2;//
   //const camY = (-player.y + canvas.height / 2) / 1.2;//
-  var camX = clamp(-player.x + canvas.width/2, 0, 3000 - canvas.width);
-  var camY = clamp(-player.y + canvas.height/2, 0, 2000 - canvas.height);
+  var camX = clamp(-player.x + canvas.width/2, 0, 1600 - canvas.width);
+  var camY = clamp(-player.y + canvas.height/2, 0, 900 - canvas.height);
   ctx.translate(camX, camY);///
 
 
   map(50);
   dirChange();
 
-
+  ctx.fillRect(-25,-25,50,50)
   player.draw_body();
 
   lastUpdate = now;
