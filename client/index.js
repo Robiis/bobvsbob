@@ -27,17 +27,18 @@ function redraw() {
   let now = performance.now();
   let dt = now - lastUpdate;
 
+  // camera movement
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
- // const camX = (-player.x + canvas.width / 2) / 1.2;//
+  // const camX = (-player.x + canvas.width / 2) / 1.2;//
   //const camY = (-player.y + canvas.height / 2) / 1.2;//
-  // this "if the "
+  // camera movement
   var camX = clamp(-player.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
   var camY = clamp(-player.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);///
 
-
+  //draws map
   map(50, canvasMagnificationRatio);
   dirChange();
 
