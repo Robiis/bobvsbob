@@ -51,3 +51,17 @@ function redraw() {
 
 let lastUpdate = performance.now();
 redraw();
+
+
+/*
+camera movement
+map design
+map store
+border
+shooting
+HP
+obsticles
+ieroči
+
+
+*/
