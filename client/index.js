@@ -10,8 +10,6 @@ let downPressed = false;
 let reloadPressed = false;
 let canvasMagnificationRatio = 2; 
 
-
-
 // constants
 const KeyboardHelper = {
   left: 65,
@@ -22,12 +20,10 @@ const KeyboardHelper = {
 }; // A, D, W, S
 
 //images
-
 const grass = new Image();
 grass.src = "grass.png";
 
 gaidaAtteluIeladi(function(){},grass);
-
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
@@ -68,12 +64,12 @@ redraw();
 /*
 camera movement -- done
 map design -- 
-map store
-border
-shooting
-HP
-obsticles
-ieroči
+map store --
+border --
+shooting --
+HP -- 
+obsticles --
+ieroči --
 
 
 */
