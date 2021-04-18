@@ -70,6 +70,6 @@ shooting --
 HP -- 
 obsticles --
 ieroči --
-
+cartoon rooftop top view
 
 */
