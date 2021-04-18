@@ -10,7 +10,7 @@ body {
 }
 
 #myCanvas {
-  display: block;/*none/block*/
+  display: none;/*none/block*/
 }
 
 @media screen and (max-width: 1600px) {
@@ -121,5 +121,9 @@ body {
 .lobby li {
   padding: 0;
   margin: 0;
+}
+
+.crown {
+  color: rgb(255,215,0);
 }
 
