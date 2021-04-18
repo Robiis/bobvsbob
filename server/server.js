@@ -71,7 +71,7 @@ io.on("connection", function(socket) {
       });
       
       // create a new room and join the user to it
-      rooms.push({ roomId, users: [socket.id] });
+      rooms.push({ roomId, gameStarted: false, users: [socket.id] });
       socket.join(roomId);
       socket.emit("joined-room", { id: socket.id, roomId, admin: true, newUsers: usersForClient });
       socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: true });
@@ -90,6 +90,15 @@ io.on("connection", function(socket) {
     socket.broadcast.to(user.roomId).emit("change-username", { id: socket.id, newUsername: username });
     user.username = username;
   }); 
+
+  socket.on("start-game", function() {
+    const user = getUserById(users, socket.id);
+    const room = getRoomById(rooms, user.roomId);
+    if (user.admin && room.gameStarted === false) {
+      room.gameStarted = true;
+      io.to(room.roomId).emit("start-game");
+    }
+  });
 
   // when user disconnects
   socket.on("disconnect", function() {

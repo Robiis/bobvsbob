@@ -32,7 +32,7 @@ body {
 }
 
 #lobby { 
-  display: block;/*none/block*/
+  display: none;/*none/block*/
 }
 
 .box {

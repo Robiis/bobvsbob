@@ -39,7 +39,7 @@ function redraw() {
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
   // const camX = (-player.x + canvas.width / 2) / 1.2;//
-  //const camY = (-player.y + canvas.height / 2) / 1.2;//
+  // const camY = (-player.y + canvas.height / 2) / 1.2;//
   // camera movement
   var camX = clamp(-player.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
   var camY = clamp(-player.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
@@ -54,12 +54,10 @@ function redraw() {
   player.draw_body();
 
   lastUpdate = now;
-  requestAnimationFrame(redraw);
+  if (clientState.gameStarted) {
+    requestAnimationFrame(redraw);
+  }
 }
-
-let lastUpdate = performance.now();
-redraw();
-
 
 /*
 camera movement -- done

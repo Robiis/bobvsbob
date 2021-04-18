@@ -58,7 +58,6 @@ function removeAPlayerUsername(id) {
 // if an user updates their username
 function updatePlayerUsername(id, newUsername) {
   const userTag = document.getElementById(`id-${id}`);
-  console.log(userTag);
   userTag.innerHTML = newUsername;
   userTag.id = `id-${id}`;
 }
@@ -75,6 +74,11 @@ function adminPlayerCrown(id, username) {
   parent.appendChild(userTag);
 }
 
+function clientPlayerSign(id) {
+  const parent = document.getElementById(`id-${id}`);
+  parent.innerHTML += " (You)";
+}
+
 // when the client changes their username
 function changeUsername() {
   const input = document.getElementById("username");
@@ -88,6 +92,13 @@ function changeUsername() {
   if (user.admin) {
     adminPlayerCrown(user.id, user.username);
   } 
+  clientPlayerSign(user.id);
+}
+
+function startGame() {
+  if (user.admin) {
+    socket.emit("start-game");
+  }
 }
 
 // get user object by id

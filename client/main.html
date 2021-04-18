@@ -20,7 +20,7 @@
     <p id="lobby-link"></p>
     <input type="submit" value="Copy" class="button" onclick="copyTextToClipboard(window.location.href); return false;">
 
-    <h3>Players</h3>
+    <h3 id="players-count">Players</h3>
     <ul id="players-list"></ul>
 
     <h3>Username</h3>
@@ -29,7 +29,7 @@
 
     <div id="admin">
       <h3>Start</h3>
-      <input type="submit" value="Start the Game" class="button" onclick="return false;">
+      <input type="submit" value="Start the Game" class="button" onclick="startGame(); return false;">
     </div>
   </div>
   
@@ -40,7 +40,7 @@
   <!--classes-->
   <script src="classes/player.js"></script>
   <!--functions-->
-  <script src="functions/image-waiting.js"></script>
+  <script src="functions/imageWaiting.js"></script>
   <script src="functions/map.js"></script>
   <script src="functions/keys.js"></script>
   <script src="functions/movement.js"></script>

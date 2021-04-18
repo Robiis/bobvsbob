@@ -3,8 +3,17 @@ const { room, newroom } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
+// variables
+const clientState = { gameStarted: false };
 const user = {};
+let lastUpdate;
 let users = [];
+
+// element selection
+const lobbyDiv = document.getElementById("lobby");
+const canvasDiv = document.getElementById("myCanvas");
+const adminDiv = document.getElementById("admin");
+const playerCountDiv = document.getElementById("players-count");
 
 // generate a random username
 user.username = `coolusername${Math.floor(Math.random() * 9999)}`;
@@ -34,11 +43,12 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
   createAPlayerUsername(id, user.username);
   if (admin) {
     user.admin = true;
-    document.getElementById("admin").style.display = "block";
+    adminDiv.style.display = "block";
     adminPlayerCrown(id, user.username);
   } else {
     user.admin = false;
   }
+  clientPlayerSign(id);
 
   newUsers.forEach(function(cuser) {
     createAPlayerUsername(cuser.id, cuser.username);
@@ -47,6 +57,9 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
       adminPlayerCrown(cuser.id, cuser.username);
     }
   });
+
+  playerCountDiv.innerHTML = `Players (${users.length + 1})`;
+  lobbyDiv.style.display = "block";
 });
 
 // if another user joins the room
@@ -54,8 +67,7 @@ socket.on("connect-user", function({ id, username, admin }) {
   console.log(`User ${username} connected`);
   createAPlayerUsername(id, username);
   users.push({ id, username, admin });
-  console.log(user);
-  console.log(users);
+  playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
 // if a user disconnects from the room
@@ -63,8 +75,7 @@ socket.on("disconnect-user", function(id) {
   console.log(`User ${getUserById(users, id).username} disconnected`);
   removeAPlayerUsername(id);
   users = users.filter(cuser => cuser.id !== id);
-  console.log(user);
-  console.log(users);
+  playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
 // if a message from the server is sent
@@ -85,12 +96,11 @@ socket.on("admin-change", function(id) {
     adminPlayerCrown(id, username);
   } else {
     console.log("You are now an admin");
-    document.getElementById("admin").style.display = "block";
+    adminDiv.style.display = "block";
     user.admin = true;
     adminPlayerCrown(id, user.username);
+    clientPlayerSign(id);
   }
-  console.log(user);
-  console.log(users);
 });
 
 // if a player updates their username
@@ -100,9 +110,17 @@ socket.on("change-username", function({ id, newUsername }) {
   if (getUserById(users, id).admin) {
     adminPlayerCrown(id, newUsername);
   } 
-  console.log(user);
-  console.log(users);
 }); 
+
+// when admin starts the game
+socket.on("start-game", function() {
+  lobbyDiv.style.display = "none";
+  clientState.gameStarted = true;
+  canvasDiv.style.display = "block";
+
+  lastUpdate = performance.now();
+  redraw();
+});
 
 // if user is diconnected from the server
 socket.on("disconnect", function() {
