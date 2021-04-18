@@ -19,19 +19,19 @@
 
 function dirChange(){
   if (rightPressed){
-    player.x += 5;
+    player.x += 10;
   }
   if (leftPressed){
-    player.x -= 5;
+    player.x -= 10;
   }
   if (upPressed){
-    player.y -= 5;
+    player.y -= 10;
   }
   if (downPressed){
-    player.y += 5;
+    player.y += 10;
   }
   if (reloadPressed){
-    console.log(5);
+    //console.log(5);
   }
 }
 

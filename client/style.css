@@ -11,6 +11,7 @@ body {
 
 #myCanvas {
   display: none;/*none/block*/
+  background-color: forestgreen;
 }
 
 @media screen and (max-width: 1600px) {

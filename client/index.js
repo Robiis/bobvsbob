@@ -38,15 +38,13 @@ function redraw() {
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
-  // const camX = (-player.x + canvas.width / 2) / 1.2;//
-  // const camY = (-player.y + canvas.height / 2) / 1.2;//
   // camera movement
   var camX = clamp(-player.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
   var camY = clamp(-player.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);///
 
   //draws map
-  map(50, canvasMagnificationRatio, grass);
+  //map(50, canvasMagnificationRatio, grass);
   dirChange();
 
   ctx.fillRect(-25,-25,50,50)
