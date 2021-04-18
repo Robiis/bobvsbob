@@ -1,6 +1,5 @@
 // settings
 focus();
-let player = new client(50, 50, "#F38181", "hehe");
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 let rightPressed = false;
@@ -9,6 +8,19 @@ let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
 let canvasMagnificationRatio = 2;
+let obstacles = [];
+
+//images
+const roof = new Image();
+roof.src = "roofBlue.png";
+
+gaidaAtteluIeladi(function(){},roof);
+
+//players & obs
+let player = new client(50, 50, "#F38181", "hehe");
+obstacles.push(
+  new obstacle(-200,-200,roof,"roofBlue")
+);
 
 // constants
 const KeyboardHelper = {
@@ -18,12 +30,6 @@ const KeyboardHelper = {
   down: 83,
   reload: 82
 }; // A, D, W, S
-
-//images
-const grass = new Image();
-grass.src = "grass.png";
-
-gaidaAtteluIeladi(function(){},grass);
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
@@ -41,10 +47,12 @@ function redraw() {
   // camera movement
   var camX = clamp(-player.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
   var camY = clamp(-player.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
-  ctx.translate(camX, camY);///
+  ctx.translate(camX, camY);
 
   //draws map
-  //map(50, canvasMagnificationRatio, grass);
+  obstacles.forEach(function(obs){
+    obs.draw();
+  })
   dirChange();
 
   ctx.fillRect(-25,-25,50,50)

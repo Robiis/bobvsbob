@@ -16,6 +16,8 @@ class client {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
       ctx.fill();
+      ctx.lineWidth = 8/3;
+      ctx.stroke();
       ctx.closePath();
   }
 }
