@@ -124,6 +124,7 @@ socket.on("start-game", function() {
   clientState.gameStarted = true;
   canvasDiv.style.display = "block";
 
+  document.title = "2DCSGO";
   lastUpdate = performance.now();
   redraw();
 });

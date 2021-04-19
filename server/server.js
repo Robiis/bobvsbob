@@ -6,7 +6,7 @@ const { errorHandler, messageHandler } = require("./messages.js");
 const { getRoomById, getUserById } = require("./serverFunctions.js");
 
 // send the whole client folder to the client
-app.use(express.static("public"));
+app.use(express.static("src"));
 app.use("/", express.static("./client"));
 
 // start the server
