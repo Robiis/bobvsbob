@@ -1,5 +1,7 @@
 // changes the player's direction
 function dirChange() {
+  // player.movement.prevDir = player.movement.dir;
+
   if (upPressed && rightPressed) {
     player.movement.dir = "ur"
   } else if (downPressed && rightPressed) {
@@ -20,36 +22,41 @@ function dirChange() {
     player.movement.dir = "";
   }
 
-  switch (player.movement.dir) {
-    case "u":
-      player.y -= 10;
-      break;
-    case "d":
-      player.y += 10;
-      break;
-    case "r":
-      player.x += 10;
-      break;
-    case "l":
-      player.x -= 10;
-      break;
-    case "ur":
-      player.y -= 10;
-      player.x += 10;
-      break;
-    case "dr":
-      player.y += 10;
-      player.x += 10;
-      break;
-    case "dl":
-      player.y += 10;
-      player.x -= 10;
-      break;
-    case "ul":
-      player.y -= 10;
-      player.x -= 10;
-      break;
-  }
+  socket.emit("dir", player.movement.dir);
+  // if (player.movement.prevDir !== player.movement.dir) {
+  //   socket.emit("dir", player.movement.dir);
+  // }
+
+  // switch (player.movement.dir) {
+  //   case "u":
+  //     player.y -= 10;
+  //     break;
+  //   case "d":
+  //     player.y += 10;
+  //     break;
+  //   case "r":
+  //     player.x += 10;
+  //     break;
+  //   case "l":
+  //     player.x -= 10;
+  //     break;
+  //   case "ur":
+  //     player.y -= 10;
+  //     player.x += 10;
+  //     break;
+  //   case "dr":
+  //     player.y += 10;
+  //     player.x += 10;
+  //     break;
+  //   case "dl":
+  //     player.y += 10;
+  //     player.x -= 10;
+  //     break;
+  //   case "ul":
+  //     player.y -= 10;
+  //     player.x -= 10;
+  //     break;
+  // }
 }
 
 // // changes the player's direction

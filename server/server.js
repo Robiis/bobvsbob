@@ -29,8 +29,8 @@ io.on("connection", function(socket) {
         roomId,
         username,
         admin: false,
-        pos: {},
-        movement: {}
+        pos: {x: 0, y: 0}, 
+        movement: {dir: 0}
       });
 
       // connect user to the room
@@ -63,8 +63,8 @@ io.on("connection", function(socket) {
         roomId,
         username,
         admin: true,
-        pos: {}, 
-        movement: {}
+        pos: {x: 0, y: 0}, 
+        movement: {dir: ""}
       });
 
       const usersForClient = [];
@@ -103,20 +103,48 @@ io.on("connection", function(socket) {
 
       setInterval(function() {
         users.forEach(function(user) {
-          if (user.movement.moving === true) {
-            switch (user.movement.dir) {
-              case "":
-                break;
-              default:
-                break;
-            }
+          switch (user.movement.dir) {
+            case "u":
+              user.pos.y -= 10;
+              break;
+            case "d":
+              user.pos.y += 10;
+              break;
+            case "r":
+              user.pos.x += 10;
+              break;
+            case "l":
+              user.pos.x -= 10;
+              break;
+            case "ur":
+              user.pos.y -= 10;
+              user.pos.x += 10;
+              break;
+            case "ul":
+              user.pos.y -= 10;
+              user.pos.x -= 10;
+              break;
+            case "dl":
+              user.pos.y += 10;
+              user.pos.x -= 10;
+              break;
+            case "dr":
+              user.pos.y += 10;
+              user.pos.x += 10;
+              break;
+            default:
+              break;
           }
-          io.to(user.roomId).emit("pos", { x: user.pos.x, y: user.pos.y });
+          io.to(user.roomId).emit("pos", { id: user.id, x: user.pos.x, y: user.pos.y });
         });
       }, 1000/60);
 
       io.to(room.roomId).emit("start-game");
     }
+  });
+
+  socket.on("dir", function(dir) {
+    getUserById(users, socket.id).movement.dir = dir;
   });
 
   // when user disconnects

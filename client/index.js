@@ -10,16 +10,15 @@ let reloadPressed = false;
 let canvasMagnificationRatio = 2;
 let obstacles = [];
 
-//images
+// images
 const roof = new Image();
 roof.src = "roofBlue.png";
 
 gaidaAtteluIeladi(function() {}, roof);
 
-//players & obs
-let player = new client(50, 50, "#F38181", "hehe");
+// obstacles
 obstacles.push(
-  new obstacle(-200,-200,roof,"roofBlue")
+  new obstacle(-200, -200, roof, "roofBlue")
 );
 
 // constants
@@ -60,13 +59,16 @@ function redraw() {
   ctx.fillText(player.movement.dir, 50, 50);
 
   // camera movement
-  var camX = clamp(-player.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
-  var camY = clamp(-player.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
+  var camX = clamp(-player.pos.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
+  var camY = clamp(-player.pos.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);
 
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
   player.draw_body();
+  players.forEach(function(cplayer) {
+    cplayer.draw_body();
+  });
 
   lastUpdate = now;
   if (clientState.gameStarted) {

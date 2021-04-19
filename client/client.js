@@ -7,7 +7,8 @@ const { room, newroom } = Qs.parse(location.search, {
 const clientState = { gameStarted: false };
 const user = {};
 let lastUpdate;
-let users = [];
+let players = [];
+let player;
 
 // element selection
 const lobbyDiv = document.getElementById("lobby");
@@ -39,6 +40,7 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
 
   users = newUsers;
   user.id = id;
+  player = new client(id, 50, 50, "#F38181", user.username);
 
   createAPlayerUsername(id, user.username);
   if (admin) {
@@ -56,6 +58,8 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
     if (cuser.admin) {
       adminPlayerCrown(cuser.id, cuser.username);
     }
+    
+    players.push(new client(cuser.id, 50, 50, "#F38181", cuser.username));
   });
 
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
@@ -67,6 +71,7 @@ socket.on("connect-user", function({ id, username, admin }) {
   console.log(`User ${username} connected`);
   createAPlayerUsername(id, username);
   users.push({ id, username, admin });
+  players.push(new client(id, 50, 50, "#F38181", user.username));
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
@@ -75,6 +80,7 @@ socket.on("disconnect-user", function(id) {
   console.log(`User ${getUserById(users, id).username} disconnected`);
   removeAPlayerUsername(id);
   users = users.filter(cuser => cuser.id !== id);
+  players = players.filter(cplayer => cplayer.id !== id);
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
@@ -120,6 +126,16 @@ socket.on("start-game", function() {
 
   lastUpdate = performance.now();
   redraw();
+});
+
+socket.on("pos", function({ id, x, y }) {
+  if (id !== player.id) {
+    getUserById(players, id).pos.x = x;
+    getUserById(players, id).pos.y = y;
+  } else {
+    player.pos.x = x;
+    player.pos.y = y;
+  }
 });
 
 // if user is diconnected from the server
