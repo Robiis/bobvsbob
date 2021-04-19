@@ -101,39 +101,42 @@ io.on("connection", function(socket) {
     if (user.admin && room.gameStarted === false) {
       room.gameStarted = true;
 
+      // main server loop
       setInterval(function() {
         users.forEach(function(user) {
-          switch (user.movement.dir) {
-            case "u":
-              user.pos.y -= 10;
-              break;
-            case "d":
-              user.pos.y += 10;
-              break;
-            case "r":
-              user.pos.x += 10;
-              break;
-            case "l":
-              user.pos.x -= 10;
-              break;
-            case "ur":
-              user.pos.y -= 10;
-              user.pos.x += 10;
-              break;
-            case "ul":
-              user.pos.y -= 10;
-              user.pos.x -= 10;
-              break;
-            case "dl":
-              user.pos.y += 10;
-              user.pos.x -= 10;
-              break;
-            case "dr":
-              user.pos.y += 10;
-              user.pos.x += 10;
-              break;
-            default:
-              break;
+          if (user.roomId = room.roomId) {
+            switch (user.movement.dir) {
+              case "u":
+                user.pos.y -= 5;
+                break;
+              case "d":
+                user.pos.y += 5;
+                break;
+              case "r":
+                user.pos.x += 5;
+                break;
+              case "l":
+                user.pos.x -= 5;
+                break;
+              case "ur":
+                user.pos.y -= 5;
+                user.pos.x += 5;
+                break;
+              case "ul":
+                user.pos.y -= 5;
+                user.pos.x -= 5;
+                break;
+              case "dl":
+                user.pos.y += 5;
+                user.pos.x -= 5;
+                break;
+              case "dr":
+                user.pos.y += 5;
+                user.pos.x += 5;
+                break;
+              default:
+                break;
+            }
           }
           io.to(user.roomId).emit("pos", { id: user.id, x: user.pos.x, y: user.pos.y });
         });
@@ -144,7 +147,9 @@ io.on("connection", function(socket) {
   });
 
   socket.on("dir", function(dir) {
-    getUserById(users, socket.id).movement.dir = dir;
+    if (getUserById(users, socket.id)) {
+      getUserById(users, socket.id).movement.dir = dir;
+    }
   });
 
   // when user disconnects

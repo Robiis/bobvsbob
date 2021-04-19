@@ -128,6 +128,7 @@ socket.on("start-game", function() {
   redraw();
 });
 
+// when pos changes
 socket.on("pos", function({ id, x, y }) {
   if (id !== player.id) {
     getUserById(players, id).pos.x = x;
