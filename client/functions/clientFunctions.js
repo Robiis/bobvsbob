@@ -95,10 +95,15 @@ function changeUsername() {
   clientPlayerSign(user.id);
 }
 
+// if you start a game
 function startGame() {
   if (user.admin) {
     socket.emit("start-game");
   }
+}
+
+function keyboardInput(keys) {
+  socket.emit("keyboard-input", keys);
 }
 
 // get user object by id

@@ -28,7 +28,9 @@ io.on("connection", function(socket) {
         id: socket.id,
         roomId,
         username,
-        admin: false
+        admin: false,
+        pos: {},
+        movement: {}
       });
 
       // connect user to the room
@@ -38,7 +40,7 @@ io.on("connection", function(socket) {
       const usersForClient = [];
       users.forEach(function(user) { 
         if (user.roomId === roomId && user.id !== socket.id) {
-          usersForClient.push({ id: user.id, username: user.username, admin: user.admin }) ;
+          usersForClient.push({ id: user.id, username: user.username, admin: user.admin, pos: user.pos, movement: user.movement }) ;
         }
       });
 
@@ -60,13 +62,15 @@ io.on("connection", function(socket) {
         id: socket.id,
         roomId,
         username,
-        admin: true
+        admin: true,
+        pos: {}, 
+        movement: {}
       });
 
       const usersForClient = [];
       users.forEach(function(user) { 
         if (user.roomId === roomId && user.id !== socket.id) {
-          usersForClient.push({ id: user.id, username: user.username, admin: user.admin }) ;
+          usersForClient.push({ id: user.id, username: user.username, admin: user.admin, pos: user.pos, movement: user.movement }) ;
         }
       });
       
@@ -96,6 +100,21 @@ io.on("connection", function(socket) {
     const room = getRoomById(rooms, user.roomId);
     if (user.admin && room.gameStarted === false) {
       room.gameStarted = true;
+
+      setInterval(function() {
+        users.forEach(function(user) {
+          if (user.movement.moving === true) {
+            switch (user.movement.dir) {
+              case "":
+                break;
+              default:
+                break;
+            }
+          }
+          io.to(user.roomId).emit("pos", { x: user.pos.x, y: user.pos.y });
+        });
+      }, 1000/60);
+
       io.to(room.roomId).emit("start-game");
     }
   });

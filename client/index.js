@@ -14,7 +14,7 @@ let obstacles = [];
 const roof = new Image();
 roof.src = "roofBlue.png";
 
-gaidaAtteluIeladi(function(){},roof);
+gaidaAtteluIeladi(function() {}, roof);
 
 //players & obs
 let player = new client(50, 50, "#F38181", "hehe");
@@ -40,20 +40,29 @@ function redraw() {
   let now = performance.now();
   let dt = now - lastUpdate;
 
+  //draws map
+  obstacles.forEach(function(obs){
+    obs.draw();
+  });
+  dirChange();
+
   // camera movement
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+  // text on screen
+  // ctx.fillText(`${user.pos.x}, ${user.pos.y}`, 50, 50);
+  // let count = 50;
+  // users.forEach(function(cuser) {
+  //   count += 50;
+  //   ctx.fillText(`${cuser.pos.x}, ${cuser.pos.y}`, 50, count);
+  // });
+  ctx.fillText(player.movement.dir, 50, 50);
 
   // camera movement
   var camX = clamp(-player.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
   var camY = clamp(-player.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);
-
-  //draws map
-  obstacles.forEach(function(obs){
-    obs.draw();
-  })
-  dirChange();
 
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
