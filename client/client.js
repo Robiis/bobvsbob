@@ -140,6 +140,30 @@ socket.on("pos", function({ id, x, y }) {
   }
 });
 
+socket.on("start-move", function({ id, x, y, dir }) {
+  if (player.id !== id) {
+    getUserById(players, id).pos.x = x;
+    getUserById(players, id).pos.y = y;
+    getUserById(players, id).movement.moveDir = dir;
+  } else {
+    player.pos.x = x;
+    player.pos.y = y;
+    player.movement.moveDir = dir;
+  }
+});
+
+socket.on("stop-move", function({ id, x, y }) {
+  if (player.id !== id) {
+    getUserById(players, id).pos.x = x;
+    getUserById(players, id).pos.y = y;
+    getUserById(players, id).movement.moveDir = "";
+  } else {
+    player.pos.x = x;
+    player.pos.y = y;
+    player.movement.moveDir = "";
+  }
+});
+
 // if user is diconnected from the server
 socket.on("disconnect", function() {
   console.log("disconnected");
