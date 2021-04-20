@@ -39,10 +39,6 @@ function redraw() {
   let now = performance.now();
   let dt = now - lastUpdate;
 
-  //draws map
-  obstacles.forEach(function(obs){
-    obs.draw();
-  });
   dirChange();
 
   // camera movement
@@ -63,6 +59,12 @@ function redraw() {
   var camY = clamp(-player.pos.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);
 
+  
+  //draws map
+  obstacles.forEach(function(obs){
+    obs.draw();
+  });
+  
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
   player.draw_body();

@@ -20,7 +20,7 @@ class client {
     ctx.beginPath();
     ctx.arc(this.pos.x, this.pos.y, this.r, 0, Math.PI * 2);
     ctx.fill();
-    ctx.lineWidth = 8/3;
+    ctx.lineWidth = 16/3;
     ctx.stroke();
     ctx.closePath();
   }
