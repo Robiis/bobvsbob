@@ -40,6 +40,11 @@ function redraw() {
   let dt = now - lastUpdate;
 
   dirChange();
+  movePlayer(player);
+  players.forEach(function(cplayer) {
+    movePlayer(cplayer);
+  });
+
   // camera movement
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
@@ -72,11 +77,6 @@ function redraw() {
 
   players.forEach(function(cplayer) {
     cplayer.draw_body();
-  });
-
-  movePlayer(player);
-  players.forEach(function(cplayer) {
-    movePlayer(cplayer);
   });
 
   lastUpdate = now;
