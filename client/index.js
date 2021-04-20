@@ -35,17 +35,11 @@ document.addEventListener("keydown", keyDownChecker, false);
 document.addEventListener("keyup", keyUpChecker, false);
 
 // loop--------------------------------------------------------------------------------------------------------------
-setInterval(redraw, 1000/60);
 function redraw() {
   let now = performance.now();
   let dt = now - lastUpdate;
 
   dirChange();
-  movePlayer(player);
-  players.forEach(function(cplayer) {
-    movePlayer(cplayer);
-  });
-
   // camera movement
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
   ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
@@ -80,9 +74,14 @@ function redraw() {
     cplayer.draw_body();
   });
 
+  movePlayer(player);
+  players.forEach(function(cplayer) {
+    movePlayer(cplayer);
+  });
+
   lastUpdate = now;
   if (clientState.gameStarted) {
-    // requestAnimationFrame(redraw);
+    requestAnimationFrame(redraw);
   }
 }
 
