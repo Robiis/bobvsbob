@@ -18,7 +18,7 @@ gaidaAtteluIeladi(function() {}, roof);
 
 // obstacles
 obstacles.push(
-  new obstacle(-200, -200, roof, "roofBlue")
+  new obstacle(200, 200, roof, "roofBlue")
 );
 
 // constants
@@ -67,10 +67,13 @@ function redraw() {
   
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
+
+  borderCheck(player);
   player.draw_body();
-  players.forEach(function(cplayer) {
+
+  /*players.forEach(function(cplayer) {
     cplayer.draw_body();
-  });
+  });*/
 
   lastUpdate = now;
   if (clientState.gameStarted) {
@@ -80,13 +83,13 @@ function redraw() {
 
 /*
 camera movement -- done
-map design -- 
-map store --
-border --
+map design -- kinda done
+map store -- no need ur mom
+border -- 
 shooting --
 HP -- 
 obsticles --
 ieroči --
-cartoon rooftop top view
+cartoon rooftop top view -- done
 
 */

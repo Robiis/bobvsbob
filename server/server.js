@@ -107,32 +107,32 @@ io.on("connection", function(socket) {
           if (user.roomId = room.roomId) {
             switch (user.movement.dir) {
               case "u":
-                user.pos.y -= 5;
+                user.pos.y -= 1;
                 break;
               case "d":
-                user.pos.y += 5;
+                user.pos.y += 1;
                 break;
               case "r":
-                user.pos.x += 5;
+                user.pos.x += 1;
                 break;
               case "l":
-                user.pos.x -= 5;
+                user.pos.x -= 1;
                 break;
               case "ur":
-                user.pos.y -= 5;
-                user.pos.x += 5;
+                user.pos.y -= 1;
+                user.pos.x += 1;
                 break;
               case "ul":
-                user.pos.y -= 5;
-                user.pos.x -= 5;
+                user.pos.y -= 1;
+                user.pos.x -= 1;
                 break;
               case "dl":
-                user.pos.y += 5;
-                user.pos.x -= 5;
+                user.pos.y += 1;
+                user.pos.x -= 1;
                 break;
               case "dr":
-                user.pos.y += 5;
-                user.pos.x += 5;
+                user.pos.y += 1;
+                user.pos.x += 1;
                 break;
               default:
                 break;
