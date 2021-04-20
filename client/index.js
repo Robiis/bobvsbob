@@ -35,6 +35,7 @@ document.addEventListener("keydown", keyDownChecker, false);
 document.addEventListener("keyup", keyUpChecker, false);
 
 // loop--------------------------------------------------------------------------------------------------------------
+setInterval(redraw, 1000/60);
 function redraw() {
   let now = performance.now();
   let dt = now - lastUpdate;
@@ -81,7 +82,7 @@ function redraw() {
 
   lastUpdate = now;
   if (clientState.gameStarted) {
-    requestAnimationFrame(redraw);
+    // requestAnimationFrame(redraw);
   }
 }
 
