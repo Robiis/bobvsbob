@@ -113,42 +113,40 @@ io.on("connection", function(socket) {
       user.movement.moveInt = setInterval(function() {
         switch (user.movement.dir) {
           case "u":
-            user.pos.y -= 10;
+            user.pos.y -= 5;
             break;
           case "d":
-            user.pos.y += 10;
+            user.pos.y += 5;
             break;
           case "r":
-            user.pos.x += 10;
+            user.pos.x += 5;
             break;
           case "l":
-            user.pos.x -= 10;
+            user.pos.x -= 5;
             break;
           case "ur":
-            user.pos.y -= 10;
-            user.pos.x += 10;
+            user.pos.y -= 5;
+            user.pos.x += 5;
             break;
           case "ul":
-            user.pos.y -= 10;
-            user.pos.x -= 10;
+            user.pos.y -= 5;
+            user.pos.x -= 5;
             break;
           case "dl":
-            user.pos.y += 10;
-            user.pos.x -= 10;
+            user.pos.y += 5;
+            user.pos.x -= 5;
             break;
           case "dr":
-            user.pos.y += 10;
-            user.pos.x += 10;
+            user.pos.y += 5;
+            user.pos.x += 5;
             break;
           default:
             break;
         }
       }, 1000/60);
-      console.log("made")
       io.to(user.roomId).emit("start-move", { id: socket.id, dir, x: user.pos.x, y: user.pos.y });
     } else {
       clearInterval(user.movement.moveInt);
-      console.log("cleared")
       io.to(user.roomId).emit("stop-move", { id: socket.id, x: user.pos.x, y: user.pos.y });
     }
   });

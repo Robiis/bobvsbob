@@ -29,32 +29,32 @@ function dirChange() {
 function movePlayer(player) {
   switch (player.movement.moveDir) {
     case "u":
-      player.pos.y -= 10;
+      player.pos.y -= 5;
       break;
     case "d":
-      player.pos.y += 10;
+      player.pos.y += 5;
       break;
     case "r":
-      player.pos.x += 10;
+      player.pos.x += 5;
       break;
     case "l":
-      player.pos.x -= 10;
+      player.pos.x -= 5;
       break;
     case "ur":
-      player.pos.y -= 10;
-      player.pos.x += 10;
+      player.pos.y -= 5;
+      player.pos.x += 5;
       break;
     case "ul":
-      player.pos.y -= 10;
-      player.pos.x -= 10;
+      player.pos.y -= 5;
+      player.pos.x -= 5;
       break;
     case "dl":
-      player.pos.y += 10;
-      player.pos.x -= 10;
+      player.pos.y += 5;
+      player.pos.x -= 5;
       break;
     case "dr":
-      player.pos.y += 10;
-      player.pos.x += 10;
+      player.pos.y += 5;
+      player.pos.x += 5;
       break;
     default:
       break;
