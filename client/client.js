@@ -139,7 +139,10 @@ socket.on("pos", function({ id, x, y }) {
     player.pos.y = y;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 0136228 (movement test)
 });
 
 socket.on("start-move", function({ id, x, y, dir }) {
@@ -164,6 +167,9 @@ socket.on("stop-move", function({ id, x, y }) {
     player.pos.y = y;
     player.movement.moveDir = "";
   }
+<<<<<<< HEAD
+>>>>>>> parent of 0136228 (movement test)
+=======
 >>>>>>> parent of 0136228 (movement test)
 });
 
