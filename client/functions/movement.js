@@ -1,7 +1,5 @@
 // changes the player's direction
 function dirChange() {
-  // player.movement.prevDir = player.movement.dir;
-
   player.movement.prevDir = player.movement.dir;
   if (upPressed && rightPressed) {
     player.movement.dir = "ur"
