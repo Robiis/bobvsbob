@@ -141,7 +141,10 @@ socket.on("pos", function({ id, x, y }) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 0136228 (movement test)
 =======
 >>>>>>> parent of 0136228 (movement test)
 =======
@@ -172,6 +175,9 @@ socket.on("stop-move", function({ id, x, y }) {
   }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 0136228 (movement test)
+=======
 >>>>>>> parent of 0136228 (movement test)
 =======
 >>>>>>> parent of 0136228 (movement test)
