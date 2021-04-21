@@ -138,6 +138,33 @@ socket.on("pos", function({ id, x, y }) {
     player.pos.x = x;
     player.pos.y = y;
   }
+<<<<<<< HEAD
+=======
+});
+
+socket.on("start-move", function({ id, x, y, dir }) {
+  if (player.id !== id) {
+    getUserById(players, id).pos.x = x;
+    getUserById(players, id).pos.y = y;
+    getUserById(players, id).movement.moveDir = dir;
+  } else {
+    player.pos.x = x;
+    player.pos.y = y;
+    player.movement.moveDir = dir;
+  }
+});
+
+socket.on("stop-move", function({ id, x, y }) {
+  if (player.id !== id) {
+    getUserById(players, id).pos.x = x;
+    getUserById(players, id).pos.y = y;
+    getUserById(players, id).movement.moveDir = "";
+  } else {
+    player.pos.x = x;
+    player.pos.y = y;
+    player.movement.moveDir = "";
+  }
+>>>>>>> parent of 0136228 (movement test)
 });
 
 // if user is diconnected from the server
