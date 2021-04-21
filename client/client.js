@@ -162,7 +162,6 @@ socket.on("stop-move", function({ id, x, y }) {
     player.pos.y = y;
     player.movement.moveDir = "";
   }
-
 });
 
 // if user is diconnected from the server
