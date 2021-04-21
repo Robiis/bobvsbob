@@ -68,7 +68,7 @@ function redraw() {
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
 
-  //borderCheck(player);
+  borderCheck(player);
   player.draw_body();
 
   /*players.forEach(function(cplayer) {
