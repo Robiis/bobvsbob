@@ -29,8 +29,8 @@ io.on("connection", function(socket) {
         roomId,
         username,
         admin: false,
-        pos: {x: 50, y: 50}, 
-        movement: {dir: "", prevDir: ""}
+        pos: {x: 0, y: 0}, 
+        movement: {dir: 0}
       });
 
       // connect user to the room
@@ -63,8 +63,8 @@ io.on("connection", function(socket) {
         roomId,
         username,
         admin: true,
-        pos: {x: 50, y: 50}, 
-        movement: {dir: "", prevDir: ""}
+        pos: {x: 0, y: 0}, 
+        movement: {dir: ""}
       });
 
       const usersForClient = [];
@@ -101,53 +101,54 @@ io.on("connection", function(socket) {
     if (user.admin && room.gameStarted === false) {
       room.gameStarted = true;
 
+      // main server loop
+      setInterval(function() {
+        users.forEach(function(user) {
+          if (user.roomId = room.roomId) {
+            switch (user.movement.dir) {
+              case "u":
+                user.pos.y -= 1;
+                break;
+              case "d":
+                user.pos.y += 1;
+                break;
+              case "r":
+                user.pos.x += 1;
+                break;
+              case "l":
+                user.pos.x -= 1;
+                break;
+              case "ur":
+                user.pos.y -= 1;
+                user.pos.x += 1;
+                break;
+              case "ul":
+                user.pos.y -= 1;
+                user.pos.x -= 1;
+                break;
+              case "dl":
+                user.pos.y += 1;
+                user.pos.x -= 1;
+                break;
+              case "dr":
+                user.pos.y += 1;
+                user.pos.x += 1;
+                break;
+              default:
+                break;
+            }
+          }
+          io.to(user.roomId).emit("pos", { id: user.id, x: user.pos.x, y: user.pos.y });
+        });
+      }, 1000/60);
+
       io.to(room.roomId).emit("start-game");
     }
   });
 
   socket.on("dir", function(dir) {
-    const user = getUserById(users, socket.id);
-    user.movement.dir = dir;
-    if (dir !== "") {
-      clearInterval(user.movement.moveInt);
-      user.movement.moveInt = setInterval(function() {
-        switch (user.movement.dir) {
-          case "u":
-            user.pos.y -= 5;
-            break;
-          case "d":
-            user.pos.y += 5;
-            break;
-          case "r":
-            user.pos.x += 5;
-            break;
-          case "l":
-            user.pos.x -= 5;
-            break;
-          case "ur":
-            user.pos.y -= 5;
-            user.pos.x += 5;
-            break;
-          case "ul":
-            user.pos.y -= 5;
-            user.pos.x -= 5;
-            break;
-          case "dl":
-            user.pos.y += 5;
-            user.pos.x -= 5;
-            break;
-          case "dr":
-            user.pos.y += 5;
-            user.pos.x += 5;
-            break;
-          default:
-            break;
-        }
-      }, 1000/60);
-      io.to(user.roomId).emit("start-move", { id: socket.id, dir, x: user.pos.x, y: user.pos.y });
-    } else {
-      clearInterval(user.movement.moveInt);
-      io.to(user.roomId).emit("stop-move", { id: socket.id, x: user.pos.x, y: user.pos.y });
+    if (getUserById(users, socket.id)) {
+      getUserById(users, socket.id).movement.dir = dir;
     }
   });
 
