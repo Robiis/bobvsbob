@@ -8,19 +8,4 @@ function getUserById(users, id) {
   return users.find(user => user.id === id);
 }
 
-class obstacle {
-  constructor(x, y,imgName) {
-      this.x = x;
-      this.y = y;
-      if (imgName == "roofBlue"){
-        this.width = 150;
-        this.height = 150;
-      }
-  }
-
-  draw() {
-      ctx.drawImage(this.img, this.x, this.y);
-  }
-}
-
-module.exports = { getRoomById, getUserById ,obstacle};
+module.exports = { getRoomById, getUserById };

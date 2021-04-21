@@ -3,7 +3,7 @@ const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const { errorHandler, messageHandler } = require("./messages.js");
-const { getRoomById, getUserById ,obstacle} = require("./serverFunctions.js");
+const { getRoomById, getUserById } = require("./serverFunctions.js");
 
 // send the whole client folder to the client
 app.use(express.static("src"));
@@ -16,12 +16,6 @@ server.listen(PORT, console.log(`Server started on port ${PORT}`));
 // rooms & users
 let rooms = [];
 let users = [];
-
-//obstacles
-let obstacles = [];
-obstacles.push(
-  new obstacle(200, 200, "roofBlue")
-);
 
 // when user connects
 io.on("connection", function(socket) {
@@ -143,83 +137,8 @@ io.on("connection", function(socket) {
               default:
                 break;
             }
-            obstacles.forEach(function(obs) {
-              //Checks if user is out of the borders
-              if (user.movement.dir === "r") {
-                  if (user.pos.x + user.r >= obs.x && user.pos.y + user.r >= obs.y && user.pos.y - user.r <= obs.y + obs.height && user.pos.x <= obs.x) { //Checks if user is next to the LEFT border of obs
-                      console.log(123);
-                      user.pos.x = obs.x - user.r - 1;
-                      rightPressed = false;
-                      user.movement.dir = "";
-                  };
-              } else if (user.movement.dir === "dr") {
-                  if (user.pos.x + user.r >= obs.x && user.pos.y + user.r >= obs.y && user.pos.y - user.r <= obs.y + obs.height && user.pos.x <= obs.x) { //Checks if user is next to the LEFT border of obs
-                      user.pos.x = obs.x - user.r - 1;
-                      rightPressed = false;
-                      user.movement.dir = "";
-                  };
-                  if (user.pos.y + user.r >= obs.y && user.pos.x + user.r >= obs.x && user.pos.x - user.r <= obs.x + obs.width && user.pos.y <= obs.y) { //Checks if user is next to the UPPER border of obs
-                      user.pos.y = obs.y - user.r - 1;
-                      downPressed = false;
-                      user.movement.dir = "";
-                  };
-              } else if (user.movement.dir === "d") {
-                  if (user.pos.y + user.r >= obs.y && user.pos.x + user.r >= obs.x && user.pos.x - user.r <= obs.x + obs.width && user.pos.y <= obs.y) { //Checks if user is next to the UPPER border of obs
-                      user.pos.y = obs.y - user.r - 1;
-                      downPressed = false;
-                      user.movement.dir = "";
-                  };
-              } else if (user.movement.dir === "dl") {
-                  if (user.pos.y + user.r >= obs.y && user.pos.x + user.r >= obs.x && user.pos.x - user.r <= obs.x + obs.width && user.pos.y <= obs.y) { //Checks if user is next to the UPPER border of obs
-                      user.pos.y = obs.y - user.r - 1;
-                      downPressed = false;
-                      user.movement.dir = "";
-                  };
-                  if (user.pos.x - user.r <= obs.x + obs.width && user.pos.y + user.r >= obs.y && user.pos.y - user.r <= obs.y + obs.height && user.pos.x >= obs.x + obs.width) { //Checks if user is next to the RIGHT border of obs
-                      user.pos.x = obs.x + obs.width + user.r + 1;
-                      leftPressed = false;
-                      user.movement.dir = "";
-                  };
-              } else if (user.movement.dir === "l") {
-                  if (user.pos.x - user.r <= obs.x + obs.width && user.pos.y + user.r >= obs.y && user.pos.y - user.r <= obs.y + obs.height && user.pos.x >= obs.x + obs.width) { //Checks if user is next to the RIGHT border of obs
-                      user.pos.x = obs.x + obs.width + user.r + 1;
-                      leftPressed = false;
-                      user.movement.dir = "";
-                  };
-              } else if (user.movement.dir === "ul") {
-                  if (user.pos.x - user.r <= obs.x + obs.width && user.pos.y + user.r >= obs.y && user.pos.y - user.r <= obs.y + obs.height && user.pos.x >= obs.x + obs.width) { //Checks if user is next to the RIGHT border of obs
-                      user.pos.x = obs.x + obs.width + user.r + 1;
-                      leftPressed = false;
-                      user.movement.dir = "";
-                  };
-                  if (user.pos.y - user.r <= obs.y + obs.height && user.pos.x + user.r >= obs.x && user.pos.x - user.r <= obs.x + obs.width && user.pos.y >= obs.y + obs.height) { //Checks if user is next to the LOWER border of obs
-                      user.pos.y = obs.y + obs.height + user.r + 1;
-                      upPressed = false;
-                      user.movement.dir = "";
-                  };
-              } else if (user.movement.dir === "u") {
-                  if (user.pos.y - user.r <= obs.y + obs.height && user.pos.x + user.r >= obs.x && user.pos.x - user.r <= obs.x + obs.width && user.pos.y >= obs.y + obs.height) { //Checks if user is next to the LOWER border of obs
-                      user.pos.y = obs.y + obs.height + user.r + 1;
-                      upPressed = false;
-                      user.movement.dir = "";
-                  };
-              } else if (user.movement.dir === "ur") {
-                  if (user.pos.y - user.r <= obs.y + obs.height && user.pos.x + user.r >= obs.x && user.pos.x - user.r <= obs.x + obs.width && user.pos.y >= obs.y + obs.height) { //Checks if user is next to the LOWER border of obs
-                      user.pos.y = obs.y + obs.height + user.r + 1;
-                      upPressed = false;
-                      user.movement.dir = "";
-                  };
-                  if (user.pos.x + user.r >= obs.x && user.pos.y + user.r >= obs.y && user.pos.y - user.r <= obs.y + obs.height && user.pos.x <= obs.x) { //Checks if user is next to the LEFT border of obs
-                      user.pos.x = obs.x - user.r - 1;
-                      rightPressed = false;
-                      user.movement.dir = "";
-                  };
-              };
-          });
           }
-
           io.to(user.roomId).emit("pos", { id: user.id, x: user.pos.x, y: user.pos.y });
-
         });
       }, 1000/60);
 
