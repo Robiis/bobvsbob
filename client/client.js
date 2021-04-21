@@ -15,6 +15,8 @@ const lobbyDiv = document.getElementById("lobby");
 const canvasDiv = document.getElementById("myCanvas");
 const adminDiv = document.getElementById("admin");
 const playerCountDiv = document.getElementById("players-count");
+const errDiv = document.getElementById("err");
+const errMsg = document.getElementById("err-msg");
 
 // generate a random username
 user.username = `coolusername${Math.floor(Math.random() * 9999)}`;
@@ -84,11 +86,19 @@ socket.on("disconnect-user", function(id) {
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
-// if a message from the server is sent
-socket.on("msg", function(msg) { console.log(msg) });
-
 // if an error from the server is sent
-socket.on("err", function(err) { console.error(err) });
+socket.on("err", function(err) { 
+  if (err === "err1") {
+    console.log("Error - Game already started");
+    errDiv.style.display = "block";
+    errMsg.innerHTML = "Error - Game already started <br> <a href='/'>Back to menu</a>";
+    
+  } else if (err === "err2") {
+    console.log("Error - No room with that id found");
+    errDiv.style.display = "block";
+    errMsg.innerHTML = "Error - No room with that id found <br> <a href='/'>Back to menu</a>";
+  }
+});
 
 // if server asks to redirect, redirect
 socket.on("redirect", function(destination) {
@@ -129,41 +139,7 @@ socket.on("start-game", function() {
   redraw();
 });
 
-// // when pos changes
-// socket.on("pos", function({ id, x, y }) {
-//   if (id !== player.id) {
-//     getUserById(players, id).pos.x = x;
-//     getUserById(players, id).pos.y = y;
-//   } else {
-//     player.pos.x = x;
-//     player.pos.y = y;
-//   }
-// });
-
-// socket.on("start-move", function({ id, x, y, dir }) {
-//   if (player.id !== id) {
-//     getUserById(players, id).pos.x = x;
-//     getUserById(players, id).pos.y = y;
-//     getUserById(players, id).movement.moveDir = dir;
-//   } else {
-//     player.pos.x = x;
-//     player.pos.y = y;
-//     player.movement.moveDir = dir;
-//   }
-// });
-
-// socket.on("stop-move", function({ id, x, y }) {
-//   if (player.id !== id) {
-//     getUserById(players, id).pos.x = x;
-//     getUserById(players, id).pos.y = y;
-//     getUserById(players, id).movement.moveDir = "";
-//   } else {
-//     player.pos.x = x;
-//     player.pos.y = y;
-//     player.movement.moveDir = "";
-//   }
-// });
-
+// when player starts moving
 socket.on("start-move", function({ id, dir, x, y }) {
   const cplayer = getUserById(players, id);
   cplayer.pos.x = x;
@@ -171,6 +147,7 @@ socket.on("start-move", function({ id, dir, x, y }) {
   cplayer.movement.dir = dir;
 });
 
+// when player stops moving
 socket.on("stop-move", function({ id, x, y }) {
   const cplayer = getUserById(players, id);
   cplayer.pos.x = x;
@@ -180,5 +157,8 @@ socket.on("stop-move", function({ id, x, y }) {
 
 // if user is diconnected from the server
 socket.on("disconnect", function() {
-  console.log("disconnected");
+  if (errDiv.style.display !== "block") {
+    errDiv.style.display = "block";
+    errMsg.innerHTML = "Disconnected";
+  }
 });

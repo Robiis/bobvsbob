@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
-const { errorHandler, messageHandler } = require("./messages.js");
+const { errorHandler } = require("./messages.js");
 const { getRoomById, getUserById } = require("./serverFunctions.js");
 
 // send the whole client folder to the client
@@ -22,7 +22,7 @@ io.on("connection", function(socket) {
   // when user joins a room
   socket.on("room-id", function({ roomId, username }) {
     console.log(getRoomById(rooms, roomId));
-    if (getRoomById(rooms, roomId)) {
+    if (getRoomById(rooms, roomId) && getRoomById(rooms, roomId).gameStarted !== true) {
       // add user to users
       users.push({
         id: socket.id,
@@ -30,7 +30,7 @@ io.on("connection", function(socket) {
         username,
         admin: false,
         pos: {x: 50, y: 50}, 
-        movement: {dir: "", prevDir: ""}
+        movement: {dir: ""}
       });
 
       // connect user to the room
@@ -50,7 +50,15 @@ io.on("connection", function(socket) {
       console.log(rooms);
       console.log(users);
     } else {
-      errorHandler(socket, "No room with that id found");
+      if (getRoomById(rooms, roomId) !== undefined) {
+        if (getRoomById(rooms, roomId).gameStarted === true) {
+          errorHandler(socket, "err1");
+        } else {
+          errorHandler(socket, "err2");
+        }
+      } else {
+        errorHandler(socket, "err2");
+      }
     }
   });
 
@@ -64,7 +72,7 @@ io.on("connection", function(socket) {
         username,
         admin: true,
         pos: {x: 50, y: 50}, 
-        movement: {dir: "", prevDir: ""}
+        movement: {dir: ""}
       });
 
       const usersForClient = [];
@@ -95,6 +103,7 @@ io.on("connection", function(socket) {
     user.username = username;
   }); 
 
+  // when client starts game
   socket.on("start-game", function() {
     const user = getUserById(users, socket.id);
     const room = getRoomById(rooms, user.roomId);
@@ -105,6 +114,7 @@ io.on("connection", function(socket) {
     }
   });
 
+  // when user starts to move
   socket.on("start-move", function({ dir, x, y }) {
     const user = getUserById(users, socket.id);
     user.movement.dir = dir;
@@ -113,6 +123,7 @@ io.on("connection", function(socket) {
     socket.broadcast.to(user.roomId).emit("start-move", { id: socket.id, dir, x, y });
   });
 
+  // when user stops moving
   socket.on("stop-move", function({ x, y }) {
     const user = getUserById(users, socket.id);
     user.movement.dir = "";
@@ -120,52 +131,6 @@ io.on("connection", function(socket) {
     user.pos.y = y;
     socket.broadcast.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
   });
-
-  // socket.on("dir", function(dir) {
-  //   const user = getUserById(users, socket.id);
-  //   user.movement.dir = dir;
-  //   if (dir !== "") {
-  //     clearInterval(user.movement.moveInt);
-  //     user.movement.moveInt = setInterval(function() {
-  //       switch (user.movement.dir) {
-  //         case "u":
-  //           user.pos.y -= 5;
-  //           break;
-  //         case "d":
-  //           user.pos.y += 5;
-  //           break;
-  //         case "r":
-  //           user.pos.x += 5;
-  //           break;
-  //         case "l":
-  //           user.pos.x -= 5;
-  //           break;
-  //         case "ur":
-  //           user.pos.y -= 5;
-  //           user.pos.x += 5;
-  //           break;
-  //         case "ul":
-  //           user.pos.y -= 5;
-  //           user.pos.x -= 5;
-  //           break;
-  //         case "dl":
-  //           user.pos.y += 5;
-  //           user.pos.x -= 5;
-  //           break;
-  //         case "dr":
-  //           user.pos.y += 5;
-  //           user.pos.x += 5;
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     }, 1000/60);
-  //     io.to(user.roomId).emit("start-move", { id: socket.id, dir, x: user.pos.x, y: user.pos.y });
-  //   } else {
-  //     clearInterval(user.movement.moveInt);
-  //     io.to(user.roomId).emit("stop-move", { id: socket.id, x: user.pos.x, y: user.pos.y });
-  //   }
-  // });
 
   // when user disconnects
   socket.on("disconnect", function() {

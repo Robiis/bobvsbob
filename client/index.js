@@ -44,6 +44,7 @@ function redraw() {
   players.forEach(function(cplayer) {
     movePlayer(cplayer);
   });
+  borderCheck(player);
 
   // camera movement
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
@@ -72,9 +73,7 @@ function redraw() {
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
 
-  borderCheck(player);
   player.draw_body();
-
   players.forEach(function(cplayer) {
     cplayer.draw_body();
   });

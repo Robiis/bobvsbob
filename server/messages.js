@@ -4,9 +4,4 @@ function errorHandler(socket, err) {
   socket.disconnect();
 }
 
-// send a message to the client
-function messageHandler(socket, msg) {
-  socket.emit("msg", msg);
-}
-
-module.exports = { errorHandler, messageHandler };
+module.exports = { errorHandler };

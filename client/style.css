@@ -36,6 +36,10 @@ body {
   display: none;/*none/block*/
 }
 
+#err {
+  display: none;
+}
+
 .box {
   padding: 40px;
   background-color: #272525;
@@ -48,6 +52,10 @@ body {
   color: white;
   text-transform: uppercase;
   font-weight: 500;
+}
+
+.box p {
+  color: white;
 }
 
 .box h1 {
