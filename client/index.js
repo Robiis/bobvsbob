@@ -40,10 +40,6 @@ function redraw() {
   let dt = now - lastUpdate;
 
   dirChange();
-  movePlayer(player);
-  players.forEach(function(cplayer) {
-    movePlayer(cplayer);
-  });
 
   // camera movement
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
@@ -75,9 +71,9 @@ function redraw() {
   //borderCheck(player);
   player.draw_body();
 
-  players.forEach(function(cplayer) {
+  /*players.forEach(function(cplayer) {
     cplayer.draw_body();
-  });
+  });*/
 
   lastUpdate = now;
   if (clientState.gameStarted) {
