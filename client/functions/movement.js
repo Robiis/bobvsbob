@@ -1,6 +1,7 @@
 // changes the player's direction
 function dirChange() {
   player.movement.prevDir = player.movement.dir;
+
   if (upPressed && rightPressed) {
     player.movement.dir = "ur"
   } else if (downPressed && rightPressed) {
@@ -22,39 +23,45 @@ function dirChange() {
   }
 
   if (player.movement.prevDir !== player.movement.dir) {
-    socket.emit("dir", player.movement.dir);
+    if (player.movement.dir !== "") {
+      socket.emit("start-move", { dir: player.movement.dir, x: player.pos.x, y: player.pos.y });
+      console.log("start");
+    } else {
+      socket.emit("stop-move", { x: player.pos.x, y: player.pos.y });
+      console.log("stop");
+    }  
   }
 }
 
-function movePlayer(player) {
-  switch (player.movement.moveDir) {
+function movePlayer(cplayer) {
+  switch (cplayer.movement.dir) {
     case "u":
-      player.pos.y -= 5;
+      cplayer.pos.y -= 5;
       break;
     case "d":
-      player.pos.y += 5;
+      cplayer.pos.y += 5;
       break;
     case "r":
-      player.pos.x += 5;
+      cplayer.pos.x += 5;
       break;
     case "l":
-      player.pos.x -= 5;
+      cplayer.pos.x -= 5;
       break;
     case "ur":
-      player.pos.y -= 5;
-      player.pos.x += 5;
+      cplayer.pos.y -= 5;
+      cplayer.pos.x += 5;
       break;
     case "ul":
-      player.pos.y -= 5;
-      player.pos.x -= 5;
+      cplayer.pos.y -= 5;
+      cplayer.pos.x -= 5;
       break;
     case "dl":
-      player.pos.y += 5;
-      player.pos.x -= 5;
+      cplayer.pos.y += 5;
+      cplayer.pos.x -= 5;
       break;
     case "dr":
-      player.pos.y += 5;
-      player.pos.x += 5;
+      cplayer.pos.y += 5;
+      cplayer.pos.x += 5;
       break;
     default:
       break;

@@ -105,51 +105,67 @@ io.on("connection", function(socket) {
     }
   });
 
-  socket.on("dir", function(dir) {
+  socket.on("start-move", function({ dir, x, y }) {
     const user = getUserById(users, socket.id);
     user.movement.dir = dir;
-    if (dir !== "") {
-      clearInterval(user.movement.moveInt);
-      user.movement.moveInt = setInterval(function() {
-        switch (user.movement.dir) {
-          case "u":
-            user.pos.y -= 5;
-            break;
-          case "d":
-            user.pos.y += 5;
-            break;
-          case "r":
-            user.pos.x += 5;
-            break;
-          case "l":
-            user.pos.x -= 5;
-            break;
-          case "ur":
-            user.pos.y -= 5;
-            user.pos.x += 5;
-            break;
-          case "ul":
-            user.pos.y -= 5;
-            user.pos.x -= 5;
-            break;
-          case "dl":
-            user.pos.y += 5;
-            user.pos.x -= 5;
-            break;
-          case "dr":
-            user.pos.y += 5;
-            user.pos.x += 5;
-            break;
-          default:
-            break;
-        }
-      }, 1000/60);
-      io.to(user.roomId).emit("start-move", { id: socket.id, dir, x: user.pos.x, y: user.pos.y });
-    } else {
-      clearInterval(user.movement.moveInt);
-      io.to(user.roomId).emit("stop-move", { id: socket.id, x: user.pos.x, y: user.pos.y });
-    }
+    user.pos.x = x;
+    user.pos.y = y;
+    socket.broadcast.to(user.roomId).emit("start-move", { id: socket.id, dir, x, y });
   });
+
+  socket.on("stop-move", function({ x, y }) {
+    const user = getUserById(users, socket.id);
+    user.movement.dir = "";
+    user.pos.x = x;
+    user.pos.y = y;
+    socket.broadcast.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
+  });
+
+  // socket.on("dir", function(dir) {
+  //   const user = getUserById(users, socket.id);
+  //   user.movement.dir = dir;
+  //   if (dir !== "") {
+  //     clearInterval(user.movement.moveInt);
+  //     user.movement.moveInt = setInterval(function() {
+  //       switch (user.movement.dir) {
+  //         case "u":
+  //           user.pos.y -= 5;
+  //           break;
+  //         case "d":
+  //           user.pos.y += 5;
+  //           break;
+  //         case "r":
+  //           user.pos.x += 5;
+  //           break;
+  //         case "l":
+  //           user.pos.x -= 5;
+  //           break;
+  //         case "ur":
+  //           user.pos.y -= 5;
+  //           user.pos.x += 5;
+  //           break;
+  //         case "ul":
+  //           user.pos.y -= 5;
+  //           user.pos.x -= 5;
+  //           break;
+  //         case "dl":
+  //           user.pos.y += 5;
+  //           user.pos.x -= 5;
+  //           break;
+  //         case "dr":
+  //           user.pos.y += 5;
+  //           user.pos.x += 5;
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     }, 1000/60);
+  //     io.to(user.roomId).emit("start-move", { id: socket.id, dir, x: user.pos.x, y: user.pos.y });
+  //   } else {
+  //     clearInterval(user.movement.moveInt);
+  //     io.to(user.roomId).emit("stop-move", { id: socket.id, x: user.pos.x, y: user.pos.y });
+  //   }
+  // });
 
   // when user disconnects
   socket.on("disconnect", function() {
