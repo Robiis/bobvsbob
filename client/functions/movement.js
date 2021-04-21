@@ -1,11 +1,8 @@
 // changes the player's direction
 function dirChange() {
-<<<<<<< HEAD
   // player.movement.prevDir = player.movement.dir;
 
-=======
   player.movement.prevDir = player.movement.dir;
->>>>>>> parent of 0136228 (movement test)
   if (upPressed && rightPressed) {
     player.movement.dir = "ur"
   } else if (downPressed && rightPressed) {
@@ -26,43 +23,6 @@ function dirChange() {
     player.movement.dir = "";
   }
 
-<<<<<<< HEAD
-  socket.emit("dir", player.movement.dir);
-  // if (player.movement.prevDir !== player.movement.dir) {
-  //   socket.emit("dir", player.movement.dir);
-  // }
-
-  // switch (player.movement.dir) {
-  //   case "u":
-  //     player.y -= 10;
-  //     break;
-  //   case "d":
-  //     player.y += 10;
-  //     break;
-  //   case "r":
-  //     player.x += 10;
-  //     break;
-  //   case "l":
-  //     player.x -= 10;
-  //     break;
-  //   case "ur":
-  //     player.y -= 10;
-  //     player.x += 10;
-  //     break;
-  //   case "dr":
-  //     player.y += 10;
-  //     player.x += 10;
-  //     break;
-  //   case "dl":
-  //     player.y += 10;
-  //     player.x -= 10;
-  //     break;
-  //   case "ul":
-  //     player.y -= 10;
-  //     player.x -= 10;
-  //     break;
-  // }
-=======
   if (player.movement.prevDir !== player.movement.dir) {
     socket.emit("dir", player.movement.dir);
   }
@@ -101,7 +61,6 @@ function movePlayer(player) {
     default:
       break;
   } 
->>>>>>> parent of 0136228 (movement test)
 }
 
 // // changes the player's direction

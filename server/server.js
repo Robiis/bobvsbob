@@ -147,10 +147,6 @@ io.on("connection", function(socket) {
   });
 
   socket.on("dir", function(dir) {
-<<<<<<< HEAD
-    if (getUserById(users, socket.id)) {
-      getUserById(users, socket.id).movement.dir = dir;
-=======
     const user = getUserById(users, socket.id);
     user.movement.dir = dir;
     if (dir !== "") {
@@ -193,7 +189,6 @@ io.on("connection", function(socket) {
     } else {
       clearInterval(user.movement.moveInt);
       io.to(user.roomId).emit("stop-move", { id: socket.id, x: user.pos.x, y: user.pos.y });
->>>>>>> parent of 0136228 (movement test)
     }
   });
 
