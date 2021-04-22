@@ -48,20 +48,20 @@ function movePlayer(cplayer) {
       cplayer.pos.x -= 5;
       break;
     case "ur":
-      cplayer.pos.y -= 5;
-      cplayer.pos.x += 5;
+      cplayer.pos.y -= 5 / Math.sqrt(2);
+      cplayer.pos.x += 5 / Math.sqrt(2);
       break;
     case "ul":
-      cplayer.pos.y -= 5;
-      cplayer.pos.x -= 5;
+      cplayer.pos.y -= 5 / Math.sqrt(2);
+      cplayer.pos.x -= 5 / Math.sqrt(2);
       break;
     case "dl":
-      cplayer.pos.y += 5;
-      cplayer.pos.x -= 5;
+      cplayer.pos.y += 5 / Math.sqrt(2);
+      cplayer.pos.x -= 5 / Math.sqrt(2);
       break;
     case "dr":
-      cplayer.pos.y += 5;
-      cplayer.pos.x += 5;
+      cplayer.pos.y += 5 / Math.sqrt(2);
+      cplayer.pos.x += 5 / Math.sqrt(2);
       break;
     default:
       break;

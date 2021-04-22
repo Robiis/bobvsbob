@@ -7,7 +7,7 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
-let canvasMagnificationRatio = 2;
+let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
 let obstacles = [];
 
 // images
@@ -18,7 +18,12 @@ gaidaAtteluIeladi(function() {}, roof);
 
 // obstacles
 obstacles.push(
-  new obstacle(200, 200, roof, "roofBlue")
+  new obstacle(200, 200, roof,  "roofBlue", true),
+  new obstacle((1-canvasMagnificationRatio) * canvas.width, -canvas.height - 1, canvasMagnificationRatio * canvas.width, 5, false),//upper border
+  new obstacle((1-canvasMagnificationRatio) * canvas.width, canvas.height, canvasMagnificationRatio * canvas.width, 5, false),//lower border
+  new obstacle((1-canvasMagnificationRatio) * canvas.width - 1, (1-canvasMagnificationRatio) * canvas.height, 5, canvasMagnificationRatio * canvas.height, false),//left border
+  new obstacle(canvas.width, (1-canvasMagnificationRatio) * canvas.height, 5, canvasMagnificationRatio * canvas.height, false)//right border
+
 );
 
 // constants
@@ -48,7 +53,7 @@ function redraw() {
 
   // camera movement
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
-  ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // text on screen
   // ctx.fillText(`${user.pos.x}, ${user.pos.y}`, 50, 50);
@@ -67,7 +72,9 @@ function redraw() {
   
   //draws map
   obstacles.forEach(function(obs){
-    obs.draw();
+    if (obs.drawable){
+      obs.draw();
+    }
   });
   
   ctx.fillRect(-25,-25,50,50)
