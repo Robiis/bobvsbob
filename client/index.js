@@ -7,6 +7,7 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
+let infoPressed = false;
 let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
 let obstacles = [];
 
@@ -32,8 +33,9 @@ const KeyboardHelper = {
   right: 68,
   up: 87,
   down: 83,
-  reload: 82
-}; // A, D, W, S
+  reload: 82,
+  info: 81
+};
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
@@ -51,25 +53,19 @@ function redraw() {
   });
   borderCheck(player);
 
-  // camera movement
-  ctx.setTransform(1,0,0,1,0,0);//////////////matrix
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  players.forEach(function(cplayer) {
+    borderCheck(cplayer);
+  });
 
-  // text on screen
-  // ctx.fillText(`${user.pos.x}, ${user.pos.y}`, 50, 50);
-  // let count = 50;
-  // users.forEach(function(cuser) {
-  //   count += 50;
-  //   ctx.fillText(`${cuser.pos.x}, ${cuser.pos.y}`, 50, count);
-  // });
-  ctx.fillText(player.movement.dir, 50, 50);
+  // camera movement
+  ctx.setTransform(1, 0, 0, 1, 0, 0);//////////////matrix
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // camera movement
   var camX = clamp(-player.pos.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
   var camY = clamp(-player.pos.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);
 
-  
   //draws map
   obstacles.forEach(function(obs){
     if (obs.drawable){
@@ -80,10 +76,14 @@ function redraw() {
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
 
-  player.draw_body();
   players.forEach(function(cplayer) {
     cplayer.draw_body();
   });
+  player.draw_body();
+
+  if (infoPressed) {
+    drawInfoScreen(camX, camY, player, players);
+  }
 
   lastUpdate = now;
   if (clientState.gameStarted) {
@@ -96,6 +96,8 @@ camera movement -- done
 map design -- kinda done
 map store -- no need ur mom
 border -- yeah kinda done
+map store -- kas tas tads jason
+border -- 
 shooting --
 HP -- 
 obsticles --

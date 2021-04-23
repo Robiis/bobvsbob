@@ -25,10 +25,8 @@ function dirChange() {
   if (player.movement.prevDir !== player.movement.dir) {
     if (player.movement.dir !== "") {
       socket.emit("start-move", { dir: player.movement.dir, x: player.pos.x, y: player.pos.y });
-      console.log("start");
     } else {
       socket.emit("stop-move", { x: player.pos.x, y: player.pos.y });
-      console.log("stop");
     }  
   }
 }

@@ -73,7 +73,7 @@ socket.on("connect-user", function({ id, username, admin }) {
   console.log(`User ${username} connected`);
   createAPlayerUsername(id, username);
   users.push({ id, username, admin });
-  players.push(new client(id, 50, 50, "#F38181", user.username));
+  players.push(new client(id, 50, 50, "#F38181", username));
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
@@ -122,6 +122,7 @@ socket.on("admin-change", function(id) {
 // if a player updates their username
 socket.on("change-username", function({ id, newUsername }) {
   getUserById(users, id).username = newUsername;
+  getUserById(players, id).username = newUsername;
   updatePlayerUsername(id, newUsername);
   if (getUserById(users, id).admin) {
     adminPlayerCrown(id, newUsername);
@@ -159,6 +160,8 @@ socket.on("stop-move", function({ id, x, y }) {
 socket.on("disconnect", function() {
   if (errDiv.style.display !== "block") {
     errDiv.style.display = "block";
-    errMsg.innerHTML = "Disconnected";
+    errMsg.innerHTML = "Disconnected <br> <a href='/'>Back to menu</a>";
+    lobbyDiv.style.display = "none";
+    canvasDiv.style.display = "none";
   }
 });
