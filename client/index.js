@@ -53,8 +53,12 @@ function redraw() {
   });
   borderCheck(player);
 
+  players.forEach(function(cplayer) {
+    borderCheck(cplayer);
+  });
+
   // camera movement
-  ctx.setTransform(1,0,0,1,0,0);//////////////matrix
+  ctx.setTransform(1, 0, 0, 1, 0, 0);//////////////matrix
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // camera movement
