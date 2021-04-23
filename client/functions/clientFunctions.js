@@ -83,6 +83,7 @@ function clientPlayerSign(id) {
 function changeUsername() {
   const input = document.getElementById("username");
   user.username = input.value;
+  player.username = input.value;
 
   socket.emit("change-username", input.value);
   input.placeholder = input.value;

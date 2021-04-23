@@ -7,6 +7,7 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
+let infoPressed = false;
 let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
 let obstacles = [];
 
@@ -18,7 +19,7 @@ gaidaAtteluIeladi(function() {}, roof);
 
 // obstacles
 obstacles.push(
-  new obstacle(200, 200, roof,  "roofBlue", true),
+  new obstacle(200, 200, roof, "roofBlue", true),
   new obstacle((1-canvasMagnificationRatio) * canvas.width, -canvas.height - 1, canvasMagnificationRatio * canvas.width, 5, false),//upper border
   new obstacle((1-canvasMagnificationRatio) * canvas.width, canvas.height, canvasMagnificationRatio * canvas.width, 5, false),//lower border
   new obstacle((1-canvasMagnificationRatio) * canvas.width - 1, (1-canvasMagnificationRatio) * canvas.height, 5, canvasMagnificationRatio * canvas.height, false),//left border
@@ -32,8 +33,9 @@ const KeyboardHelper = {
   right: 68,
   up: 87,
   down: 83,
-  reload: 82
-}; // A, D, W, S
+  reload: 82,
+  info: 81
+};
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
@@ -55,21 +57,11 @@ function redraw() {
   ctx.setTransform(1,0,0,1,0,0);//////////////matrix
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // text on screen
-  // ctx.fillText(`${user.pos.x}, ${user.pos.y}`, 50, 50);
-  // let count = 50;
-  // users.forEach(function(cuser) {
-  //   count += 50;
-  //   ctx.fillText(`${cuser.pos.x}, ${cuser.pos.y}`, 50, count);
-  // });
-  ctx.fillText(player.movement.dir, 50, 50);
-
   // camera movement
   var camX = clamp(-player.pos.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
   var camY = clamp(-player.pos.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
   ctx.translate(camX, camY);
 
-  
   //draws map
   obstacles.forEach(function(obs){
     if (obs.drawable){
@@ -80,10 +72,14 @@ function redraw() {
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
 
-  player.draw_body();
   players.forEach(function(cplayer) {
     cplayer.draw_body();
   });
+  player.draw_body();
+
+  if (infoPressed) {
+    drawInfoScreen(camX, camY, player, players);
+  }
 
   lastUpdate = now;
   if (clientState.gameStarted) {
@@ -94,7 +90,7 @@ function redraw() {
 /*
 camera movement -- done
 map design -- kinda done
-map store -- no need ur mom
+map store -- kas tas tads jason
 border -- 
 shooting --
 HP -- 
