@@ -1,5 +1,5 @@
 class obstacle {
-  constructor(x, y, img, imgName, drawable) {
+  constructor(x, y, drawable, img, imgName, width, height) {
       this.x = x;
       this.y = y;
       this.drawable = drawable;
@@ -8,11 +8,8 @@ class obstacle {
         this.height = 150;
         this.img = img;
       } else{
-        //basically, there are four obstacles that correspond to the four borders of the game
-        //we don't need to draw them, so they don't have img and imgName, instead, they have
-        //their width(as img) and height(as imgName)
-        this.width = img;
-        this.height = imgName
+        this.width = width;
+        this.height = height
       }
   }
 
