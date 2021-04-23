@@ -4,8 +4,8 @@ function drawInfoScreen(camX, camY, player, players) {
   const width = 1024;
   const height = 576;
 
-  ctx.font = "80px Arial";
-  ctx.fillStyle = "gray";
+  ctx.font = "80px sans-serif";
+  ctx.fillStyle = "#272525";
   ctx.globalAlpha = 0.85;
 
   ctx.fillRect(x, y, width, height);
@@ -13,7 +13,7 @@ function drawInfoScreen(camX, camY, player, players) {
   ctx.globalAlpha = 1;
 
   ctx.textAlign = "center";
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "white";
 
   ctx.fillText("LEADERBOARD", x + width/2, y + 130);
 
