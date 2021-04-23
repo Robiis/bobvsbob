@@ -18,11 +18,11 @@ gaidaAtteluIeladi(function() {}, roof);
 
 // obstacles
 obstacles.push(
-  new obstacle(200, 200, roof,  "roofBlue", true),
-  new obstacle((1-canvasMagnificationRatio) * canvas.width, -canvas.height - 1, canvasMagnificationRatio * canvas.width, 5, false),//upper border
-  new obstacle((1-canvasMagnificationRatio) * canvas.width, canvas.height, canvasMagnificationRatio * canvas.width, 5, false),//lower border
-  new obstacle((1-canvasMagnificationRatio) * canvas.width - 1, (1-canvasMagnificationRatio) * canvas.height, 5, canvasMagnificationRatio * canvas.height, false),//left border
-  new obstacle(canvas.width, (1-canvasMagnificationRatio) * canvas.height, 5, canvasMagnificationRatio * canvas.height, false)//right border
+  new obstacle(200, 200, true, roof,  "roofBlue", 0, 0),
+  new obstacle((1-canvasMagnificationRatio) * canvas.width, -canvas.height - 1, false,"","", canvasMagnificationRatio * canvas.width, 5),//upper border
+  new obstacle((1-canvasMagnificationRatio) * canvas.width, canvas.height, false,"","", canvasMagnificationRatio * canvas.width, 5),//lower border
+  new obstacle((1-canvasMagnificationRatio) * canvas.width - 1, (1-canvasMagnificationRatio) * canvas.height, false,"","", 5, canvasMagnificationRatio * canvas.height),//left border
+  new obstacle(canvas.width, (1-canvasMagnificationRatio) * canvas.height, false,"","", 5, canvasMagnificationRatio * canvas.height)//right border
 
 );
 
@@ -95,7 +95,7 @@ function redraw() {
 camera movement -- done
 map design -- kinda done
 map store -- no need ur mom
-border -- 
+border -- yeah kinda done
 shooting --
 HP -- 
 obsticles --
