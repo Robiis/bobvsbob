@@ -16,6 +16,9 @@ let mousePos = {
   x: 0,
   y: 0
 }
+let currentClosePoints = []; // the closest points from player to an obstacle(or to a player)
+let closePList = []; // the closest point from player to all obstacles and players
+let coefficient; // the slope of player's shooting trajectory
 
 // images
 const roof = new Image();
@@ -30,7 +33,6 @@ obstacles.push(
   new obstacle((1-canvasMagnificationRatio) * canvas.width, canvas.height, false,"","", canvasMagnificationRatio * canvas.width, 1),//lower border
   new obstacle((1-canvasMagnificationRatio) * canvas.width - 1, (1-canvasMagnificationRatio) * canvas.height, false,"","", 1, canvasMagnificationRatio * canvas.height),//left border
   new obstacle(canvas.width, (1-canvasMagnificationRatio) * canvas.height, false,"","", 1, canvasMagnificationRatio * canvas.height)//right border
-
 );
 
 // constants
@@ -46,17 +48,24 @@ const KeyboardHelper = {
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
 document.addEventListener("keyup", keyUpChecker, false);
+// gets the coords of mouse
 document.addEventListener("mousemove", function(event){
   mousePos.x = event.clientX;
   mousePos.y = event.clientY;
-}, false);//for shooting
+}, false);
+// if click, then shooting check
+document.addEventListener('mousedown', function() {
+  player.shootYes = true;
+}, false)
+document.addEventListener('mouseup', function() {
+  player.shootYes = false;
+}, false);
 // loop--------------------------------------------------------------------------------------------------------------
 let now, dt;
 function redraw() {
+
   now = performance.now();
   dt = now - lastUpdate;
-  //screenSize();
-
   dirChange();
 
   // moves players
@@ -91,6 +100,11 @@ function redraw() {
   // this part will be deleted
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
+  
+  // shooting check
+  if (player.shootYes === true) {
+    shootingCheck();
+  };
 
   // draws players
   players.forEach(function(cplayer) {
@@ -100,6 +114,9 @@ function redraw() {
   player.draw_weapon();
   player.draw_body();
   player.draw_name();
+
+
+
 
   // info stuff
   if (infoPressed) {

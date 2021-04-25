@@ -16,6 +16,7 @@ class client {
     this.font = "30px Arial";
     this.nameColor = "#95E1D3";
     //for shooting
+    this.shootYes = false; // if mouse clicked
     this.theta = 0; // the angle between mouse and player
     this.lastMouseX = this.x + 1; // the last mouse x coordinate
     this.lastMouseY = this.y;// the last mouse y coordinate
@@ -25,6 +26,7 @@ class client {
     this.wColor = "black";
     this.shootingDist = 600; // how far can player shoot
   }
+
   // Draws the player's body
   draw_body() {
     ctx.fillStyle = this.color;
@@ -35,6 +37,7 @@ class client {
     ctx.stroke();
     ctx.closePath();
   }
+
   // Draws the player's name
   draw_name() {
     ctx.font = this.font;
@@ -42,6 +45,7 @@ class client {
     let width = ctx.measureText(this.username).width;
     ctx.fillText(this.username, this.pos.x - 1 / 2 * width, this.pos.y - this.r - 10);
   }
+  
   // Draws the playes's weapon
   draw_weapon() {
     // calculates the end point coords of weapon(Some Math shit) (how dare you say that) (Ur mom)

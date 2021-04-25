@@ -11,6 +11,10 @@ class obstacle {
         this.width = width;
         this.height = height
       }
+      this.lu = [this.x, this.y]; //upper left corner coords
+      this.ru = [this.x + this.width, this.y]; //upper right corner
+      this.ld = [this.x, this.y + this.height]; //bottom left corner
+      this.rd = [this.x + this.width, this.y + this.height]; //bottom right corner
   }
 
   draw() {
