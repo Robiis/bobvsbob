@@ -1,5 +1,5 @@
 // gets position of the mouse
-function mouseCoordsGet() {
+function mouseCoordsGet(camX, camY) {
   if (window.innerWidth <= 1200 && canvasWidth != 800){
     canvasWidth = 800;
     canvasHeight = 450;
@@ -10,8 +10,10 @@ function mouseCoordsGet() {
     canvasWidth = 1600;
     canvasHeight = 900;
   }
-  player.lastMouseX = (mousePos.x - canvas.offsetLeft) + player.pos.x - canvasWidth * 0.5;
-  player.lastMouseY = (mousePos.y - canvas.offsetTop) + player.pos.y - canvasHeight * 0.5;
+  cameraX = clamp(-player.pos.x + canvasWidth/2, 0, mapSize.width - canvasWidth);
+  cameraY = clamp(-player.pos.y + canvasHeight/2, 0, mapSize.height - canvasHeight);
+  player.lastMouseX = (mousePos.x - canvas.offsetLeft) - cameraX;
+  player.lastMouseY = (mousePos.y - canvas.offsetTop) - cameraY;
 }
 
 // the most important part of this game - the shooting check
@@ -25,13 +27,13 @@ function shootingCheck() {
   closePList.push(eX ** 2 + eY ** 2);
   //checks the closest crosspoint with trajectory
   obstacles.forEach(function(obs) {
-      //angles from player's center to these vertex points
-      let angleLU = Math.atan2(obs.lu[1] - player.pos.y, obs.lu[0] - player.pos.x);
-      let angleRU = Math.atan2(obs.ru[1] - player.pos.y, obs.ru[0] - player.pos.x);
-      let angleLD = Math.atan2(obs.ld[1] - player.pos.y, obs.ld[0] - player.pos.x);
-      let angleRD = Math.atan2(obs.rd[1] - player.pos.y, obs.rd[0] - player.pos.x);
-      //this huge IF checks in which point trajectory crosses the obs
-      //if obs is on the right side of player
+    //angles from player's center to these vertex points
+    let angleLU = Math.atan2(obs.lu[1] - player.pos.y, obs.lu[0] - player.pos.x);
+    let angleRU = Math.atan2(obs.ru[1] - player.pos.y, obs.ru[0] - player.pos.x);
+    let angleLD = Math.atan2(obs.ld[1] - player.pos.y, obs.ld[0] - player.pos.x);
+    let angleRD = Math.atan2(obs.rd[1] - player.pos.y, obs.rd[0] - player.pos.x);
+    //this huge IF checks in which point trajectory crosses the obs
+    //if obs is on the right side of player
       if (obs.x > player.pos.x) {
         if (obs.y + obs.height < player.pos.y) { //if obs is above player
             //in this case the biggest angle is lu and rd, the LD is in the middles

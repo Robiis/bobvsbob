@@ -1,7 +1,5 @@
 // settings
 focus();
-let canvas = document.getElementById("myCanvas");
-let ctx = canvas.getContext("2d");
 let canvasWidth = 1600;// in shooting.js it needs the REAL size of canvas, bacause sometimes style.css changes it
 let canvasHeight = 900; // the REAL size of canvas.
 let rightPressed = false;
@@ -19,6 +17,29 @@ let mousePos = {
 let currentClosePoints = []; // the closest points from player to an obstacle(or to a player)
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
+let lastShot = 1000; // time lasted from the last shot(in milliseconds)
+
+// constants
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+const KeyboardHelper = {
+  left: 65,
+  right: 68,
+  up: 87,
+  down: 83,
+  reload: 82,
+  info: 81
+};
+const mapSize = {
+  width: 3200,
+  height: 1800
+}
+const weapon = {
+  ak: {
+    rateOfFire: 1000/5,// 5 reizes sekundē, so katru 200 ms var izšaut vienu reizi
+    damage: 10// damage dealt with each bullet
+  },
+}
 
 // images
 const roof = new Image();
@@ -29,21 +50,11 @@ gaidaAtteluIeladi(function() {}, roof);
 // obstacles
 obstacles.push(
   new obstacle(200, 200, true, roof,  "roofBlue", 0, 0),
-  new obstacle((1-canvasMagnificationRatio) * canvas.width, -canvas.height - 1, false,"","", canvasMagnificationRatio * canvas.width, 1),//upper border
-  new obstacle((1-canvasMagnificationRatio) * canvas.width, canvas.height, false,"","", canvasMagnificationRatio * canvas.width, 1),//lower border
-  new obstacle((1-canvasMagnificationRatio) * canvas.width - 1, (1-canvasMagnificationRatio) * canvas.height, false,"","", 1, canvasMagnificationRatio * canvas.height),//left border
-  new obstacle(canvas.width, (1-canvasMagnificationRatio) * canvas.height, false,"","", 1, canvasMagnificationRatio * canvas.height)//right border
+  new obstacle(-0.5 * mapSize.width, -0.5 * mapSize.height - 1, false,"","", mapSize.width, 1),//upper border
+  new obstacle(-0.5 * mapSize.width, 0.5 * mapSize.height, false,"","", mapSize.width, 1),//lower border
+  new obstacle(-0.5 * mapSize.width - 1, -0.5 * mapSize.height, false,"","", 1, mapSize.height),//left border
+  new obstacle(0.5 * mapSize.width, -0.5 * mapSize.height, false,"","", 1, mapSize.height)//right border
 );
-
-// constants
-const KeyboardHelper = {
-  left: 65,
-  right: 68,
-  up: 87,
-  down: 83,
-  reload: 82,
-  info: 81
-};
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
@@ -85,10 +96,10 @@ function redraw() {
   // clears canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // camera movement
-  var camX = clamp(-player.pos.x + canvas.width/2, 0, canvasMagnificationRatio * canvas.width - canvas.width);
-  var camY = clamp(-player.pos.y + canvas.height/2, 0, canvasMagnificationRatio * canvas.height - canvas.height);
+  var camX = clamp(-player.pos.x + canvas.width/2, 0, mapSize.width - canvas.width);
+  var camY = clamp(-player.pos.y + canvas.height/2, 0, mapSize.height - canvas.height);
   ctx.translate(camX, camY);
-  mouseCoordsGet();
+  mouseCoordsGet(camX, camY);
 
   //draws obstacles
   obstacles.forEach(function(obs){
@@ -102,8 +113,10 @@ function redraw() {
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
   
   // shooting check
-  if (player.shootYes === true) {
+  if (player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire) {
     shootingCheck();
+    lastShot = performance.now();
+    console.log("ur mom")
   };
 
   // draws players

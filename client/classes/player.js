@@ -16,11 +16,11 @@ class client {
     this.font = "30px Arial";
     this.nameColor = "#95E1D3";
     //for shooting
+    this.weapon = weapon.ak; // player's weapon
     this.shootYes = false; // if mouse clicked
     this.theta = 0; // the angle between mouse and player
     this.lastMouseX = this.x + 1; // the last mouse x coordinate
     this.lastMouseY = this.y;// the last mouse y coordinate
-    this.weapon = "ak"; // player's weapon
     this.wWidth = 5;
     this.wLength = 25;
     this.wColor = "black";
