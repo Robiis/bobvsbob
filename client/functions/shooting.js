@@ -160,12 +160,13 @@ function shootingCheck() {
 
   //sorts the list from small to large
   closePList.sort(function(a, b) {
-      return a - b
+      return a - b;
   });
 
   // draw a bullet trail and send bullet trail to other clients
   bulletTrail(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
-
+  shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
+  
   //tells if the player is hurt
   players.forEach(function(enemy) {
       if (enemy.crossPointDistance === closePList[0]) {
@@ -176,10 +177,11 @@ function shootingCheck() {
       }
       enemy.crossPointDistance = 0;
   });
-  //cleat this so that we can reuse it
+  //clear this so that we can reuse it
   closePList = [];
 }
 
+// bullet trail
 function bulletTrail(fromX, fromY, toX, toY) {
   ctx.strokeStyle = "black";
   ctx.beginPath();

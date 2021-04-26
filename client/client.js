@@ -156,6 +156,11 @@ socket.on("stop-move", function({ id, x, y }) {
   cplayer.movement.dir = "";
 });
 
+// when other client shoots
+socket.on("shoot", function({ fromX, fromY, toX, toY, id }) {
+  getUserById(players, id).shoot = {shoot: true, fromX, fromY, toX, toY};
+});
+
 // if user is diconnected from the server
 socket.on("disconnect", function() {
   if (errDiv.style.display !== "block") {
