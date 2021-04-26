@@ -33,6 +33,7 @@ function dirChange() {
 
 function movePlayer(cplayer, dt) {
   cplayer.theta = Math.atan2(cplayer.lastMouseY - cplayer.pos.y, cplayer.lastMouseX - cplayer.pos.x);
+  console.log(cplayer.theta);
   dt = dt * 0.06;
   switch (cplayer.movement.dir) {
     case "u":
@@ -68,6 +69,7 @@ function movePlayer(cplayer, dt) {
   } 
 }
 
+// camera movement stuff
 function clamp(value, min, max){
   if(value < min) return min;
   else if(value > max) return max;

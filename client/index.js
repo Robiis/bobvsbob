@@ -65,12 +65,14 @@ document.addEventListener("mousemove", function(event){
   mousePos.y = event.clientY;
 }, false);
 // if click, then shooting check
-document.addEventListener('mousedown', function() {
+document.addEventListener("mousedown", function() {
   player.shootYes = true;
 }, false)
-document.addEventListener('mouseup', function() {
+document.addEventListener("mouseup", function() {
   player.shootYes = false;
 }, false);
+// remove right click default actions
+window.addEventListener("contextmenu", function (e) { e.preventDefault() }, false);
 // loop--------------------------------------------------------------------------------------------------------------
 let now, dt;
 function redraw() {
@@ -118,18 +120,20 @@ function redraw() {
     lastShot = performance.now();
     console.log("ur mom")
   };
+  
 
   // draws players
   players.forEach(function(cplayer) {
+    if (cplayer.shoot.shoot) {
+      cplayer.shoot.shoot = false;
+      bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY);
+    }
     cplayer.draw_body();
     cplayer.draw_name();
   });
   player.draw_weapon();
   player.draw_body();
   player.draw_name();
-
-
-
 
   // info stuff
   if (infoPressed) {
@@ -141,8 +145,6 @@ function redraw() {
     requestAnimationFrame(redraw);
   }
 }
-
-
 
 /*
 camera movement -- done

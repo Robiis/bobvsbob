@@ -13,7 +13,14 @@ class client {
       x: x,
       y: y
     };
-    this.font = "30px Arial";
+    this.shoot = {
+      shoot: false,
+      fromX: 0,
+      fromY: 0,
+      toX: 0,
+      toY: 0
+    }
+    this.font = "20px Arial";
     this.nameColor = "#95E1D3";
     //for shooting
     this.weapon = weapon.ak; // player's weapon
@@ -42,13 +49,13 @@ class client {
   draw_name() {
     ctx.font = this.font;
     ctx.fillStyle = this.nameColor;
-    let width = ctx.measureText(this.username).width;
+    const width = ctx.measureText(this.username).width;
     ctx.fillText(this.username, this.pos.x - 1 / 2 * width, this.pos.y - this.r - 10);
   }
   
   // Draws the playes's weapon
   draw_weapon() {
-    // calculates the end point coords of weapon(Some Math shit) (how dare you say that) (Ur mom)
+    // calculates the end point coords of weapon(Some Math shit) (how dare you say that) (Ur mom) (No u)
     // be careful! You have to add this.r to this.wLength, because wLength is the length outside the player body(the circle)
     this.theta = Math.atan2(this.lastMouseY - this.pos.y, this.lastMouseX - this.pos.x);
     let eX = this.pos.x + Math.cos(this.theta) * (this.wLength + this.r); // eX stands for endpoint X
