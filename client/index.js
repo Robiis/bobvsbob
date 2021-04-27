@@ -18,6 +18,7 @@ let currentClosePoints = []; // the closest points from player to an obstacle(or
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
+let speeeed = 5; // for testing
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -96,29 +97,27 @@ function redraw() {
   // camera movement
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   // clears canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(-0.5*mapSize.width, -0.5*mapSize.height, mapSize.width, mapSize.height);
   // camera movement
-  var camX = clamp(-player.pos.x + canvas.width/2, 0, mapSize.width - canvas.width);
-  var camY = clamp(-player.pos.y + canvas.height/2, 0, mapSize.height - canvas.height);
+  var camX = clamp(-player.pos.x + canvas.width/2, -canvas.width, 0.5 * (mapSize.width + canvas.width));
+  var camY = clamp(-player.pos.y + canvas.height/2, -canvas.height, 0.5 * (mapSize.height + canvas.height));
   ctx.translate(camX, camY);
   mouseCoordsGet(camX, camY);
 
   //draws obstacles
   obstacles.forEach(function(obs){
-    if (obs.drawable){
-      obs.draw();
-    }
+    obs.draw();
   });
   
   // this part will be deleted
   ctx.fillRect(-25,-25,50,50)
   ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
+  ctx.fillRect(-25 + canvas.width,-25 + canvas.height,50,50)
   
   // shooting check
   if (player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire) {
     shootingCheck();
     lastShot = performance.now();
-    console.log("ur mom")
   };
   
 
@@ -149,9 +148,9 @@ function redraw() {
 /*
 camera movement -- done
 map design -- kinda done
-map store -- no need ur mom
+map store -- no need 
 border -- yeah kinda done
-map store -- kas tas tads jason, tava mama
+map store -- kas tas tads jason
 shooting --
 HP -- 
 obsticles -- done

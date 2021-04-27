@@ -33,36 +33,35 @@ function dirChange() {
 
 function movePlayer(cplayer, dt) {
   cplayer.theta = Math.atan2(cplayer.lastMouseY - cplayer.pos.y, cplayer.lastMouseX - cplayer.pos.x);
-  console.log(cplayer.theta);
   dt = dt * 0.06;
   switch (cplayer.movement.dir) {
     case "u":
-      cplayer.pos.y -= 5 * dt;
+      cplayer.pos.y -= 5 * dt * speeeed;
       break;
     case "d":
-      cplayer.pos.y += 5 * dt;
+      cplayer.pos.y += 5 * dt * speeeed;
       break;
     case "r":
-      cplayer.pos.x += 5 * dt;
+      cplayer.pos.x += 5 * dt * speeeed;
       break;
     case "l":
-      cplayer.pos.x -= 5 * dt;
+      cplayer.pos.x -= 5 * dt * speeeed;
       break;
     case "ur":
-      cplayer.pos.y -= 5 / Math.sqrt(2) * dt;
-      cplayer.pos.x += 5 / Math.sqrt(2) * dt;
+      cplayer.pos.y -= 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.x += 5 / Math.sqrt(2) * dt * speeeed;
       break;
     case "ul":
-      cplayer.pos.y -= 5 / Math.sqrt(2) * dt;
-      cplayer.pos.x -= 5 / Math.sqrt(2) * dt;
+      cplayer.pos.y -= 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.x -= 5 / Math.sqrt(2) * dt * speeeed;
       break;
     case "dl":
-      cplayer.pos.y += 5 / Math.sqrt(2) * dt;
-      cplayer.pos.x -= 5 / Math.sqrt(2) * dt;
+      cplayer.pos.y += 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.x -= 5 / Math.sqrt(2) * dt * speeeed;
       break;
     case "dr":
-      cplayer.pos.y += 5 / Math.sqrt(2) * dt;
-      cplayer.pos.x += 5 / Math.sqrt(2) * dt;
+      cplayer.pos.y += 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.x += 5 / Math.sqrt(2) * dt * speeeed;
       break;
     default:
       break;

@@ -18,6 +18,12 @@ class obstacle {
   }
 
   draw() {
+    if (this.drawable){
       ctx.drawImage(this.img, this.x, this.y);
+    } else{
+      ctx.fillStyle = "yellow";
+      ctx.fillRect(this.x,this.y,this.width, this.height);
+    }
+      
   }
 }

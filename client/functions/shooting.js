@@ -3,6 +3,7 @@ function mouseCoordsGet(camX, camY) {
   if (window.innerWidth <= 1200 && canvasWidth != 800){
     canvasWidth = 800;
     canvasHeight = 450;
+    ratio = 2;
   } else if (window.innerWidth <= 1600 && window.innerWidth > 1200 && canvasWidth != 1200){
     canvasWidth = 1200;
     canvasHeight = 675;
@@ -10,10 +11,11 @@ function mouseCoordsGet(camX, camY) {
     canvasWidth = 1600;
     canvasHeight = 900;
   }
-  cameraX = clamp(-player.pos.x + canvasWidth/2, 0, mapSize.width - canvasWidth);
-  cameraY = clamp(-player.pos.y + canvasHeight/2, 0, mapSize.height - canvasHeight);
-  player.lastMouseX = (mousePos.x - canvas.offsetLeft) - cameraX;
-  player.lastMouseY = (mousePos.y - canvas.offsetTop) - cameraY;
+  //cameraX = clamp(-player.pos.x + canvasWidth/2, 0, mapSize.width - canvasWidth);
+  //cameraY = clamp(-player.pos.y + canvasHeight/2, 0, mapSize.height - canvasHeight);
+  //console.log(canvasWidth, canvasHeight);
+  player.lastMouseX = (mousePos.x - canvas.offsetLeft) + player.pos.x - 0.5 * canvasWidth;
+  player.lastMouseY = (mousePos.y - canvas.offsetTop) + player.pos.y - 0.5 * canvasHeight;
 }
 
 // the most important part of this game - the shooting check

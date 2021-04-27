@@ -3,7 +3,6 @@ function drawInfoScreen(camX, camY, player, players) {
   const y = 162 - camY;
   const width = 1024;
   const height = 576;
-  console.log(camX, camY)
 
   ctx.font = "80px sans-serif";
   ctx.fillStyle = "#272525";
