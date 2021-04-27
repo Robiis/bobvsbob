@@ -37,7 +37,7 @@ const mapSize = {
 }
 const weapon = {
   ak: {
-    rateOfFire: 1000/5,// 5 reizes sekundē, so katru 200 ms var izšaut vienu reizi
+    rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
     damage: 10// damage dealt with each bullet
   },
 }

@@ -19,7 +19,7 @@ const errDiv = document.getElementById("err");
 const errMsg = document.getElementById("err-msg");
 
 // generate a random username
-user.username = `coolusername${Math.floor(Math.random() * 9999)}`;
+user.username = `bob${Math.floor(Math.random() * 9999)}`;
 document.getElementById("username").placeholder = user.username;
 
 // write to the lobby link
@@ -135,7 +135,7 @@ socket.on("start-game", function() {
   clientState.gameStarted = true;
   canvasDiv.style.display = "block";
 
-  document.title = "2DCSGO";
+  document.title = "Bob vs Bob";
   lastUpdate = performance.now();
   redraw();
 });
