@@ -18,7 +18,7 @@ let currentClosePoints = []; // the closest points from player to an obstacle(or
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
-let speeeed = 5; // for testing
+// let speeeed = 5; // for testing
 
 // constants
 const canvas = document.getElementById("myCanvas");
