@@ -18,7 +18,7 @@ let currentClosePoints = []; // the closest points from player to an obstacle(or
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
-// let speeeed = 5; // for testing
+let speeeed = 5; // for testing
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -32,8 +32,8 @@ const KeyboardHelper = {
   info: 81
 };
 const mapSize = {
-  width: 3200,
-  height: 1800
+  width: 4000,
+  height: 2000
 }
 const weapon = {
   ak: {
@@ -99,15 +99,10 @@ function redraw() {
   // clears canvas
   ctx.clearRect(-0.5*mapSize.width, -0.5*mapSize.height, mapSize.width, mapSize.height);
   // camera movement
-  var camX = clamp(-player.pos.x + canvas.width/2, -0.5 * canvas.width, 0.5 * (mapSize.width + canvas.width));
-  var camY = clamp(-player.pos.y + canvas.height/2, -0.5 * canvas.height, 0.5 * (mapSize.height + canvas.height));
+  var camX = clamp(-player.pos.x + canvas.width/2, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
+  var camY = clamp(-player.pos.y + canvas.height/2, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
   ctx.translate(camX, camY);
   mouseCoordsGet(camX, camY);
-
-  //draws obstacles
-  obstacles.forEach(function(obs){
-    obs.draw();
-  });
   
   // this part will be deleted
   ctx.fillRect(-25,-25,50,50)
@@ -120,7 +115,6 @@ function redraw() {
     lastShot = performance.now();
   };
   
-
   // draws players
   players.forEach(function(cplayer) {
     if (cplayer.shoot.shoot) {
@@ -135,6 +129,11 @@ function redraw() {
   player.draw_body();
   player.draw_name();
   player.draw_health();
+  
+  //draws obstacles
+  obstacles.forEach(function(obs){
+    obs.draw();
+  });
 
   // info stuff
   if (infoPressed) {
