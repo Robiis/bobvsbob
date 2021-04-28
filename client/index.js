@@ -18,7 +18,8 @@ let currentClosePoints = []; // the closest points from player to an obstacle(or
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
-// let speeeed = 5; // for testing
+let lastReload = 2000; // time since last reload
+let reloading = false; // if reloading
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -38,15 +39,22 @@ const mapSize = {
 const weapon = {
   ak: {
     rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
-    damage: 10// damage dealt with each bullet
+    damage: 10,// damage dealt with each bullet
+    reloadTime: 2000, // reload time in milliseconds
+    bullets: 30, 
+    maxBullets: 30
   },
 }
 
 // images
 const roof = new Image();
 roof.src = "roofBlue.png";
+const bulletIcon = new Image();
+bulletIcon.src = "bulletIcon.png";
+const reloadIcon = new Image();
+reloadIcon.src = "reloadIcon.png";
 
-gaidaAtteluIeladi(function() {}, roof);
+gaidaAtteluIeladi(function() {}, roof, bulletIcon, reloadIcon);
 
 // obstacles
 obstacles.push(
@@ -115,11 +123,21 @@ function redraw() {
   ctx.fillRect(-25 + canvas.width,-25 + canvas.height,50,50)
   
   // shooting check
-  if (player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire) {
+  if (player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) {
     shootingCheck();
     lastShot = performance.now();
-  };
-  
+    player.weapon.bullets--;
+  }
+
+  // reloading
+  if (reloadPressed && player.weapon.bullets !== player.weapon.maxBullets && reloading !== true) {
+    reloading = true;
+    lastReload = performance.now();
+  }
+  if (reloading === true && performance.now() - lastReload >= player.weapon.reloadTime) {
+    reloading = false;
+    player.weapon.bullets = player.weapon.maxBullets;
+  }
 
   // draws players
   players.forEach(function(cplayer) {
@@ -134,10 +152,11 @@ function redraw() {
   player.draw_body();
   player.draw_name();
 
-  // info stuff
+  // ui stuff
   if (infoPressed) {
     drawInfoScreen(camX, camY, player, players);
   }
+  drawBulletReloadUi(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY, bulletIcon);
 
   lastUpdate = now;
   if (clientState.gameStarted) {
@@ -153,7 +172,7 @@ border -- yeah kinda done
 map store -- kas tas tads jason
 shooting --
 HP -- 
-obsticles -- done
+obstacles -- done
 ieroči -- 
 cartoon rooftop top view -- done
 */

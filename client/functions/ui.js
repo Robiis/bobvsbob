@@ -34,3 +34,44 @@ function drawInfoScreen(camX, camY, player, players) {
   ctx.textAlign = "start";
   ctx.fillStyle = player.color;
 }
+
+// draws bullet count and reload animation
+function drawBulletReloadUi(reloading, reloadTime, lastReload, bullets, camX, camY, bulletImg) {
+  ctx.font = "35px sans-serif";
+  if (!reloading) {
+    ctx.fillStyle = "black";
+    ctx.fillText(bullets, 1400 - camX, 835 - camY);
+    ctx.drawImage(bulletImg, 1450 - camX, 800 - camY);
+  } else {
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "#272525";
+    ctx.textAlign = "center";
+
+    ctx.fillText("Reloading...", 1400 - camX, 835 - camY);
+    drawCircle(800 - camX, 632 - camY, 73, 0, 2 * Math.PI);
+    ctx.lineWidth = 25;
+    ctx.strokeStyle = "#F05E23";
+    drawCircle(800 - camX, 632 - camY, 57, 1.5 * Math.PI, ((performance.now() - lastReload)/reloadTime*2 - 0.5) * Math.PI);
+    ctx.fillStyle = "#272525";
+    drawCircle(800 - camX, 632 - camY, 45, 0, 2 * Math.PI, true);
+    ctx.fillStyle = "white";
+    ctx.fillText((Math.abs(performance.now() - lastReload - reloadTime)/1000).toFixed(2), 800 - camX, 645 - camY)
+
+    ctx.textAlign = "start";
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "black";
+  }
+}
+
+// draw a circle
+function drawCircle(x, y, r, start, finish, filled=false) {
+  if (filled) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, start, finish);
+    ctx.fill();
+  } else {
+    ctx.beginPath();
+    ctx.arc(x, y, r, start, finish);
+    ctx.stroke();
+  }
+}
