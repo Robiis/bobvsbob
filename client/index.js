@@ -20,6 +20,7 @@ let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
+let speeed = 5;
 
 // constants
 const canvas = document.getElementById("myCanvas");

@@ -174,10 +174,8 @@ function shootingCheck() {
   //tells if the player is hurt
   players.forEach(function(enemy) {
       if (enemy.crossPointDistance === closePList[0]) {
-          enemy.hit = true;
-          //enemy.enemyWeapon.push(player.weapon);
-          //hitSend(enemy.username);
-          //console.log(enemy.enemyWeapon);
+          //enemy.hit = true;
+          //hitSend(enemy.username, player.weapon.damage);
       }
       enemy.crossPointDistance = 0;
   });

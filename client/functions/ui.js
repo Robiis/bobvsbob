@@ -37,7 +37,7 @@ function drawInfoScreen(camX, camY, player, players) {
 
 // draws bullet count and reload animation
 function drawBulletReloadUi(reloading, reloadTime, lastReload, bullets, camX, camY, bulletImg) {
-  ctx.font = "35px sans-serif";
+  ctx.font = "18px sans-serif";
   if (!reloading) {
     ctx.fillStyle = "black";
     ctx.fillText(bullets, 1400 - camX, 835 - camY);
@@ -48,14 +48,14 @@ function drawBulletReloadUi(reloading, reloadTime, lastReload, bullets, camX, ca
     ctx.textAlign = "center";
 
     ctx.fillText("Reloading...", 1400 - camX, 835 - camY);
-    drawCircle(800 - camX, 632 - camY, 73, 0, 2 * Math.PI);
-    ctx.lineWidth = 25;
+    drawCircle(800 - camX, 625 - camY, 40, 0, 2 * Math.PI);
+    ctx.lineWidth = 19;
     ctx.strokeStyle = "#F05E23";
-    drawCircle(800 - camX, 632 - camY, 57, 1.5 * Math.PI, ((performance.now() - lastReload)/reloadTime*2 - 0.5) * Math.PI);
+    drawCircle(800 - camX, 625 - camY, 28, 1.5 * Math.PI, ((performance.now() - lastReload)/reloadTime*2 - 0.5) * Math.PI);
     ctx.fillStyle = "#272525";
-    drawCircle(800 - camX, 632 - camY, 45, 0, 2 * Math.PI, true);
+    drawCircle(800 - camX, 625 - camY, 20, 0, 2 * Math.PI, true);
     ctx.fillStyle = "white";
-    ctx.fillText((Math.abs(performance.now() - lastReload - reloadTime)/1000).toFixed(2), 800 - camX, 645 - camY)
+    ctx.fillText((Math.abs(performance.now() - lastReload - reloadTime)/1000).toFixed(2), 800 - camX, 631 - camY)
 
     ctx.textAlign = "start";
     ctx.strokeStyle = "black";
