@@ -33,8 +33,8 @@ const KeyboardHelper = {
   info: 81
 };
 const mapSize = {
-  width: 3200,
-  height: 1800
+  width: 4000,
+  height: 2000
 }
 const weapon = {
   ak: {
@@ -107,15 +107,10 @@ function redraw() {
   // clears canvas
   ctx.clearRect(-0.5*mapSize.width, -0.5*mapSize.height, mapSize.width, mapSize.height);
   // camera movement
-  var camX = clamp(-player.pos.x + canvas.width/2, -canvas.width, 0.5 * (mapSize.width + canvas.width));
-  var camY = clamp(-player.pos.y + canvas.height/2, -canvas.height, 0.5 * (mapSize.height + canvas.height));
+  var camX = clamp(-player.pos.x + canvas.width/2, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
+  var camY = clamp(-player.pos.y + canvas.height/2, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
   ctx.translate(camX, camY);
   mouseCoordsGet(camX, camY);
-
-  //draws obstacles
-  obstacles.forEach(function(obs){
-    obs.draw();
-  });
   
   // this part will be deleted
   ctx.fillRect(-25,-25,50,50)
@@ -147,10 +142,17 @@ function redraw() {
     }
     cplayer.draw_body();
     cplayer.draw_name();
+    cplayer.draw_health();
   });
   player.draw_weapon();
   player.draw_body();
   player.draw_name();
+  player.draw_health();
+  
+  //draws obstacles
+  obstacles.forEach(function(obs){
+    obs.draw();
+  });
 
   // ui stuff
   if (infoPressed) {

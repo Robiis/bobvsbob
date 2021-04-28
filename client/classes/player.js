@@ -22,16 +22,20 @@ class client {
     }
     this.font = "20px Arial";
     this.nameColor = "#95E1D3";
-    //for shooting
+    // for shooting
     this.weapon = weapon.ak; // player's weapon
     this.shootYes = false; // if mouse clicked
     this.theta = 0; // the angle between mouse and player
-    this.lastMouseX = this.x + 1; // the last mouse x coordinate
-    this.lastMouseY = this.y;// the last mouse y coordinate
+    this.lastMouseX = this.pos.x + 1; // the last mouse x coordinate
+    this.lastMouseY = this.pos.y;// the last mouse y coordinate
     this.wWidth = 5;
     this.wLength = 25;
     this.wColor = "black";
     this.shootingDist = 600; // how far can player shoot
+    // health
+    this.health = 100; // current health
+    this.maxHealth = 100;// max health
+    this.healthBarH = 8;// health bar height
   }
 
   // Draws the player's body
@@ -50,7 +54,7 @@ class client {
     ctx.font = this.font;
     ctx.fillStyle = this.nameColor;
     const width = ctx.measureText(this.username).width;
-    ctx.fillText(this.username, this.pos.x - 1 / 2 * width, this.pos.y - this.r - 10);
+    ctx.fillText(this.username, this.pos.x - 1 / 2 * width, this.pos.y - this.r - 18);
   }
   
   // Draws the playes's weapon
@@ -68,5 +72,14 @@ class client {
     ctx.lineTo(eX, eY);
     ctx.stroke();
     ctx.closePath();
+  }
+  // Draws the health bar
+  draw_health() {
+    //the base, represents the max health
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.pos.x - this.r, this.pos.y - this.r - this.healthBarH - 5, 2 * this.r, this.healthBarH);
+    //the base, represents the current health
+    ctx.fillStyle = "#90ee90";
+    ctx.fillRect(this.pos.x - this.r, this.pos.y - this.r - this.healthBarH - 5, (2 * this.r) * (this.health / this.maxHealth), this.healthBarH);
   }
 }
