@@ -36,32 +36,32 @@ function movePlayer(cplayer, dt) {
   dt = dt * 0.06;
   switch (cplayer.movement.dir) {
     case "u":
-      cplayer.pos.y -= 5 * dt * speeeed;
+      cplayer.pos.y -= 5 * dt;
       break;
     case "d":
-      cplayer.pos.y += 5 * dt * speeeed;
+      cplayer.pos.y += 5 * dt;
       break;
     case "r":
-      cplayer.pos.x += 5 * dt * speeeed;
+      cplayer.pos.x += 5 * dt;
       break;
     case "l":
-      cplayer.pos.x -= 5 * dt * speeeed;
+      cplayer.pos.x -= 5 * dt;
       break;
     case "ur":
-      cplayer.pos.y -= 5 / Math.sqrt(2) * dt * speeeed;
-      cplayer.pos.x += 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.y -= 5 / Math.sqrt(2) * dt;
+      cplayer.pos.x += 5 / Math.sqrt(2) * dt;
       break;
     case "ul":
-      cplayer.pos.y -= 5 / Math.sqrt(2) * dt * speeeed;
-      cplayer.pos.x -= 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.y -= 5 / Math.sqrt(2) * dt;
+      cplayer.pos.x -= 5 / Math.sqrt(2) * dt;
       break;
     case "dl":
-      cplayer.pos.y += 5 / Math.sqrt(2) * dt * speeeed;
-      cplayer.pos.x -= 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.y += 5 / Math.sqrt(2) * dt;
+      cplayer.pos.x -= 5 / Math.sqrt(2) * dt;
       break;
     case "dr":
-      cplayer.pos.y += 5 / Math.sqrt(2) * dt * speeeed;
-      cplayer.pos.x += 5 / Math.sqrt(2) * dt * speeeed;
+      cplayer.pos.y += 5 / Math.sqrt(2) * dt;
+      cplayer.pos.x += 5 / Math.sqrt(2) * dt;
       break;
     default:
       break;
