@@ -17,6 +17,7 @@ const adminDiv = document.getElementById("admin");
 const playerCountDiv = document.getElementById("players-count");
 const errDiv = document.getElementById("err");
 const errMsg = document.getElementById("err-msg");
+const loader = document.querySelector(".loader");
 
 // generate a random username
 user.username = `bob${Math.floor(Math.random() * 9999)}`;
@@ -38,6 +39,7 @@ if (newroom !== undefined) {
 
 // if user joins a room
 socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
+  loader.style.display = "none";
   console.log(`Joined room: ${roomId}, admin: ${admin}`);
 
   users = newUsers;

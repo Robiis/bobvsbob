@@ -179,7 +179,7 @@ function shootingCheck(shoot) {
       if (cplayer.crossPointDistance === closePList[0] && shoot === true) {
         shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage);
         console.log(cplayer.id, player.weapon.damage);
-    } else {
+      } else {
         shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
       }
       cplayer.crossPointDistance = 0;
