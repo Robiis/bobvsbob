@@ -132,6 +132,11 @@ io.on("connection", function(socket) {
     socket.broadcast.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
   });
 
+  // when client shoots and hits
+  socket.on("shoot-hit", function({ fromX, fromY, toX, toY, hitId, damage }) {
+    socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot-hit", { fromX, fromY, toX, toY, sendId: socket.id, hitId, damage });
+  });
+
   // when client shoots
   socket.on("shoot", function({ fromX, fromY, toX, toY }) {
     socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot", { fromX, fromY, toX, toY, id: socket.id });

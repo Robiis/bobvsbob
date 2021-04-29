@@ -113,6 +113,10 @@ function shootSend(fromX, fromY, toX, toY) {
   socket.emit("shoot", { fromX, fromY, toX, toY });
 }
 
+function shootSendHit(fromX, fromY, toX, toY, hitId, damage) {
+  socket.emit("shoot-hit", { fromX, fromY, toX, toY, hitId, damage });
+}
+
 // get user object by id
 function getUserById(users, id) {
   return users.find(user => user.id === id);
