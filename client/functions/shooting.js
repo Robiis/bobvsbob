@@ -173,8 +173,9 @@ function shootingCheck(shoot) {
 
   // draw a bullet trail and send bullet trail to other clients
   bulletTrail(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), trailColor, trailWidth);
-  shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
-  
+  if (shoot){
+    shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
+  }
   //tells if the player is hurt
   players.forEach(function(enemy) {
       if (enemy.crossPointDistance === closePList[0] && shoot === true) {
