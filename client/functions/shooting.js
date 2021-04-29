@@ -1,5 +1,5 @@
 // gets position of the mouse
-function mouseCoordsGet(camX, camY) {
+function mouseCoordsGet() {
   if (window.innerWidth <= 1200 && canvasWidth != 800){
     canvasWidth = 800;
     canvasHeight = 450;
@@ -11,15 +11,19 @@ function mouseCoordsGet(camX, camY) {
     canvasWidth = 1600;
     canvasHeight = 900;
   }
-  //cameraX = clamp(-player.pos.x + canvasWidth/2, 0, mapSize.width - canvasWidth);
-  //cameraY = clamp(-player.pos.y + canvasHeight/2, 0, mapSize.height - canvasHeight);
-  //console.log(canvasWidth, canvasHeight);
   player.lastMouseX = (mousePos.x - canvas.offsetLeft) + player.pos.x - 0.5 * canvasWidth;
   player.lastMouseY = (mousePos.y - canvas.offsetTop) + player.pos.y - 0.5 * canvasHeight;
 }
 
 // the most important part of this game - the shooting check
-function shootingCheck() {
+function shootingCheck(shoot) {
+  if (shoot === false){
+      trailColor = "rgb(255, 0, 0)";
+      trailWidth = 2;
+  }else{
+      trailColor = "black";
+      trailWidth = 3;
+  }
   let coefficient = Math.tan(0 - player.theta);
   //trigonometry shit
   //gets the end point coords, if trajectory doesn't hit any obs or player
@@ -168,12 +172,12 @@ function shootingCheck() {
   });
 
   // draw a bullet trail and send bullet trail to other clients
-  bulletTrail(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
+  bulletTrail(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), trailColor, trailWidth);
   shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
   
   //tells if the player is hurt
   players.forEach(function(enemy) {
-      if (enemy.crossPointDistance === closePList[0]) {
+      if (enemy.crossPointDistance === closePList[0] && shoot === true) {
           //enemy.hit = true;
           //hitSend(enemy.username, player.weapon.damage);
       }
@@ -184,10 +188,10 @@ function shootingCheck() {
 }
 
 // bullet trail
-function bulletTrail(fromX, fromY, toX, toY) {
-  ctx.strokeStyle = "black";
+function bulletTrail(fromX, fromY, toX, toY, color, width) {
+  ctx.strokeStyle = color;
   ctx.beginPath();
-  ctx.lineWidth = 3;
+  ctx.lineWidth = width;
   ctx.moveTo(fromX, fromY);
   ctx.lineTo(toX, toY);
   ctx.stroke();

@@ -32,6 +32,7 @@ class client {
     this.wLength = 25;
     this.wColor = "black";
     this.shootingDist = 600; // how far can player shoot
+    this.scope = false; // if scope is on
     // health
     this.health = 100; // current health
     this.maxHealth = 100;// max health
@@ -41,6 +42,7 @@ class client {
   // Draws the player's body
   draw_body() {
     ctx.fillStyle = this.color;
+    ctx.strokeStyle = "black";
     ctx.beginPath();
     ctx.arc(this.pos.x, this.pos.y, this.r, 0, Math.PI * 2);
     ctx.fill();
@@ -65,7 +67,7 @@ class client {
     let eX = this.pos.x + Math.cos(this.theta) * (this.wLength + this.r); // eX stands for endpoint X
     let eY = this.pos.y + Math.sin(this.theta) * (this.wLength + this.r);
     //draws the weapon
-    ctx.fillStyle = this.wColor;
+    ctx.strokeStyle = this.wColor;
     ctx.beginPath();
     ctx.lineWidth = this.wWidth;
     ctx.moveTo(this.pos.x, this.pos.y);

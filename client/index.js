@@ -20,7 +20,7 @@ let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
-let speeed = 1;
+let speeed = 5;
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -75,11 +75,23 @@ document.addEventListener("mousemove", function(event){
   mousePos.y = event.clientY;
 }, false);
 // if click, then shooting check
-document.addEventListener("mousedown", function() {
-  player.shootYes = true;
+document.addEventListener("mousedown", function(event) {
+  if (event.button === 0){ // the left mouse button
+    player.shootYes = true;
+    player.scope = false
+  } else if (event.button === 2){
+    if (player.scope){
+      player.scope = false;
+    }else{
+      player.scope = true;
+    }
+    player.shootYes = false
+  }
 }, false)
-document.addEventListener("mouseup", function() {
-  player.shootYes = false;
+document.addEventListener("mouseup", function(event) {
+  if (event.button === 0){ // the left mouse button
+    player.shootYes = false;
+  }
 }, false);
 // remove right click default actions
 window.addEventListener("contextmenu", function (e) { e.preventDefault() }, false);
@@ -111,7 +123,7 @@ function redraw() {
   var camX = clamp(-player.pos.x + canvas.width/2, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
   var camY = clamp(-player.pos.y + canvas.height/2, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
   ctx.translate(camX, camY);
-  mouseCoordsGet(camX, camY);
+  mouseCoordsGet();
   
   // this part will be deleted
   ctx.fillRect(-25,-25,50,50)
@@ -119,10 +131,12 @@ function redraw() {
   ctx.fillRect(-25 + canvas.width,-25 + canvas.height,50,50)
   
   // shooting check
-  if (player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) {
-    shootingCheck();
-    lastShot = performance.now();
-    player.weapon.bullets--;
+  if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
+    shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
+    if (player.shootYes === true){
+      lastShot = performance.now();
+      player.weapon.bullets--;
+    }
   }
 
   // reloading
@@ -139,7 +153,7 @@ function redraw() {
   players.forEach(function(cplayer) {
     if (cplayer.shoot.shoot) {
       cplayer.shoot.shoot = false;
-      bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY);
+      bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
     }
     cplayer.draw_body();
     cplayer.draw_name();
@@ -173,9 +187,12 @@ map design -- kinda done
 map store -- no need 
 border -- yeah kinda done
 map store -- kas tas tads jason
-shooting --
-HP -- 
+shooting -- done  
+HP -- done
 obstacles -- done
-ieroči -- 
 cartoon rooftop top view -- done
+
+mape -- 
+ieroči -- 
+sounds -- 
 */
