@@ -40,6 +40,7 @@ if (newroom !== undefined) {
 // if user joins a room
 socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
   loader.style.display = "none";
+  // setTimeout(function() {loader.style.display = "none"}, 5000);
   console.log(`Joined room: ${roomId}, admin: ${admin}`);
 
   users = newUsers;
