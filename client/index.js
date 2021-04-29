@@ -20,7 +20,7 @@ let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
-let speeed = 5;
+let speeed = 1;
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -40,11 +40,18 @@ const mapSize = {
 const weapon = {
   ak: {
     rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
-    damage: 10,// damage dealt with each bullet
-    reloadTime: 2000, // reload time in milliseconds
+    damage: 35,// damage dealt with each bullet
+    reloadTime: 2430, // reload time in milliseconds
     bullets: 30, 
     maxBullets: 30
   },
+  glock:{
+    rateOfFire: 1000/6.7,
+    damage: 24,
+    reloadTime: 2270,
+    bullets: 20,
+    maxBullets: 20
+  }
 }
 
 // images
@@ -78,7 +85,9 @@ document.addEventListener("mousemove", function(event){
 document.addEventListener("mousedown", function(event) {
   if (event.button === 0){ // the left mouse button
     player.shootYes = true;
-    player.scope = false
+    if (player.scope){
+      player.scope = "hiden";
+    }
   } else if (event.button === 2){
     if (player.scope){
       player.scope = false;
@@ -91,6 +100,9 @@ document.addEventListener("mousedown", function(event) {
 document.addEventListener("mouseup", function(event) {
   if (event.button === 0){ // the left mouse button
     player.shootYes = false;
+    if (player.scope === "hiden"){
+      player.scope = true;
+    }
   }
 }, false);
 // remove right click default actions
