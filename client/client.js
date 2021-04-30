@@ -95,11 +95,12 @@ socket.on("err", function(err) {
     console.log("Error - Game already started");
     errDiv.style.display = "block";
     errMsg.innerHTML = "Error - Game already started <br> <a href='/'>Back to menu</a>";
-    
+    loader.style.display = "none";
   } else if (err === "err2") {
     console.log("Error - No room with that id found");
     errDiv.style.display = "block";
     errMsg.innerHTML = "Error - No room with that id found <br> <a href='/'>Back to menu</a>";
+    loader.style.display = "none";
   }
 });
 

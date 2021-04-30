@@ -8,6 +8,7 @@ let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
 let infoPressed = false;
+let mapPressed = false;
 let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
 let obstacles = [];
 let mousePos = {
@@ -31,11 +32,12 @@ const KeyboardHelper = {
   up: 87,
   down: 83,
   reload: 82,
-  info: 81
+  info: 81,
+  map: 69
 };
 const mapSize = {
   width: 4000,
-  height: 2000
+  height: 3000
 }
 const weapon = {
   ak: {
@@ -48,7 +50,7 @@ const weapon = {
   glock:{
     rateOfFire: 1000/6.7,
     damage: 24,
-    reloadTime: 2270,
+    reloadTime: 1570,
     bullets: 20,
     maxBullets: 20
   }
@@ -66,11 +68,16 @@ gaidaAtteluIeladi(function() {}, roof, bulletIcon, reloadIcon);
 
 // obstacles
 obstacles.push(
-  new obstacle(200, 200, true, roof,  "roofBlue", 0, 0),
-  new obstacle(-0.5 * mapSize.width, -0.5 * mapSize.height - 1, false,"","", mapSize.width, 1),//upper border
-  new obstacle(-0.5 * mapSize.width, 0.5 * mapSize.height, false,"","", mapSize.width, 1),//lower border
-  new obstacle(-0.5 * mapSize.width - 1, -0.5 * mapSize.height, false,"","", 1, mapSize.height),//left border
-  new obstacle(0.5 * mapSize.width, -0.5 * mapSize.height, false,"","", 1, mapSize.height)//right border
+  // borders
+  new obstacle(0, - 1, mapSize.width, 1, false), // upper border
+  new obstacle(0, mapSize.height, mapSize.width, 1, false), // lower border
+  new obstacle(-1, 0, 1, mapSize.height, false), // left border
+  new obstacle(mapSize.width, 0, 1, mapSize.height, false), // right border
+
+  // obstacles
+  new obstacle(200, 100, 500, 300),
+  new obstacle(500, 500, 500, 300),
+  new obstacle(2300, 1000, 500, 300)
 );
 
 // eventListeners
@@ -86,7 +93,7 @@ document.addEventListener("mousedown", function(event) {
   if (event.button === 0){ // the left mouse button
     player.shootYes = true;
     if (player.scope){
-      player.scope = "hiden";
+      player.scope = "hidden";
     }
   } else if (event.button === 2){
     if (player.scope){
@@ -100,7 +107,7 @@ document.addEventListener("mousedown", function(event) {
 document.addEventListener("mouseup", function(event) {
   if (event.button === 0){ // the left mouse button
     player.shootYes = false;
-    if (player.scope === "hiden"){
+    if (player.scope === "hidden"){
       player.scope = true;
     }
   }
@@ -110,7 +117,6 @@ window.addEventListener("contextmenu", function (e) { e.preventDefault() }, fals
 // loop--------------------------------------------------------------------------------------------------------------
 let now, dt;
 function redraw() {
-
   now = performance.now();
   dt = now - lastUpdate;
   dirChange();
@@ -129,18 +135,21 @@ function redraw() {
 
   // camera movement
   ctx.setTransform(1, 0, 0, 1, 0, 0);
+
   // clears canvas
   ctx.clearRect(-0.5*mapSize.width, -0.5*mapSize.height, mapSize.width, mapSize.height);
+
   // camera movement
-  var camX = clamp(-player.pos.x + canvas.width/2, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
-  var camY = clamp(-player.pos.y + canvas.height/2, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
+  const camX = clamp(-player.pos.x + canvas.width/2, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
+  const camY = clamp(-player.pos.y + canvas.height/2, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
   ctx.translate(camX, camY);
+
+  // background
+  ctx.fillStyle = "forestgreen";
+  ctx.fillRect(-mapSize.width/2, -mapSize.height/2, mapSize.width, mapSize.height);
+
+  // mouse
   mouseCoordsGet();
-  
-  // this part will be deleted
-  ctx.fillRect(-25,-25,50,50)
-  ctx.fillRect(-25 - canvas.width,-25 - canvas.height,50,50)
-  ctx.fillRect(-25 + canvas.width,-25 + canvas.height,50,50)
   
   // shooting check
   if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
@@ -161,6 +170,11 @@ function redraw() {
     player.weapon.bullets = player.weapon.maxBullets;
   }
 
+  //draws obstacles
+  obstacles.forEach(function(obs){
+    obs.draw();
+  });
+
   // draws players
   players.forEach(function(cplayer) {
     if (cplayer.shoot.shoot) {
@@ -175,17 +189,17 @@ function redraw() {
   player.draw_body();
   player.draw_name();
   player.draw_health();
-  
-  //draws obstacles
-  obstacles.forEach(function(obs){
-    obs.draw();
-  });
 
-  // ui stuff
+  // draw the ui
   if (infoPressed) {
     drawInfoScreen(camX, camY, player, players);
   }
   drawBulletReloadUi(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY, bulletIcon);
+  if (mapPressed) {
+    drawMiniMap(300, 75, 1000, 750, camX, camY, player, players, obstacles, true);
+  } else {
+    drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, false);
+  }
 
   lastUpdate = now;
   if (clientState.gameStarted) {

@@ -18,6 +18,9 @@ function keyDownChecker(event) {
     if (event.keyCode == KeyboardHelper.reload) {
         reloadPressed = true;
     }
+    if (event.keyCode == KeyboardHelper.map) {
+        mapPressed = true;
+    }
   }
   
   function keyUpChecker(event) {
@@ -41,5 +44,8 @@ function keyDownChecker(event) {
     };
     if (event.keyCode == KeyboardHelper.reload) {
         reloadPressed = false;
+    };
+    if (event.keyCode == KeyboardHelper.map) {
+        mapPressed = false;
     };
   };

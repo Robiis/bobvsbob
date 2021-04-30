@@ -1,3 +1,4 @@
+// draws an info screen
 function drawInfoScreen(camX, camY, player, players) {
   const x = 288 - camX;
   const y = 162 - camY;
@@ -8,6 +9,7 @@ function drawInfoScreen(camX, camY, player, players) {
   ctx.fillStyle = "#272525";
   ctx.globalAlpha = 0.85;
 
+  // draws screen
   ctx.fillRect(x, y, width, height);
 
   ctx.globalAlpha = 1;
@@ -19,17 +21,13 @@ function drawInfoScreen(camX, camY, player, players) {
 
   ctx.font = "50px Arial";
 
+  // draws usernames
   ctx.fillText(`${player.username}: 1 kill`, x + width/2, y + 210);
   let yPosLoop = 290;
   players.forEach(function(cplayer) {
     ctx.fillText(`${cplayer.username}: 1 kill`, x + width/2, y + yPosLoop);
     yPosLoop += 80;
   });
-
-  // ctx.fillText("coolusername1234: 1 kill", x + width/2, y + 210);
-  // ctx.fillText("coolusername1234: 1 kill", x + width/2, y + 290);
-  // ctx.fillText("coolusername1234: 1 kill", x + width/2, y + 370);
-  // ctx.fillText("coolusername1234: 1 kill", x + width/2, y + 450);
 
   ctx.textAlign = "start";
   ctx.fillStyle = player.color;
@@ -39,6 +37,7 @@ function drawInfoScreen(camX, camY, player, players) {
 function drawBulletReloadUi(reloading, reloadTime, lastReload, bullets, camX, camY, bulletImg) {
   ctx.font = "35px sans-serif";
   if (!reloading) {
+    // draws bullet count
     ctx.fillStyle = "black";
     ctx.fillText(bullets, 1400 - camX, 835 - camY);
     ctx.drawImage(bulletImg, 1450 - camX, 800 - camY);
@@ -47,9 +46,11 @@ function drawBulletReloadUi(reloading, reloadTime, lastReload, bullets, camX, ca
     ctx.strokeStyle = "#272525";
     ctx.textAlign = "center";
 
+    // draws reloading text
     ctx.fillText("Reloading...", 1400 - camX, 835 - camY);
     ctx.font = "18px sans-serif";
 
+    // draws realoding animation
     drawCircle(800 - camX, 625 - camY, 40, 0, 2 * Math.PI);
     ctx.lineWidth = 19;
     ctx.strokeStyle = "#F05E23";
@@ -75,5 +76,54 @@ function drawCircle(x, y, r, start, finish, filled=false) {
     ctx.beginPath();
     ctx.arc(x, y, r, start, finish);
     ctx.stroke();
+  }
+}
+
+// draw a mini map
+function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, players, obstacles, fs=false) {
+  mapX = mapX - camX;
+  mapY = mapY - camY;
+  const mapDif = mapSize.width/mapWidth;
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "black";
+  ctx.fillStyle = "forestgreen"
+
+  // draws minimap borders
+  ctx.strokeRect(mapX, mapY, mapWidth, mapHeight);
+  ctx.fillRect(mapX, mapY, mapWidth, mapHeight);
+
+  // draws player on the minmap
+  if (!fs) {
+    ctx.fillStyle = player.color;
+    // draws player on the minimap
+    drawCircle(mapX+((player.pos.x + mapSize.width/2)/mapDif), mapY+((player.pos.y + mapSize.height/2)/mapDif), player.r/mapDif*2, 0, 2*Math.PI, true);
+    // draws other players on minimap
+    players.forEach(function(cplayer) {
+      drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif*2, 0, 2*Math.PI, true);
+    });
+    // draws obstacles on the minimap
+    ctx.fillStyle = "#595959";
+    obstacles.forEach(function(obs) {
+      if (obs.drawable) {
+        ctx.roundRect(mapX+((obs.x + player.r)/mapDif)+mapSize.width/mapDif/2, mapY+((obs.y + player.r)/mapDif)+mapSize.height/mapDif/2, (obs.width - player.r*2)/mapDif, (obs.height - player.r*2)/mapDif, 20/mapDif).fill();
+      }
+    });
+  } else {
+    ctx.fillStyle = player.color;
+    // draws player on the minimap
+    drawCircle(mapX+((player.pos.x + mapSize.width/2)/mapDif), mapY+((player.pos.y + mapSize.height/2)/mapDif), player.r/mapDif, 0, 2*Math.PI, true);
+    // draws other players on minimap
+    players.forEach(function(cplayer) {
+      drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif, 0, 2*Math.PI, true);
+    });
+    // draws obstacles on the minimap
+    ctx.fillStyle = "#595959";
+    obstacles.forEach(function(obs) {
+      if (obs.drawable) {
+        // ctx.fillRect(mapX+(obs.x/mapDif)+mapSize.width/mapDif/2, mapY+(obs.y/mapDif)+mapSize.height/mapDif/2, obs.width/mapDif, obs.height/mapDif);
+        ctx.roundRect(mapX+(obs.x/mapDif)+mapSize.width/mapDif/2, mapY+(obs.y/mapDif)+mapSize.height/mapDif/2, obs.width/mapDif, obs.height/mapDif, 20/mapDif).fill();
+      }
+    });
   }
 }

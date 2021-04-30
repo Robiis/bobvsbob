@@ -113,8 +113,23 @@ function shootSend(fromX, fromY, toX, toY) {
   socket.emit("shoot", { fromX, fromY, toX, toY });
 }
 
+// send shooting and hit data to server
 function shootSendHit(fromX, fromY, toX, toY, hitId, damage) {
   socket.emit("shoot-hit", { fromX, fromY, toX, toY, hitId, damage });
+}
+
+// draws a rounded rectangle
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+  if (w < 2 * r) r = w / 2;
+  if (h < 2 * r) r = h / 2;
+  this.beginPath();
+  this.moveTo(x+r, y);
+  this.arcTo(x+w, y, x+w, y+h, r);
+  this.arcTo(x+w, y+h, x, y+h, r);
+  this.arcTo(x, y+h, x, y, r);
+  this.arcTo(x, y, x+w, y, r);
+  this.closePath();
+  return this;
 }
 
 // get user object by id
