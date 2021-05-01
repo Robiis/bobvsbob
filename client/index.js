@@ -21,7 +21,7 @@ let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
-let speeed = 1;
+let speeed = 1.3;
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -241,7 +241,7 @@ function redraw() {
   } else {
     drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, bgs, false);
   }
-  
+
   lastUpdate = now;
   if (clientState.gameStarted) {
     requestAnimationFrame(redraw);

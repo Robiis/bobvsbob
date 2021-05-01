@@ -61,7 +61,7 @@ class client {
   
   // Draws the playes's weapon
   draw_weapon() {
-    // calculates the end point coords of weapon(Some Math shit) (how dare you say that) (Ur mom) (No u)
+    // calculates the end point coords of weapon
     // be careful! You have to add this.r to this.wLength, because wLength is the length outside the player body(the circle)
     this.theta = Math.atan2(this.lastMouseY - this.pos.y, this.lastMouseX - this.pos.x);
     let eX = this.pos.x + Math.cos(this.theta) * (this.wLength + this.r); // eX stands for endpoint X
@@ -82,7 +82,7 @@ class client {
     ctx.fillStyle = "red";
     ctx.fillRect(this.pos.x - this.r, this.pos.y - this.r - this.healthBarH - 5, 2 * this.r, this.healthBarH);
     //the base, represents the current health
-    ctx.fillStyle = "darkgreen";
+    ctx.fillStyle = "#4cbb17";
     ctx.fillRect(this.pos.x - this.r, this.pos.y - this.r - this.healthBarH - 5, (2 * this.r) * (this.health / this.maxHealth), this.healthBarH);
   }
 }
