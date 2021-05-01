@@ -168,7 +168,14 @@ socket.on("shoot", function({ fromX, fromY, toX, toY, id }) {
 // when other client shoots
 socket.on("shoot-hit", function({ fromX, fromY, toX, toY, sendId, hitId, damage }) {
   getUserById(players, sendId).shoot = {shoot: true, fromX, fromY, toX, toY};
-  console.log(hitId, damage);
+  if (hitId === player.id){
+    player.health -= damage;
+  } else{
+    getUserById(players, hitId).health -= damage;
+  }  
+  // console.log(hitId);
+  // console.log(player.id);
+
 });
 
 // if user is diconnected from the server
