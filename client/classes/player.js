@@ -21,7 +21,7 @@ class client {
       toY: 0
     }
     this.font = "20px Arial";
-    this.nameColor = "#95E1D3";
+    this.nameColor = "black";
     // for shooting
     this.weapon = weapon.ak; // player's weapon
     this.shootYes = false; // if mouse clicked
@@ -75,13 +75,14 @@ class client {
     ctx.stroke();
     ctx.closePath();
   }
+
   // Draws the health bar
   draw_health() {
     //the base, represents the max health
     ctx.fillStyle = "red";
     ctx.fillRect(this.pos.x - this.r, this.pos.y - this.r - this.healthBarH - 5, 2 * this.r, this.healthBarH);
     //the base, represents the current health
-    ctx.fillStyle = "#90ee90";
+    ctx.fillStyle = "darkgreen";
     ctx.fillRect(this.pos.x - this.r, this.pos.y - this.r - this.healthBarH - 5, (2 * this.r) * (this.health / this.maxHealth), this.healthBarH);
   }
 }

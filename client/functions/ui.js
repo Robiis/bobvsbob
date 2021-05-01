@@ -80,18 +80,23 @@ function drawCircle(x, y, r, start, finish, filled=false) {
 }
 
 // draw a mini map
-function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, players, obstacles, fs=false) {
+function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, players, obstacles, bgs, fs=false) {
   mapX = mapX - camX;
   mapY = mapY - camY;
   const mapDif = mapSize.width/mapWidth;
 
   ctx.lineWidth = 2;
   ctx.strokeStyle = "black";
-  ctx.fillStyle = "forestgreen"
+  ctx.fillStyle = "#97BC62FF"
 
   // draws minimap borders
   ctx.strokeRect(mapX, mapY, mapWidth, mapHeight);
   ctx.fillRect(mapX, mapY, mapWidth, mapHeight);
+
+  bgs.forEach(function(bg) {
+    ctx.fillStyle = bg.color;
+    ctx.triangle(mapX+bg.x1/mapDif, mapY+bg.y1/mapDif, mapX+bg.x2/mapDif, mapY+bg.y2/mapDif, mapX+bg.x3/mapDif, mapY+bg.y3/mapDif).fill();
+  });
 
   // draws player on the minmap
   if (!fs) {
@@ -103,9 +108,9 @@ function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, player
       drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif*2, 0, 2*Math.PI, true);
     });
     // draws obstacles on the minimap
-    ctx.fillStyle = "#595959";
     obstacles.forEach(function(obs) {
       if (obs.drawable) {
+        ctx.fillStyle = obs.color;
         ctx.roundRect(mapX+((obs.x + player.r)/mapDif)+mapSize.width/mapDif/2, mapY+((obs.y + player.r)/mapDif)+mapSize.height/mapDif/2, (obs.width - player.r*2)/mapDif, (obs.height - player.r*2)/mapDif, 20/mapDif).fill();
       }
     });
@@ -118,10 +123,9 @@ function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, player
       drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif, 0, 2*Math.PI, true);
     });
     // draws obstacles on the minimap
-    ctx.fillStyle = "#595959";
     obstacles.forEach(function(obs) {
       if (obs.drawable) {
-        // ctx.fillRect(mapX+(obs.x/mapDif)+mapSize.width/mapDif/2, mapY+(obs.y/mapDif)+mapSize.height/mapDif/2, obs.width/mapDif, obs.height/mapDif);
+        ctx.fillStyle = obs.color;
         ctx.roundRect(mapX+(obs.x/mapDif)+mapSize.width/mapDif/2, mapY+(obs.y/mapDif)+mapSize.height/mapDif/2, obs.width/mapDif, obs.height/mapDif, 20/mapDif).fill();
       }
     });

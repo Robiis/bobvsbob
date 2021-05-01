@@ -29,12 +29,13 @@
 // }
 
 class obstacle {
-  constructor(x, y, width, height, drawable=true) {
+  constructor(x, y, width, height, color, drawable=true) {
     this.x = x - mapSize.width/2;
     this.y = y - mapSize.height/2;
     this.width = width;
     this.height = height
     this.drawable = drawable;
+    this.color = color;
     this.lu = [this.x, this.y]; //upper left corner coords
     this.ru = [this.x + this.width, this.y]; //upper right corner
     this.ld = [this.x, this.y + this.height]; //bottom left corner
@@ -43,7 +44,7 @@ class obstacle {
 
   draw() {
     if (this.drawable) {
-      ctx.fillStyle = "#595959";
+      ctx.fillStyle = this.color;
       ctx.roundRect(this.x, this.y, this.width, this.height, 20).fill();
     }
   }

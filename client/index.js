@@ -55,6 +55,26 @@ const weapon = {
     maxBullets: 20
   }
 }
+const bgs = [
+  {
+    x1: 1600,
+    y1: 0,
+    x2: 4000,
+    y2: 0,
+    x3: 4000,
+    y3: 3000,
+    color: "#9CC3D5FF"
+  },
+  {
+    x1: 0,
+    y1: 3000,
+    x2: 2400,
+    y2: 1000,
+    x3: 4000,
+    y3: 3000,
+    color: "#D4B996FF"
+  }
+];
 
 // images
 const roof = new Image();
@@ -69,15 +89,31 @@ gaidaAtteluIeladi(function() {}, roof, bulletIcon, reloadIcon);
 // obstacles
 obstacles.push(
   // borders
-  new obstacle(0, - 1, mapSize.width, 1, false), // upper border
-  new obstacle(0, mapSize.height, mapSize.width, 1, false), // lower border
-  new obstacle(-1, 0, 1, mapSize.height, false), // left border
-  new obstacle(mapSize.width, 0, 1, mapSize.height, false), // right border
+  new obstacle(0, - 1, mapSize.width, 1, "", false), // upper border
+  new obstacle(0, mapSize.height, mapSize.width, 1, "", false), // lower border
+  new obstacle(-1, 0, 1, mapSize.height, "", false), // left border
+  new obstacle(mapSize.width, 0, 1, mapSize.height, "", false), // right border
 
-  // obstacles
-  new obstacle(200, 100, 500, 300),
-  new obstacle(500, 500, 500, 300),
-  new obstacle(2300, 1000, 500, 300)
+  // forest obstacles
+  new obstacle(200, 100, 500, 300, "#2C5F2D"),
+  new obstacle(700, 500, 300, 300, "#2C5F2D"),
+  new obstacle(100, 500, 300, 500, "#2C5F2D"),
+  new obstacle(500, 900, 400, 700, "#2C5F2D"),
+  new obstacle(1100, 100, 350, 600, "#2C5F2D"),
+
+  // winter obstacles
+  new obstacle(2700, 200, 250, 600, "#0063B2FF"),
+  new obstacle(3000, 950, 250, 500, "#0063B2FF"),
+  new obstacle(3100, 150, 600, 400, "#0063B2FF"),
+  new obstacle(3500, 1000, 400, 500, "#0063B2FF"),
+  new obstacle(3500, 650, 400, 250, "#0063B2FF"),
+
+  // desert obstacles
+  new obstacle(1700, 2350, 400, 200, "#A07855FF"),
+  new obstacle(1900, 2650, 400, 200, "#A07855FF"),
+  new obstacle(1700, 1700, 600, 350, "#A07855FF"),
+  new obstacle(1300, 2200, 300, 600, "#A07855FF"),
+  new obstacle(2400, 2200, 300, 600, "#A07855FF")
 );
 
 // eventListeners
@@ -145,8 +181,13 @@ function redraw() {
   ctx.translate(camX, camY);
 
   // background
-  ctx.fillStyle = "forestgreen";
+  ctx.fillStyle = "#97BC62FF";
   ctx.fillRect(-mapSize.width/2, -mapSize.height/2, mapSize.width, mapSize.height);
+
+  bgs.forEach(function(bg) {
+    ctx.fillStyle = bg.color;
+    ctx.triangle(bg.x1 - mapSize.width/2, bg.y1 - mapSize.height/2, bg.x2 - mapSize.width/2, bg.y2 - mapSize.height/2, bg.x3 - mapSize.width/2, bg.y3 - mapSize.height/2).fill();
+  });
 
   // mouse
   mouseCoordsGet();
@@ -156,7 +197,7 @@ function redraw() {
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
     if (player.shootYes === true){
       lastShot = performance.now();
-      player.weapon.bullets--;
+      player.weapon.bullets--; 
     }
   }
 
@@ -196,11 +237,11 @@ function redraw() {
   }
   drawBulletReloadUi(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY, bulletIcon);
   if (mapPressed) {
-    drawMiniMap(300, 75, 1000, 750, camX, camY, player, players, obstacles, true);
+    drawMiniMap(300, 75, 1000, 750, camX, camY, player, players, obstacles, bgs, true);
   } else {
-    drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, false);
+    drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, bgs, false);
   }
-
+  
   lastUpdate = now;
   if (clientState.gameStarted) {
     requestAnimationFrame(redraw);

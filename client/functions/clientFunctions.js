@@ -119,7 +119,7 @@ function shootSendHit(fromX, fromY, toX, toY, hitId, damage) {
 }
 
 // draws a rounded rectangle
-CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
   if (w < 2 * r) r = w / 2;
   if (h < 2 * r) r = h / 2;
   this.beginPath();
@@ -128,6 +128,16 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
   this.arcTo(x+w, y+h, x, y+h, r);
   this.arcTo(x, y+h, x, y, r);
   this.arcTo(x, y, x+w, y, r);
+  this.closePath();
+  return this;
+}
+
+// draws a triangle
+CanvasRenderingContext2D.prototype.triangle = function(x1, y1, x2, y2, x3, y3) {
+  this.beginPath();
+  this.moveTo(x1, y1);
+  this.lineTo(x2, y2);
+  this.lineTo(x3, y3);
   this.closePath();
   return this;
 }

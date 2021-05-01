@@ -45,7 +45,7 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
 
   users = newUsers;
   user.id = id;
-  player = new client(id, 50, 50, "#F38181", user.username);
+  player = new client(id, 50, 50, "#FC766AFF", user.username);
 
   createAPlayerUsername(id, user.username);
   if (admin) {
