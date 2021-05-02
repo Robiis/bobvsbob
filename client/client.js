@@ -38,14 +38,14 @@ if (newroom !== undefined) {
 }
 
 // if user joins a room
-socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
+socket.on("joined-room", function({ id, roomId, admin, newUsers, pos }) {
   loader.style.display = "none";
   // setTimeout(function() {loader.style.display = "none"}, 5000);
   console.log(`Joined room: ${roomId}, admin: ${admin}`);
 
   users = newUsers;
   user.id = id;
-  player = new client(id, 50, 50, "#FC766AFF", user.username);
+  player = new client(id, pos.x, pos.y, "#FC766AFF", user.username);
 
   createAPlayerUsername(id, user.username);
   if (admin) {
@@ -72,11 +72,11 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
 });
 
 // if another user joins the room
-socket.on("connect-user", function({ id, username, admin }) {
+socket.on("connect-user", function({ id, username, admin, pos }) {
   console.log(`User ${username} connected`);
   createAPlayerUsername(id, username);
   users.push({ id, username, admin });
-  players.push(new client(id, 50, 50, "#F38181", username));
+  players.push(new client(id, pos.x, pos.y, "#F38181", username));
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
@@ -173,9 +173,20 @@ socket.on("shoot-hit", function({ fromX, fromY, toX, toY, sendId, hitId, damage 
   } else{
     getUserById(players, hitId).health -= damage;
   }  
-  // console.log(hitId);
-  // console.log(player.id);
+});
 
+// when someone respawns
+socket.on("respawn", function({ hitId, x, y }) {
+  if (player.id === hitId) {
+    player.pos.x = x;
+    player.pos.y = y;
+    player.health = 100;
+  } else {
+    const cplayer = getUserById(players, hitId);
+    cplayer.pos.x = x;
+    cplayer.pos.y = y;
+    cplayer.health = 100;
+  }
 });
 
 // if user is diconnected from the server

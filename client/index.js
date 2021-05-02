@@ -21,7 +21,7 @@ let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
-let speeed = 1.3;
+let speeed = 1.25;
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -42,7 +42,7 @@ const mapSize = {
 const weapon = {
   ak: {
     rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
-    damage: 35,// damage dealt with each bullet
+    damage: 33,// damage dealt with each bullet
     reloadTime: 2430, // reload time in milliseconds
     bullets: 30, 
     maxBullets: 30
@@ -212,7 +212,7 @@ function redraw() {
   }
 
   //draws obstacles
-  obstacles.forEach(function(obs){
+  obstacles.forEach(function(obs) {
     obs.draw();
   });
 
