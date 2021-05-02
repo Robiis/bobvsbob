@@ -4,7 +4,7 @@ function drawInfoScreen(camX, camY, player, players) {
   const y = 162 - camY;
   const width = 1024;
   const height = 576;
-
+  console.log(shake.x, shake.y);
   ctx.font = "80px sans-serif";
   ctx.fillStyle = "#272525";
   ctx.globalAlpha = 0.85;

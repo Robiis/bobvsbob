@@ -200,3 +200,24 @@ function bulletTrail(fromX, fromY, toX, toY, color, width) {
   ctx.stroke();
   ctx.closePath();
 }
+
+// camera shake
+function cameraShake(){
+    if (shake.x !== 0 && shake.y !== 0){
+        shake.x = 0;
+        shake.y = 0;
+    } else{
+        if (player.theta < 0){
+            alpha = player.theta + 0.5 * Math.PI
+            shake.x = Math.sin(alpha) * shakeLength;
+            shake.y = Math.cos(alpha) * shakeLength;
+        } else if (player.theta > 0){
+            alpha = player.theta - 0.5 * Math.PI
+            shake.x = Math.sin(alpha) * shakeLength;
+            shake.y = Math.cos(alpha) * shakeLength;
+        } else{ // theta == 0
+            shake.x = -5;
+            shake.y = 0;
+        }
+    }
+}

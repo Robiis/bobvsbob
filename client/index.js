@@ -21,7 +21,10 @@ let coefficient; // the slope of player's shooting trajectory
 let lastShot = 1000; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
-let speeed = 1.3;
+let shake = {
+  x: 0,
+  y: 0
+}; // camera shake, in px
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -75,16 +78,14 @@ const bgs = [
     color: "#D4B996FF"
   }
 ];
+const shakeLength = 5; // for how many pixels camera shakes diagonally
+const speeed = 1.3;
 
 // images
-const roof = new Image();
-roof.src = "roofBlue.png";
 const bulletIcon = new Image();
 bulletIcon.src = "bulletIcon.png";
-const reloadIcon = new Image();
-reloadIcon.src = "reloadIcon.png";
 
-gaidaAtteluIeladi(function() {}, roof, bulletIcon, reloadIcon);
+gaidaAtteluIeladi(function() {}, bulletIcon);
 
 // obstacles
 obstacles.push(
@@ -176,8 +177,8 @@ function redraw() {
   ctx.clearRect(-0.5*mapSize.width, -0.5*mapSize.height, mapSize.width, mapSize.height);
 
   // camera movement
-  const camX = clamp(-player.pos.x + canvas.width/2, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
-  const camY = clamp(-player.pos.y + canvas.height/2, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
+  const camX = clamp(-player.pos.x + canvas.width/2 - shake.x, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
+  const camY = clamp(-player.pos.y + canvas.height/2 - shake.y, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
   ctx.translate(camX, camY);
 
   // background
@@ -194,6 +195,7 @@ function redraw() {
   
   // shooting check
   if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
+    cameraShake();
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
     if (player.shootYes === true){
       lastShot = performance.now();
