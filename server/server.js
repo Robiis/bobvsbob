@@ -30,7 +30,8 @@ io.on("connection", function(socket) {
         username,
         admin: false,
         pos: {x: 50, y: 50}, 
-        movement: {dir: ""}
+        movement: {dir: ""},
+        health: 100
       });
 
       // connect user to the room
@@ -44,8 +45,9 @@ io.on("connection", function(socket) {
         }
       });
 
-      socket.emit("joined-room", { id: socket.id, roomId, admin: false, newUsers: usersForClient });
-      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: false });
+      const user = getUserById(users, socket.id);
+      socket.emit("joined-room", { id: socket.id, roomId, admin: false, newUsers: usersForClient, pos: user.pos });
+      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: false, pos: user.pos });
 
       console.log(rooms);
       console.log(users);
@@ -72,7 +74,8 @@ io.on("connection", function(socket) {
         username,
         admin: true,
         pos: {x: 50, y: 50}, 
-        movement: {dir: ""}
+        movement: {dir: ""},
+        health: 100
       });
 
       const usersForClient = [];
@@ -85,8 +88,10 @@ io.on("connection", function(socket) {
       // create a new room and join the user to it
       rooms.push({ roomId, gameStarted: false, users: [socket.id] });
       socket.join(roomId);
-      socket.emit("joined-room", { id: socket.id, roomId, admin: true, newUsers: usersForClient });
-      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: true });
+
+      const user = getUserById(users, socket.id);
+      socket.emit("joined-room", { id: socket.id, roomId, admin: true, newUsers: usersForClient, pos: user.pos });
+      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: true, pos: user.pos });
 
       console.log(rooms);
       console.log(users);
@@ -135,6 +140,15 @@ io.on("connection", function(socket) {
   // when client shoots and hits
   socket.on("shoot-hit", function({ fromX, fromY, toX, toY, hitId, damage }) {
     socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot-hit", { fromX, fromY, toX, toY, sendId: socket.id, hitId, damage });
+    
+    const hitUser = getUserById(users, hitId);
+    hitUser.health -= damage;
+    if (hitUser.health <= 0) {
+      hitUser.pos.x = 50;
+      hitUser.pos.y = 50;
+      hitUser.health = 100;
+      io.to(hitUser.roomId).emit("respawn", { hitId, x: hitUser.pos.x, y: hitUser.pos.y });
+    }
   });
 
   // when client shoots

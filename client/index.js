@@ -45,7 +45,7 @@ const mapSize = {
 const weapon = {
   ak: {
     rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
-    damage: 35,// damage dealt with each bullet
+    damage: 33,// damage dealt with each bullet
     reloadTime: 2430, // reload time in milliseconds
     bullets: 30, 
     maxBullets: 30
@@ -214,7 +214,7 @@ function redraw() {
   }
 
   //draws obstacles
-  obstacles.forEach(function(obs){
+  obstacles.forEach(function(obs) {
     obs.draw();
   });
 
