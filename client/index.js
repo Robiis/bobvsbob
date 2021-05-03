@@ -181,6 +181,12 @@ function redraw() {
   const camY = clamp(-player.pos.y + canvas.height/2 - shake.y, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
   ctx.translate(camX, camY);
 
+  // resets camera shake
+  if (shake.x !== 0 && shake.y !== 0){
+    shake.x = 0;
+    shake.y = 0;
+  }
+
   // background
   ctx.fillStyle = "#97BC62FF";
   ctx.fillRect(-mapSize.width/2, -mapSize.height/2, mapSize.width, mapSize.height);
@@ -195,9 +201,9 @@ function redraw() {
   
   // shooting check
   if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
-    cameraShake();
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
     if (player.shootYes === true){
+      cameraShake();
       lastShot = performance.now();
       player.weapon.bullets--; 
     }
@@ -260,8 +266,8 @@ shooting -- done
 HP -- done
 obstacles -- done
 cartoon rooftop top view -- done
-
-mape -- 
+mape -- done by robis
+camera shake -- done
 ieroči -- 
 sounds -- 
 */

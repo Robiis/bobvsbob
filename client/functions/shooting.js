@@ -203,21 +203,47 @@ function bulletTrail(fromX, fromY, toX, toY, color, width) {
 
 // camera shake
 function cameraShake(){
-    if (shake.x !== 0 && shake.y !== 0){
+    if (player.theta < -0.5 * Math.PI){
+        alpha = Math.PI - Math.abs(player.theta);
+        shake.x = Math.cos(alpha) * shakeLength;
+        shake.y = Math.sin(alpha) * shakeLength;
+    } else if (player.theta > -0.5 * Math.PI && player.theta < 0){
+        alpha = Math.abs(player.theta);
+        shake.x = -Math.cos(alpha) * shakeLength;
+        shake.y = Math.sin(alpha) * shakeLength;
+    } else if (player.theta < 0.5 * Math.PI && player.theta > 0){
+        //alpha = Math.abs(player.theta);
+        shake.x = -Math.cos(player.theta) * shakeLength;
+        shake.y = -Math.sin(player.theta) * shakeLength;
+    } else if (player.theta > 0.5 * Math.PI){
+        alpha = Math.abs(Math.PI - player.theta);
+        shake.x = Math.cos(alpha) * shakeLength;
+        shake.y = -Math.sin(alpha) * shakeLength;
+    } else if (player.theta == -0.5 * Math.PI){
         shake.x = 0;
+        shake.y = -shakeLength;
+    } else if (player.theta == 0){
+        shake.x = shakeLength;
         shake.y = 0;
-    } else{
-        if (player.theta < 0){
-            alpha = player.theta + 0.5 * Math.PI
-            shake.x = Math.sin(alpha) * shakeLength;
-            shake.y = Math.cos(alpha) * shakeLength;
-        } else if (player.theta > 0){
-            alpha = player.theta - 0.5 * Math.PI
-            shake.x = Math.sin(alpha) * shakeLength;
-            shake.y = Math.cos(alpha) * shakeLength;
-        } else{ // theta == 0
-            shake.x = -5;
-            shake.y = 0;
-        }
+    } else if (player.theta == 0.5 * Math.PI){
+        shake.x = 0;
+        shake.y = shakeLength;
     }
+
+
+
+
+
+    /*if (player.theta < 0){
+        alpha = player.theta + 0.5 * Math.PI
+        shake.x = Math.cos(alpha) * shakeLength;
+        shake.y = Math.sin(alpha) * shakeLength;
+    } else if (player.theta > 0){
+        alpha = player.theta - 0.5 * Math.PI
+        shake.x = Math.cos(alpha) * shakeLength;
+        shake.y = Math.sin(alpha) * shakeLength;
+    } else{ // theta == 0
+        shake.x = -5;
+        shake.y = 0;
+    }*/
 }
