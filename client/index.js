@@ -26,6 +26,18 @@ let shake = {
   y: 0
 }; // camera shake, in px
 
+// images
+const bulletIcon = new Image();
+bulletIcon.src = "bulletIcon.png";
+const ak = new Image();
+ak.src = "ak.png";
+const glock = new Image();
+glock.src = "glock.png";
+const frame = new Image();
+frame.src = "frame.png";
+
+gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame);
+
 // constants
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
@@ -36,7 +48,9 @@ const KeyboardHelper = {
   down: 83,
   reload: 82,
   info: 81,
-  map: 69
+  map: 69,
+  mainW: 49,
+  sideW: 50
 };
 const mapSize = {
   width: 4000,
@@ -48,14 +62,18 @@ const weapon = {
     damage: 33,// damage dealt with each bullet
     reloadTime: 2430, // reload time in milliseconds
     bullets: 30, 
-    maxBullets: 30
+    maxBullets: 30,
+    img: ak,
+    shootingDist: 600
   },
   glock:{
     rateOfFire: 1000/6.7,
     damage: 24,
     reloadTime: 1570,
     bullets: 20,
-    maxBullets: 20
+    maxBullets: 20,
+    img: glock,
+    shootingDist: 400
   }
 }
 const bgs = [
@@ -78,14 +96,8 @@ const bgs = [
     color: "#D4B996FF"
   }
 ];
-const shakeLength = 5; // for how many pixels camera shakes diagonally
+const shakeLength = 3; // for how many pixels camera shakes diagonally
 const speeed = 1.3;
-
-// images
-const bulletIcon = new Image();
-bulletIcon.src = "bulletIcon.png";
-
-gaidaAtteluIeladi(function() {}, bulletIcon);
 
 // obstacles
 obstacles.push(
@@ -243,7 +255,7 @@ function redraw() {
   if (infoPressed) {
     drawInfoScreen(camX, camY, player, players);
   }
-  drawBulletReloadUi(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY, bulletIcon);
+  drawWeaponComplex(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY);
   if (mapPressed) {
     drawMiniMap(300, 75, 1000, 750, camX, camY, player, players, obstacles, bgs, true);
   } else {
@@ -257,16 +269,19 @@ function redraw() {
 }
 
 /*
+basic level:
 camera movement -- done
 map design -- kinda done
 map store -- no need 
 border -- yeah kinda done
-map store -- kas tas tads jason
+map store -- kas tas tads jason, es nezinu lol
 shooting -- done  
 HP -- done
 obstacles -- done
 cartoon rooftop top view -- done
 mape -- done by robis
+
+advenced level:
 camera shake -- done
 ieroči -- 
 sounds -- 

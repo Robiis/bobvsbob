@@ -23,7 +23,9 @@ class client {
     this.font = "20px Arial";
     this.nameColor = "black";
     // for shooting
-    this.weapon = weapon.ak; // player's weapon
+    this.mainWeapon = weapon.ak; // player's main weapon
+    this.sideWeapon = weapon.glock // player's pistal
+    this.weapon = this.mainWeapon;
     this.shootYes = false; // if mouse clicked
     this.theta = 0; // the angle between mouse and player
     this.lastMouseX = this.pos.x + 1; // the last mouse x coordinate
@@ -31,7 +33,7 @@ class client {
     this.wWidth = 5;
     this.wLength = 25;
     this.wColor = "black";
-    this.shootingDist = 600; // how far can player shoot
+    //this.shootingDist = 600; // how far can player shoot
     this.scope = false; // if scope is on
     // health
     this.health = 100; // current health

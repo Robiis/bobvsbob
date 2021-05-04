@@ -27,8 +27,8 @@ function shootingCheck(shoot) {
   let coefficient = Math.tan(0 - player.theta);
   //trigonometry shit
   //gets the end point coords, if trajectory doesn't hit any obs or player
-  let eX = Math.cos(player.theta) * player.shootingDist;
-  let eY = Math.sin(player.theta) * player.shootingDist;
+  let eX = Math.cos(player.theta) * player.weapon.shootingDist;
+  let eY = Math.sin(player.theta) * player.weapon.shootingDist;
   //pushs this end point into the closest points' list, so that if no crosspoint with obs, then this will be the endpoint of trajectory
   closePList.push(eX ** 2 + eY ** 2);
   //checks the closest crosspoint with trajectory
@@ -107,7 +107,7 @@ function shootingCheck(shoot) {
     });
     //if the smallest one(the length from player to the crosspoint) is shorter than player's shooting distance
     //then it can get shoot, so push it into the "main" list
-    if (currentClosePoints[0] <= player.shootingDist ** 2) {
+    if (currentClosePoints[0] <= player.weapon.shootingDist ** 2) {
         closePList.push(currentClosePoints[0]);
     };
     //cleat this so that we can reuse it
@@ -157,7 +157,7 @@ function shootingCheck(shoot) {
     });
     //if the smallest one(the length from player to the crosspoint) is shorter than player's shooting distance
     //then it can get shoot, so push it into the "main" list
-    if (currentClosePoints[0] <= player.shootingDist ** 2) {
+    if (currentClosePoints[0] <= player.weapon.shootingDist ** 2) {
         closePList.push(currentClosePoints[0]);
         enemy.crossPointDistance = currentClosePoints[0];
     };
@@ -229,21 +229,8 @@ function cameraShake(){
         shake.x = 0;
         shake.y = shakeLength;
     }
+}
 
-
-
-
-
-    /*if (player.theta < 0){
-        alpha = player.theta + 0.5 * Math.PI
-        shake.x = Math.cos(alpha) * shakeLength;
-        shake.y = Math.sin(alpha) * shakeLength;
-    } else if (player.theta > 0){
-        alpha = player.theta - 0.5 * Math.PI
-        shake.x = Math.cos(alpha) * shakeLength;
-        shake.y = Math.sin(alpha) * shakeLength;
-    } else{ // theta == 0
-        shake.x = -5;
-        shake.y = 0;
-    }*/
+function weaponDraw(){
+    
 }
