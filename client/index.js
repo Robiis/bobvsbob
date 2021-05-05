@@ -9,6 +9,7 @@ let downPressed = false;
 let reloadPressed = false;
 let infoPressed = false;
 let mapPressed = false;
+let weaponChange = false;
 let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
 let obstacles = [];
 let mousePos = {
@@ -230,6 +231,10 @@ function redraw() {
     reloading = false;
     player.weapon.bullets = player.weapon.maxBullets;
   }
+  if (weaponChange){  // if you change weapon, the reload stops
+    reloading = false;
+    weaponChange = false;
+  }
 
   //draws obstacles
   obstacles.forEach(function(obs) {
@@ -283,6 +288,7 @@ mape -- done by robis
 
 advenced level:
 camera shake -- done
-ieroči -- 
+ieroči, scroll -- 50%
 sounds -- 
+grenade(goes through walls) -- 
 */

@@ -23,9 +23,11 @@ function keyDownChecker(event) {
     }
     if (event.keyCode == KeyboardHelper.mainW){
         player.weapon = player.mainWeapon;
+        weaponChange = true;
     }
     if (event.keyCode == KeyboardHelper.sideW){
         player.weapon = player.sideWeapon;
+        weaponChange = true;
     }
   }
   
