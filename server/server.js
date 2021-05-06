@@ -23,34 +23,38 @@ io.on("connection", function(socket) {
   socket.on("room-id", function({ roomId, username }) {
     console.log(getRoomById(rooms, roomId));
     if (getRoomById(rooms, roomId) && getRoomById(rooms, roomId).gameStarted !== true) {
-      // add user to users
-      users.push({
-        id: socket.id,
-        roomId,
-        username,
-        admin: false,
-        pos: {x: 50, y: 50}, 
-        movement: {dir: ""},
-        health: 100
-      });
+      if (username !== "" && username.length < 16 && username.length > 0) {
+        // add user to users
+        users.push({
+          id: socket.id,
+          roomId,
+          username,
+          admin: false,
+          pos: {x: 50, y: 50}, 
+          movement: {dir: ""},
+          health: 100
+        });
 
-      // connect user to the room
-      getRoomById(rooms, roomId).users.push(socket.id);
-      socket.join(roomId);
+        // connect user to the room
+        getRoomById(rooms, roomId).users.push(socket.id);
+        socket.join(roomId);
 
-      const usersForClient = [];
-      users.forEach(function(user) { 
-        if (user.roomId === roomId && user.id !== socket.id) {
-          usersForClient.push({ id: user.id, username: user.username, admin: user.admin, pos: user.pos, movement: user.movement }) ;
-        }
-      });
+        const usersForClient = [];
+        users.forEach(function(user) { 
+          if (user.roomId === roomId && user.id !== socket.id) {
+            usersForClient.push({ id: user.id, username: user.username, admin: user.admin, pos: user.pos, movement: user.movement }) ;
+          }
+        });
 
-      const user = getUserById(users, socket.id);
-      socket.emit("joined-room", { id: socket.id, roomId, admin: false, newUsers: usersForClient, pos: user.pos });
-      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: false, pos: user.pos });
+        const user = getUserById(users, socket.id);
+        socket.emit("joined-room", { id: socket.id, roomId, admin: false, newUsers: usersForClient, pos: user.pos });
+        socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: false, pos: user.pos });
 
-      console.log(rooms);
-      console.log(users);
+        console.log(rooms);
+        console.log(users);
+      } else {
+        errorHandler(socket, "err3");
+      }
     } else {
       if (getRoomById(rooms, roomId) !== undefined) {
         if (getRoomById(rooms, roomId).gameStarted === true) {
@@ -67,34 +71,38 @@ io.on("connection", function(socket) {
   // when user creates a new room
   socket.on("new-room-id", function({ roomId, username }) {
     if (!getRoomById(rooms, roomId)) {
-      // add user to users
-      users.push({
-        id: socket.id,
-        roomId,
-        username,
-        admin: true,
-        pos: {x: 50, y: 50}, 
-        movement: {dir: ""},
-        health: 100
-      });
+      if (username !== "" && username.length < 16 && username.length > 0) {
+        // add user to users
+        users.push({
+          id: socket.id,
+          roomId,
+          username,
+          admin: true,
+          pos: {x: 50, y: 50}, 
+          movement: {dir: ""},
+          health: 100
+        });
 
-      const usersForClient = [];
-      users.forEach(function(user) { 
-        if (user.roomId === roomId && user.id !== socket.id) {
-          usersForClient.push({ id: user.id, username: user.username, admin: user.admin, pos: user.pos, movement: user.movement }) ;
-        }
-      });
-      
-      // create a new room and join the user to it
-      rooms.push({ roomId, gameStarted: false, users: [socket.id] });
-      socket.join(roomId);
+        const usersForClient = [];
+        users.forEach(function(user) { 
+          if (user.roomId === roomId && user.id !== socket.id) {
+            usersForClient.push({ id: user.id, username: user.username, admin: user.admin, pos: user.pos, movement: user.movement }) ;
+          }
+        });
+        
+        // create a new room and join the user to it
+        rooms.push({ roomId, gameStarted: false, users: [socket.id] });
+        socket.join(roomId);
 
-      const user = getUserById(users, socket.id);
-      socket.emit("joined-room", { id: socket.id, roomId, admin: true, newUsers: usersForClient, pos: user.pos });
-      socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: true, pos: user.pos });
+        const user = getUserById(users, socket.id);
+        socket.emit("joined-room", { id: socket.id, roomId, admin: true, newUsers: usersForClient, pos: user.pos });
+        socket.broadcast.to(roomId).emit("connect-user", { id: socket.id, username, admin: true, pos: user.pos });
 
-      console.log(rooms);
-      console.log(users);
+        console.log(rooms);
+        console.log(users);
+      } else {
+        errorHandler(socket, "err3");
+      }
     } else {
       // ask user to redirect
       socket.emit("redirect", `/main.html?room=${roomId}`);
@@ -103,9 +111,13 @@ io.on("connection", function(socket) {
 
   // when a socket changes their username
   socket.on("change-username", function(username) {
-    const user = getUserById(users, socket.id);
-    socket.broadcast.to(user.roomId).emit("change-username", { id: socket.id, newUsername: username });
-    user.username = username;
+    if (username !== "" && username.length < 16 && username.length > 0) {
+      const user = getUserById(users, socket.id);
+      socket.broadcast.to(user.roomId).emit("change-username", { id: socket.id, newUsername: username });
+      user.username = username;
+    } else {
+      errorHandler(socket, "err3");
+    }
   }); 
 
   // when client starts game
@@ -130,11 +142,15 @@ io.on("connection", function(socket) {
 
   // when user stops moving
   socket.on("stop-move", function({ x, y }) {
-    const user = getUserById(users, socket.id);
-    user.movement.dir = "";
-    user.pos.x = x;
-    user.pos.y = y;
-    socket.broadcast.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
+    try {
+      const user = getUserById(users, socket.id);
+      user.movement.dir = "";
+      user.pos.x = x;
+      user.pos.y = y;
+      socket.broadcast.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
+    } catch(err) {
+      console.log(err);
+    }
   });
 
   // when client shoots and hits

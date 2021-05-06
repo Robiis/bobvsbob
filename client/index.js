@@ -171,7 +171,9 @@ window.onblur = function() {
   leftPressed = false;
   downPressed = false;
   upPressed = false; 
-  socket.emit("stop-move", { x: player.pos.x, y: player.pos.y });
+  if (clientState.gameStarted) {
+    socket.emit("stop-move", { x: player.pos.x, y: player.pos.y });
+  }
 }
 // loop--------------------------------------------------------------------------------------------------------------
 let now, dt;

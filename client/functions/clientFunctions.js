@@ -82,18 +82,24 @@ function clientPlayerSign(id) {
 // when the client changes their username
 function changeUsername() {
   const input = document.getElementById("username");
-  user.username = input.value;
-  player.username = input.value;
-
-  socket.emit("change-username", input.value);
-  input.placeholder = input.value;
-  input.value = "";
-
-  updatePlayerUsername(user.id, user.username);
-  if (user.admin) {
-    adminPlayerCrown(user.id, user.username);
-  } 
-  clientPlayerSign(user.id);
+  input.value = input.value.replace(/\s/g, '');
+  if (input.value !== "" && input.value.length < 16 && input.value.length > 0) {
+    user.username = input.value;
+    player.username = input.value;
+  
+    socket.emit("change-username", input.value);
+    input.placeholder = input.value;
+    input.value = "";
+  
+    updatePlayerUsername(user.id, user.username);
+    if (user.admin) {
+      adminPlayerCrown(user.id, user.username);
+    } 
+    clientPlayerSign(user.id);
+  } else {
+    input.placeholder = user.username;
+    input.value = "";
+  }
 }
 
 // if you start a game

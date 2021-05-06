@@ -101,7 +101,14 @@ socket.on("err", function(err) {
     errDiv.style.display = "block";
     errMsg.innerHTML = "Error - No room with that id found <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
+  } else if (err === "err3") {
+    console.log("Error - Invalid username");
+    errDiv.style.display = "block";
+    errMsg.innerHTML = "Error - Invalid username <br> <a href='/'>Back to menu</a>";
+    loader.style.display = "none";
+    lobbyDiv.style.display = "none";
   }
+  clientState.gameStarted = false;
 });
 
 // if server asks to redirect, redirect
@@ -197,4 +204,5 @@ socket.on("disconnect", function() {
     lobbyDiv.style.display = "none";
     canvasDiv.style.display = "none";
   }
+  clientState.gameStarted = false;
 });
