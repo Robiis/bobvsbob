@@ -26,6 +26,7 @@ let shake = {
   x: 0,
   y: 0
 }; // camera shake, in px
+let focused = true;
 
 // images
 const bulletIcon = new Image();
@@ -164,6 +165,14 @@ document.addEventListener("mouseup", function(event) {
 }, false);
 // remove right click default actions
 window.addEventListener("contextmenu", function (e) { e.preventDefault() }, false);
+// checks if document has focus
+window.onblur = function() {
+  rightPressed = false;
+  leftPressed = false;
+  downPressed = false;
+  upPressed = false; 
+  socket.emit("stop-move", { x: player.pos.x, y: player.pos.y });
+}
 // loop--------------------------------------------------------------------------------------------------------------
 let now, dt;
 function redraw() {

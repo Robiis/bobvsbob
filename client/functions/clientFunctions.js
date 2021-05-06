@@ -103,11 +103,6 @@ function startGame() {
   }
 }
 
-// why
-function keyboardInput(keys) {
-  socket.emit("keyboard-input", keys);
-}
-
 // send shooting data to server
 function shootSend(fromX, fromY, toX, toY) {
   socket.emit("shoot", { fromX, fromY, toX, toY });

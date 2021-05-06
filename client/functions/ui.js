@@ -69,10 +69,6 @@ function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, player
     ctx.fillStyle = player.color;
     // draws player on the minimap
     drawCircle(mapX+((player.pos.x + mapSize.width/2)/mapDif), mapY+((player.pos.y + mapSize.height/2)/mapDif), player.r/mapDif*2, 0, 2*Math.PI, true);
-    // draws other players on minimap
-    players.forEach(function(cplayer) {
-      drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif*2, 0, 2*Math.PI, true);
-    });
     // draws obstacles on the minimap
     obstacles.forEach(function(obs) {
       if (obs.drawable) {
@@ -80,20 +76,26 @@ function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, player
         ctx.roundRect(mapX+((obs.x + player.r)/mapDif)+mapSize.width/mapDif/2, mapY+((obs.y + player.r)/mapDif)+mapSize.height/mapDif/2, (obs.width - player.r*2)/mapDif, (obs.height - player.r*2)/mapDif, 20/mapDif).fill();
       }
     });
+    // draws other players on minimap
+    players.forEach(function(cplayer) {
+      ctx.fillStyle = cplayer.color;
+      drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif*2, 0, 2*Math.PI, true);
+    });
   } else {
     ctx.fillStyle = player.color;
     // draws player on the minimap
     drawCircle(mapX+((player.pos.x + mapSize.width/2)/mapDif), mapY+((player.pos.y + mapSize.height/2)/mapDif), player.r/mapDif, 0, 2*Math.PI, true);
-    // draws other players on minimap
-    players.forEach(function(cplayer) {
-      drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif, 0, 2*Math.PI, true);
-    });
     // draws obstacles on the minimap
     obstacles.forEach(function(obs) {
       if (obs.drawable) {
         ctx.fillStyle = obs.color;
         ctx.roundRect(mapX+(obs.x/mapDif)+mapSize.width/mapDif/2, mapY+(obs.y/mapDif)+mapSize.height/mapDif/2, obs.width/mapDif, obs.height/mapDif, 20/mapDif).fill();
       }
+    });
+    // draws other players on minimap
+    players.forEach(function(cplayer) {
+      ctx.fillStyle = cplayer.color;
+      drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif, 0, 2*Math.PI, true);
     });
   }
 }
