@@ -277,6 +277,7 @@ function redraw() {
   } else {
     drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, bgs, false);
   }
+  ctx.fillText(`${player.pos.x}, ${player.pos.y}`, 50-camX, 50-camY);
 
   lastUpdate = now;
   if (clientState.gameStarted) {

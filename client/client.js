@@ -38,14 +38,14 @@ if (newroom !== undefined) {
 }
 
 // if user joins a room
-socket.on("joined-room", function({ id, roomId, admin, newUsers, pos }) {
+socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
   loader.style.display = "none";
   // setTimeout(function() {loader.style.display = "none"}, 5000);
   console.log(`Joined room: ${roomId}, admin: ${admin}`);
 
   users = newUsers;
   user.id = id;
-  player = new client(id, pos.x, pos.y, "#FC766AFF", user.username);
+  player = new client(id, 0, 0, "#FC766AFF", user.username);
 
   createAPlayerUsername(id, user.username);
   if (admin) {
@@ -64,7 +64,7 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers, pos }) {
       adminPlayerCrown(cuser.id, cuser.username);
     }
     
-    players.push(new client(cuser.id, 50, 50, "#F38181", cuser.username));
+    players.push(new client(cuser.id, 0, 0, "#FC766AFF", cuser.username));
   });
 
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
@@ -72,11 +72,11 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers, pos }) {
 });
 
 // if another user joins the room
-socket.on("connect-user", function({ id, username, admin, pos }) {
+socket.on("connect-user", function({ id, username, admin }) {
   console.log(`User ${username} connected`);
   createAPlayerUsername(id, username);
   users.push({ id, username, admin });
-  players.push(new client(id, pos.x, pos.y, "#F38181", username));
+  players.push(new client(id, 0, 0, "#FC766AFF", username));
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
@@ -96,17 +96,20 @@ socket.on("err", function(err) {
     errDiv.style.display = "block";
     errMsg.innerHTML = "Error - Game already started <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
+    canvasDiv.style.display = "none";
   } else if (err === "err2") {
     console.log("Error - No room with that id found");
     errDiv.style.display = "block";
     errMsg.innerHTML = "Error - No room with that id found <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
+    canvasDiv.style.display = "none";
   } else if (err === "err3") {
     console.log("Error - Invalid username");
     errDiv.style.display = "block";
     errMsg.innerHTML = "Error - Invalid username <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
     lobbyDiv.style.display = "none";
+    canvasDiv.style.display = "none";
   }
   clientState.gameStarted = false;
 });
@@ -141,12 +144,24 @@ socket.on("change-username", function({ id, newUsername }) {
 }); 
 
 // when admin starts the game
-socket.on("start-game", function() {
-  lobbyDiv.style.display = "none";
-  clientState.gameStarted = true;
-  canvasDiv.style.display = "block";
+socket.on("start-game", function(playersxy) {
+  // change players position
+  playersxy.forEach(function(cplayer) {
+    if (cplayer.id !== player.id) {
+      getUserById(players, cplayer.id).pos.x = cplayer.x;
+      getUserById(players, cplayer.id).pos.y = cplayer.y;
+    } else {
+      player.pos.x = cplayer.x;
+      player.pos.y = cplayer.y;
+    }
+  });
 
+  // other game starting stuff
+  clientState.gameStarted = true;
+  lobbyDiv.style.display = "none";
+  canvasDiv.style.display = "block";
   document.title = "Bob vs Bob";
+
   lastUpdate = performance.now();
   redraw();
 });
