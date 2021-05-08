@@ -203,6 +203,10 @@ socket.on("respawn", function({ hitId, x, y }) {
     player.pos.x = x;
     player.pos.y = y;
     player.health = 100;
+    reloading = false;
+    lastReload = 2430;
+    weapon.ak.bullets = weapon.ak.maxBullets;
+    weapon.glock.bullets = weapon.glock.maxBullets;
   } else {
     const cplayer = getUserById(players, hitId);
     cplayer.pos.x = x;
