@@ -33,37 +33,53 @@ function dirChange() {
 
 function movePlayer(cplayer, dt) {
   cplayer.theta = Math.atan2(cplayer.lastMouseY - cplayer.pos.y, cplayer.lastMouseX - cplayer.pos.x);
-  dt = dt * 0.06;
+  dt = dt * 0.078;
   switch (cplayer.movement.dir) {
     case "u":
+      cplayer.lastPos.y = cplayer.pos.y;
       cplayer.pos.y -= 5 * dt * speeed;
       break;
     case "d":
+      cplayer.lastPos.y = cplayer.pos.y;
       cplayer.pos.y += 5 * dt * speeed;
       break;
     case "r":
+      cplayer.lastPos.x = cplayer.pos.x;
       cplayer.pos.x += 5 * dt * speeed;
       break;
     case "l":
+      cplayer.lastPos.x = cplayer.pos.x;
       cplayer.pos.x -= 5 * dt * speeed;
       break;
     case "ur":
+      cplayer.lastPos.x = cplayer.pos.x;
+      cplayer.lastPos.y = cplayer.pos.y;
       cplayer.pos.y -= 5 / Math.sqrt(2) * dt * speeed;
       cplayer.pos.x += 5 / Math.sqrt(2) * dt * speeed;
       break;
     case "ul":
+      cplayer.lastPos.x = cplayer.pos.x;
+      cplayer.lastPos.y = cplayer.pos.y;
       cplayer.pos.y -= 5 / Math.sqrt(2) * dt * speeed;
       cplayer.pos.x -= 5 / Math.sqrt(2) * dt * speeed;
       break;
     case "dl":
+      cplayer.lastPos.x = cplayer.pos.x;
+      cplayer.lastPos.y = cplayer.pos.y;
       cplayer.pos.y += 5 / Math.sqrt(2) * dt * speeed;
       cplayer.pos.x -= 5 / Math.sqrt(2) * dt * speeed;
       break;
     case "dr":
+      cplayer.lastPos.x = cplayer.pos.x;
+      cplayer.lastPos.y = cplayer.pos.y;
       cplayer.pos.y += 5 / Math.sqrt(2) * dt * speeed;
       cplayer.pos.x += 5 / Math.sqrt(2) * dt * speeed;
       break;
     default:
+      if (cplayer.pos.x !== cplayer.lastPos.x && cplayer.pos.y !== cplayer.lastPos.y){
+        cplayer.lastPos.x = cplayer.pos.x;
+        cplayer.lastPos.y = cplayer.pos.y;
+      }
       break;
   } 
 }

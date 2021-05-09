@@ -99,7 +99,7 @@ const bgs = [
   }
 ];
 const shakeLength = 3; // for how many pixels camera shakes diagonally
-const speeed = 1.3;
+const speeed = 1;
 
 // obstacles
 obstacles.push(
@@ -163,6 +163,14 @@ document.addEventListener("mouseup", function(event) {
     }
   }
 }, false);
+document.addEventListener("wheel", function(event){
+  if (player.weapon == player.mainWeapon){
+    player.weapon = player.sideWeapon;
+  } else if (player.weapon == player.sideWeapon){
+    player.weapon = player.mainWeapon;
+  }
+  weaponChange = true;
+})
 // remove right click default actions
 window.addEventListener("contextmenu", function (e) { e.preventDefault() }, false);
 // checks if document has focus
@@ -189,6 +197,7 @@ function redraw() {
   });
 
   // checks if players collide with obstacles
+  clientCheck(player);
   borderCheck(player);
   players.forEach(function(cplayer) {
     borderCheck(cplayer);
@@ -277,7 +286,7 @@ function redraw() {
   } else {
     drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, bgs, false);
   }
-  ctx.fillText(`${player.pos.x}, ${player.pos.y}`, 50-camX, 50-camY);
+  //ctx.fillText(`${player.pos.x}, ${player.pos.y}`, 50-camX, 50-camY);
 
   lastUpdate = now;
   if (clientState.gameStarted) {
@@ -300,7 +309,10 @@ mape -- done by robis
 
 advenced level:
 camera shake -- done
-ieroči, scroll -- 50%
+ieroči, scroll -- done
 sounds -- 
-grenade(goes through walls) -- 
+grenade(goes through walls) -- not now
+help ui --
+weapon spray --
+players' obs check --
 */
