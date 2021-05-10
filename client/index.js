@@ -66,7 +66,11 @@ const weapon = {
     bullets: 30, 
     maxBullets: 30,
     img: ak,
-    shootingDist: 600
+    shootingDist: 600,
+    spray: Math.PI / 180 * 5, // weapon's deviation, in degrees. Pēdējais koeficients norāda par cik grādiem ir spray
+    wWidth: 7,
+    wLength: 30,
+    wColor: "rgb(200, 115, 29)"
   },
   glock:{
     rateOfFire: 1000/6.7,
@@ -75,7 +79,11 @@ const weapon = {
     bullets: 20,
     maxBullets: 20,
     img: glock,
-    shootingDist: 400
+    shootingDist: 400,
+    spray: Math.PI / 180 * 2, // weapon's deviation, in degrees.
+    wWidth: 5,
+    wLength: 20,
+    wColor: "rgb(100, 113, 124)"
   }
 }
 const bgs = [
@@ -314,6 +322,6 @@ ieroči, scroll -- done
 sounds -- 
 grenade(goes through walls) -- not now
 help ui --
-weapon spray --
+weapon spray -- done
 players' obs check -- done
 */

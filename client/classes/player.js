@@ -34,9 +34,9 @@ class client {
     this.theta = 0; // the angle between mouse and player
     this.lastMouseX = this.pos.x + 1; // the last mouse x coordinate
     this.lastMouseY = this.pos.y;// the last mouse y coordinate
-    this.wWidth = 5;
-    this.wLength = 25;
-    this.wColor = "black";
+    //this.wWidth = 5;
+    //this.wLength = 25;
+    //this.wColor = "black";
     //this.shootingDist = 600; // how far can player shoot
     this.scope = false; // if scope is on
     // health
@@ -68,14 +68,14 @@ class client {
   // Draws the playes's weapon
   draw_weapon() {
     // calculates the end point coords of weapon
-    // be careful! You have to add this.r to this.wLength, because wLength is the length outside the player body(the circle)
+    // be careful! You have to add this.r to this.weapon.wLength, because weapon.wLength is the length outside the player body(the circle)
     this.theta = Math.atan2(this.lastMouseY - this.pos.y, this.lastMouseX - this.pos.x);
-    let eX = this.pos.x + Math.cos(this.theta) * (this.wLength + this.r); // eX stands for endpoint X
-    let eY = this.pos.y + Math.sin(this.theta) * (this.wLength + this.r);
+    let eX = this.pos.x + Math.cos(this.theta) * (this.weapon.wLength + this.r); // eX stands for endpoint X
+    let eY = this.pos.y + Math.sin(this.theta) * (this.weapon.wLength + this.r);
     //draws the weapon
-    ctx.strokeStyle = this.wColor;
+    ctx.strokeStyle = this.weapon.wColor;
     ctx.beginPath();
-    ctx.lineWidth = this.wWidth;
+    ctx.lineWidth = this.weapon.wWidth;
     ctx.moveTo(this.pos.x, this.pos.y);
     ctx.lineTo(eX, eY);
     ctx.stroke();
