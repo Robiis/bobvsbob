@@ -17,13 +17,14 @@ function mouseCoordsGet() {
 
 // the most important part of this game - the shooting check
 function shootingCheck(shoot) {
-  let theta = player.theta + (Math.random() * (player.weapon.spray + player.weapon.spray) - player.weapon.spray);
   if (shoot === false){
       trailColor = "rgb(255, 0, 0)";
       trailWidth = 2;
+      theta = player.theta
   }else{
       trailColor = "black";
       trailWidth = 3;
+      theta = player.theta + (Math.random() * (player.weapon.spray + player.weapon.spray) - player.weapon.spray);
   }
   let coefficient = Math.tan(0 - theta);
   //trigonometry shit
