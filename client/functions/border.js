@@ -60,61 +60,31 @@ function borderCheck(client) {
         };
     });
 }
-function clientCheck(client){
-    players.forEach(function(enemy){
-        //Checks if client collides with other players
-        if (Math.sqrt((client.pos.x - enemy.pos.x) ** 2 + (client.pos.y - enemy.pos.y) ** 2) < client.r + enemy.r){
-            client.pos.x = client.lastPos.x;
-            client.pos.y = client.lastPos.y
-            enemy.pos.x = enemy.lastPos.x;
-            enemy.pos.y = enemy.lastPos.y
-            //client.movement.dir = "";
-        }
-    })
-        //Checks if client collides with other players
-        /*if (client.movement.dir === "r") {
-            if (client.pos.x + client.r >= enemy.pos.x && client.pos.y + client.r >= enemy.pos.y && client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x <= enemy.pos.x) { // LEFT border of obs
-                client.pos.x = enemy.pos.x - client.r - 1;
-            };
-        } else if (client.movement.dir === "dr") {
-            if (client.pos.x + client.r >= enemy.pos.x && client.pos.y + client.r >= enemy.pos.y && client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x <= enemy.pos.x) { // LEFT border of obs
-                client.pos.x = enemy.pos.x - client.r - 1;
-            };
-            if (client.pos.y + client.r >= enemy.pos.y && client.pos.x + client.r >= enemy.pos.x && client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y <= enemy.pos.y) { // UPPER border of obs
-                client.pos.y = enemy.pos.y - client.r - 1;
-            };
-        } else if (client.movement.dir === "d") {
-            if (client.pos.y + client.r >= enemy.pos.y && client.pos.x + client.r >= enemy.pos.x && client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y <= enemy.pos.y) { // UPPER border of obs
-                client.pos.y = enemy.pos.y - client.r - 1;
-            };
-        } else if (client.movement.dir === "dl") {
-            if (client.pos.y + client.r >= enemy.pos.y && client.pos.x + client.r >= enemy.pos.x && client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y <= enemy.pos.y) { // UPPER border of obs
-                client.pos.y = enemy.pos.y - client.r - 1;
-            };
-            if (client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y + client.r >= enemy.pos.y && client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x >= enemy.pos.x + enemy.r) { // RIGHT border of obs
-                client.pos.x = enemy.pos.x + enemy.r + client.r + 1;
-            };
-        } else if (client.movement.dir === "l") {
-            if (client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y + client.r >= enemy.pos.y && client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x >= enemy.pos.x + enemy.r) { // RIGHT border of obs
-                client.pos.x = enemy.pos.x + enemy.r + client.r + 1;
-            };
-        } else if (client.movement.dir === "ul") {
-            if (client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y + client.r >= enemy.pos.y && client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x >= enemy.pos.x + enemy.r) { // RIGHT border of obs
-                client.pos.x = enemy.pos.x + enemy.r + client.r + 1;
-            };
-            if (client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x + client.r >= enemy.pos.x && client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y >= enemy.pos.y + enemy.r) { // LOWER border of obs
-                client.pos.y = enemy.pos.y + enemy.r + client.r + 1;
-            };
-        } else if (client.movement.dir === "u") {
-            if (client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x + client.r >= enemy.pos.x && client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y >= enemy.pos.y + enemy.r) { // LOWER border of obs
-                client.pos.y = enemy.pos.y + enemy.r + client.r + 1;
-            };
-        } else if (client.movement.dir === "ur") {
-            if (client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x + client.r >= enemy.pos.x && client.pos.x - client.r <= enemy.pos.x + enemy.r && client.pos.y >= enemy.pos.y + enemy.r) { // LOWER border of obs
-                client.pos.y = enemy.pos.y + enemy.r + client.r + 1;
-            };
-            if (client.pos.x + client.r >= enemy.pos.x && client.pos.y + client.r >= enemy.pos.y && client.pos.y - client.r <= enemy.pos.y + enemy.r && client.pos.x <= enemy.pos.x) { // LEFT border of obs
-                client.pos.x = enemy.pos.x - client.r - 1;
-            };
-        };*/
+
+// obstacles check between players
+function clientObsCheck(client){
+    // if the client is the player
+    if (client.id === player.id){
+        players.forEach(function(enemy){
+            //Checks if client collides with all other players
+            if (Math.sqrt((client.pos.x - enemy.pos.x) ** 2 + (client.pos.y - enemy.pos.y) ** 2) < client.r + enemy.r){
+                client.pos.x = client.lastPos.x;
+                client.pos.y = client.lastPos.y
+                enemy.pos.x = enemy.lastPos.x;
+                enemy.pos.y = enemy.lastPos.y
+            }
+        })
+    } 
+    // if the client is other player
+    else if (client.id !== player.id){
+        players.forEach(function(enemy){
+            // checks collision between all other players from "players" array that is not the client himself
+            if (Math.sqrt((client.pos.x - enemy.pos.x) ** 2 + (client.pos.y - enemy.pos.y) ** 2) < client.r + enemy.r && enemy.id !== client.id){
+                client.pos.x = client.lastPos.x;
+                client.pos.y = client.lastPos.y
+                enemy.pos.x = enemy.lastPos.x;
+                enemy.pos.y = enemy.lastPos.y
+            }
+        })
+    }
 }

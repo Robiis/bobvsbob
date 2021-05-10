@@ -197,9 +197,10 @@ function redraw() {
   });
 
   // checks if players collide with obstacles
-  clientCheck(player);
+  clientObsCheck(player);
   borderCheck(player);
   players.forEach(function(cplayer) {
+    clientObsCheck(cplayer);
     borderCheck(cplayer);
   });
 
@@ -314,5 +315,5 @@ sounds --
 grenade(goes through walls) -- not now
 help ui --
 weapon spray --
-players' obs check --
+players' obs check -- done
 */
