@@ -17,6 +17,7 @@ class client {
       x: x,
       y: y
     }
+    
     this.shoot = {
       shoot: false,
       fromX: 0,
