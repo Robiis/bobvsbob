@@ -21,7 +21,7 @@ function shootingCheck(shoot) {
       trailColor = "rgb(255, 0, 0)";
       trailWidth = 2;
       theta = player.theta
-  }else{
+  } else{
       trailColor = "black";
       trailWidth = 3;
       theta = player.theta + (Math.random() * (player.weapon.spray + player.weapon.spray) - player.weapon.spray);
@@ -182,6 +182,9 @@ function shootingCheck(shoot) {
         shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage);
         if (!cplayer.onCooldown) {
             cplayer.health -= player.weapon.damage;
+            if (cplayer.health < 0) {
+                cplayer.health = 0;
+            }
         }
       } else {
           if (shoot){

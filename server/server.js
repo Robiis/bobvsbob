@@ -184,7 +184,7 @@ io.on("connection", function(socket) {
 
   // when client shoots and hits
   socket.on("shoot-hit", function({ fromX, fromY, toX, toY, hitId, damage }) {
-    if (!getUserById(users, hitId).onCooldown) {
+    if (!getUserById(users, hitId).onCooldown && !getUserById(users, socket.id).onCooldown) {
       socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot-hit", { fromX, fromY, toX, toY, sendId: socket.id, hitId, damage });
     
       const hitUser = getUserById(users, hitId);
@@ -210,7 +210,9 @@ io.on("connection", function(socket) {
         hitUser.onCooldown = true;
         setTimeout(function() {hitUser.onCooldown = false}, 3000);
       }
-    } 
+    } else {
+      socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot", { fromX, fromY, toX, toY, id: socket.id});
+    }
   });
 
   // when client shoots
