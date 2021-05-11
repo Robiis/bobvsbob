@@ -232,7 +232,3 @@ function cameraShake(){
         shake.y = shakeLength;
     }
 }
-
-function weaponDraw(){
-    
-}
