@@ -207,13 +207,28 @@ socket.on("respawn", function({ hitId, x, y }) {
     lastReload = 2430;
     weapon.ak.bullets = weapon.ak.maxBullets;
     weapon.glock.bullets = weapon.glock.maxBullets;
+
+    // spawn cooldown
+    player.color = "blue";
+    player.onCooldown = true;
+    setTimeout(function() {
+      player.color = "#FC766AFF";
+      player.onCooldown = false;
+    }, 3000);
   } else {
     const cplayer = getUserById(players, hitId);
     cplayer.pos.x = x;
     cplayer.pos.y = y;
     cplayer.health = 100;
+
+    // spawn cooldown
+    cplayer.color = "blue";
+    cplayer.onCooldown = true;
+    setTimeout(function() {
+      cplayer.color = "#FC766AFF";
+      cplayer.onCooldown = false;
+    }, 3000);
   }
-  console.log("respawn");
 });
 
 // if user is diconnected from the server

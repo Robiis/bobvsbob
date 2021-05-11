@@ -242,7 +242,7 @@ function redraw() {
   mouseCoordsGet();
   
   // shooting check
-  if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
+  if (((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) && !player.onCooldown) {
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
     if (player.shootYes === true){
       cameraShake();
