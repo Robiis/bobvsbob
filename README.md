@@ -1,3 +1,3 @@
-# 2D CSGO
-Taking a very big 3d game, and making it 2d, small and bad woooooooohoooooooooo
+# Bob vs Bob
+Bob vs Bob by Roberts and Jasons
 
