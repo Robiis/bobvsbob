@@ -213,6 +213,7 @@ socket.on("respawn", function({ hitId, x, y }) {
     cplayer.pos.y = y;
     cplayer.health = 100;
   }
+  console.log("respawn");
 });
 
 // if user is diconnected from the server
