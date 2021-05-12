@@ -178,7 +178,7 @@ function shootingCheck(shoot) {
 
   //tells if the player is hurt
   players.forEach(function(cplayer) {
-      if (cplayer.crossPointDistance === closePList[0] && shoot === true) {
+      if (cplayer.crossPointDistance === closePList[0] && shoot === true && cplayer.health > 0) {
         shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage);
         if (!cplayer.onCooldown) {
             cplayer.health -= player.weapon.damage;
