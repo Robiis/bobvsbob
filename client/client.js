@@ -168,30 +168,18 @@ socket.on("start-game", function(playersxy) {
 
 // when player starts moving
 socket.on("start-move", function({ id, dir, x, y }) {
-  if (id !== player.id) {
-    const cplayer = getUserById(players, id);
-    cplayer.pos.x = x;
-    cplayer.pos.y = y;
-    cplayer.movement.dir = dir;
-  } else {
-    player.pos.x = x;
-    player.pos.y = y;
-    player.movement.dir = dir;
-  }
+  const cplayer = getUserById(players, id);
+  cplayer.pos.x = x;
+  cplayer.pos.y = y;
+  cplayer.movement.dir = dir;
 });
 
 // when player stops moving
 socket.on("stop-move", function({ id, x, y }) {
-  if (id !== player.id) {
-    const cplayer = getUserById(players, id);
-    cplayer.pos.x = x;
-    cplayer.pos.y = y;
-    cplayer.movement.dir = "";
-  } else {
-    player.pos.x = x;
-    player.pos.y = y;
-    player.movement.dir = "";
-  }
+  const cplayer = getUserById(players, id);
+  cplayer.pos.x = x;
+  cplayer.pos.y = y;
+  cplayer.movement.dir = "";
 });
 
 // when other client shoots
@@ -220,26 +208,26 @@ socket.on("respawn", function({ hitId, x, y }) {
     weapon.ak.bullets = weapon.ak.maxBullets;
     weapon.glock.bullets = weapon.glock.maxBullets;
 
-    // spawn cooldown
-    player.color = "blue";
-    player.onCooldown = true;
-    setTimeout(function() {
-      player.color = "#FC766AFF";
-      player.onCooldown = false;
-    }, 3000);
+    // // spawn cooldown
+    // player.color = "blue";
+    // player.onCooldown = true;
+    // setTimeout(function() {
+    //   player.color = "#FC766AFF";
+    //   player.onCooldown = false;
+    // }, 3000);
   } else {
     const cplayer = getUserById(players, hitId);
     cplayer.pos.x = x;
     cplayer.pos.y = y;
     cplayer.health = 100;
 
-    // spawn cooldown
-    cplayer.color = "blue";
-    cplayer.onCooldown = true;
-    setTimeout(function() {
-      cplayer.color = "#FC766AFF";
-      cplayer.onCooldown = false;
-    }, 3000);
+    // // spawn cooldown
+    // cplayer.color = "blue";
+    // cplayer.onCooldown = true;
+    // setTimeout(function() {
+    //   cplayer.color = "#FC766AFF";
+    //   cplayer.onCooldown = false;
+    // }, 3000);
   }
 });
 

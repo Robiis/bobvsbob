@@ -29,7 +29,7 @@ class client {
     this.nameColor = "black";
     // for shooting
     this.mainWeapon = weapon.ak; // player's main weapon
-    this.sideWeapon = weapon.glock // player's pistal
+    this.sideWeapon = weapon.glock // player's pistol
     this.weapon = this.mainWeapon;
     this.shootYes = false; // if mouse clicked
     this.theta = 0; // the angle between mouse and player

@@ -26,7 +26,7 @@ const respawnPoints = [
   // // desert biome
   // [-180, 1260], [-270, 760], [360, 500]
   [-180, 1260], [-270, 760]
-]
+];
 
 // when user connects
 io.on("connection", function(socket) {
@@ -166,7 +166,7 @@ io.on("connection", function(socket) {
     user.movement.dir = dir;
     user.pos.x = x;
     user.pos.y = y;
-    io.to(user.roomId).emit("start-move", { id: socket.id, dir, x, y });
+    socket.broadcast.to(user.roomId).emit("start-move", { id: socket.id, dir, x, y });
   });
 
   // when user stops moving
@@ -176,7 +176,7 @@ io.on("connection", function(socket) {
       user.movement.dir = "";
       user.pos.x = x;
       user.pos.y = y;
-      io.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
+      socket.broadcast.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
     } catch(err) {
       console.log(err);
     }
@@ -207,8 +207,8 @@ io.on("connection", function(socket) {
 
         hitUser.health = 100;
         io.to(hitUser.roomId).emit("respawn", { hitId, x: hitUser.pos.x, y: hitUser.pos.y });
-        hitUser.onCooldown = true;
-        setTimeout(function() {hitUser.onCooldown = false}, 3000);
+        // hitUser.onCooldown = true;
+        // setTimeout(function() {hitUser.onCooldown = false}, 3000);
       }
     } else {
       socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot", { fromX, fromY, toX, toY, id: socket.id});
