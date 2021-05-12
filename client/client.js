@@ -168,18 +168,30 @@ socket.on("start-game", function(playersxy) {
 
 // when player starts moving
 socket.on("start-move", function({ id, dir, x, y }) {
-  const cplayer = getUserById(players, id);
-  cplayer.pos.x = x;
-  cplayer.pos.y = y;
-  cplayer.movement.dir = dir;
+  if (id !== player.id) {
+    const cplayer = getUserById(players, id);
+    cplayer.pos.x = x;
+    cplayer.pos.y = y;
+    cplayer.movement.dir = dir;
+  } else {
+    player.pos.x = x;
+    player.pos.y = y;
+    player.movement.dir = dir;
+  }
 });
 
 // when player stops moving
 socket.on("stop-move", function({ id, x, y }) {
-  const cplayer = getUserById(players, id);
-  cplayer.pos.x = x;
-  cplayer.pos.y = y;
-  cplayer.movement.dir = "";
+  if (id !== player.id) {
+    const cplayer = getUserById(players, id);
+    cplayer.pos.x = x;
+    cplayer.pos.y = y;
+    cplayer.movement.dir = "";
+  } else {
+    player.pos.x = x;
+    player.pos.y = y;
+    player.movement.dir = "";
+  }
 });
 
 // when other client shoots

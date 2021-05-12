@@ -1,30 +1,30 @@
 // changes the player's direction
 function dirChange() {
-  player.movement.prevDir = player.movement.dir;
+  player.movement.prevDir = player.movement.moveDir;
 
   if (upPressed && rightPressed) {
-    player.movement.dir = "ur"
+    player.movement.moveDir = "ur"
   } else if (downPressed && rightPressed) {
-    player.movement.dir = "dr"
+    player.movement.moveDir = "dr"
   } else if (downPressed && leftPressed) {
-    player.movement.dir = "dl"
+    player.movement.moveDir = "dl"
   } else if (upPressed && leftPressed) {
-    player.movement.dir = "ul"
+    player.movement.moveDir = "ul"
   } else if (upPressed) {
-    player.movement.dir = "u";
+    player.movement.moveDir = "u";
   } else if (downPressed) {
-    player.movement.dir = "d";
+    player.movement.moveDir = "d";
   } else if (leftPressed) {
-    player.movement.dir = "l";
+    player.movement.moveDir = "l";
   } else if (rightPressed) {
-    player.movement.dir = "r";
+    player.movement.moveDir = "r";
   } else {
-    player.movement.dir = "";
+    player.movement.moveDir = "";
   }
 
-  if (player.movement.prevDir !== player.movement.dir) {
-    if (player.movement.dir !== "") {
-      socket.emit("start-move", { dir: player.movement.dir, x: player.pos.x, y: player.pos.y });
+  if (player.movement.prevDir !== player.movement.moveDir) {
+    if (player.movement.moveDir !== "") {
+      socket.emit("start-move", { dir: player.movement.moveDir, x: player.pos.x, y: player.pos.y });
     } else {
       socket.emit("stop-move", { x: player.pos.x, y: player.pos.y });
     }  

@@ -166,7 +166,7 @@ io.on("connection", function(socket) {
     user.movement.dir = dir;
     user.pos.x = x;
     user.pos.y = y;
-    socket.broadcast.to(user.roomId).emit("start-move", { id: socket.id, dir, x, y });
+    io.to(user.roomId).emit("start-move", { id: socket.id, dir, x, y });
   });
 
   // when user stops moving
@@ -176,7 +176,7 @@ io.on("connection", function(socket) {
       user.movement.dir = "";
       user.pos.x = x;
       user.pos.y = y;
-      socket.broadcast.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
+      io.to(user.roomId).emit("stop-move", { id: socket.id, x, y });
     } catch(err) {
       console.log(err);
     }
