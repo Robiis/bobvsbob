@@ -149,7 +149,7 @@ document.addEventListener("mousemove", function(event){
 }, false);
 // if click, then shooting check
 document.addEventListener("mousedown", function(event) {
-  if (event.button === 0 && player.onCooldown === false){ // the left mouse button
+  if (event.button === 0){ // the left mouse button
     player.shootYes = true;
     if (player.scope){
       player.scope = "hidden";
@@ -295,7 +295,6 @@ function redraw() {
   } else {
     drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, bgs, false);
   }
-  //ctx.fillText(`${player.pos.x}, ${player.pos.y}`, 50-camX, 50-camY);
 
   lastUpdate = now;
   if (clientState.gameStarted) {

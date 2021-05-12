@@ -19,13 +19,12 @@ let users = [];
 
 // all possible player respawn points
 const respawnPoints = [
-  // // forest biome
-  // [-1900, -1350], [-1750, -430], [-1110, -1220],
-  // // snowy biome
-  // [1850, -1050], [1380, -150], [1040, -850],
-  // // desert biome
-  // [-180, 1260], [-270, 760], [360, 500]
-  [-180, 1260], [-270, 760]
+  // forest biome
+  [-1900, -1350], [-1750, -430], [-1110, -1220],
+  // snowy biome
+  [1850, -1050], [1380, -150], [1040, -850],
+  // desert biome
+  [-180, 1260], [-270, 760], [360, 500]
 ];
 
 // when user connects
@@ -46,7 +45,6 @@ io.on("connection", function(socket) {
           spawnPos: {x: posX, y: posY},
           movement: {dir: ""},
           health: 100,
-          onCooldown: false
         });
 
         // connect user to the room
@@ -102,7 +100,6 @@ io.on("connection", function(socket) {
           spawnPos: {x: posX, y: posY},
           movement: {dir: ""},
           health: 100,
-          onCooldown: false
         });
 
         const usersForClient = [];
@@ -184,32 +181,28 @@ io.on("connection", function(socket) {
 
   // when client shoots and hits
   socket.on("shoot-hit", function({ fromX, fromY, toX, toY, hitId, damage }) {
-    if (!getUserById(users, hitId).onCooldown && !getUserById(users, socket.id).onCooldown) {
-      socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot-hit", { fromX, fromY, toX, toY, sendId: socket.id, hitId, damage });
-    
-      const hitUser = getUserById(users, hitId);
-      hitUser.health -= damage;
-      if (hitUser.health <= 0) {
-        // respawn the player
-        let tempRespawnPoints = respawnPoints.map((respPoint) => respPoint);
-        tempRespawnPoints.forEach(function(respPoint) {
-          if (respPoint[0] === hitUser.spawnPos.x && respPoint[1] === hitUser.spawnPos.y) {
-            tempRespawnPoints = tempRespawnPoints.filter(respP => respP !== respPoint);
-          }
-        });
+    socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot-hit", { fromX, fromY, toX, toY, sendId: socket.id, hitId, damage });
+  
+    const hitUser = getUserById(users, hitId);
+    hitUser.health -= damage;
+    if (hitUser.health <= 0) {
+      // respawn the player
+      let tempRespawnPoints = respawnPoints.map((respPoint) => respPoint);
+      tempRespawnPoints.forEach(function(respPoint) {
+        if (respPoint[0] === hitUser.spawnPos.x && respPoint[1] === hitUser.spawnPos.y) {
+          tempRespawnPoints = tempRespawnPoints.filter(respP => respP !== respPoint);
+        }
+      });
 
-        const [posX, posY] = tempRespawnPoints[Math.floor(Math.random() * tempRespawnPoints.length)];
+      const [posX, posY] = tempRespawnPoints[Math.floor(Math.random() * tempRespawnPoints.length)];
 
-        hitUser.pos.x = posX;
-        hitUser.pos.y = posY;
-        hitUser.spawnPos.x = posX;
-        hitUser.spawnPos.y = posY;
+      hitUser.pos.x = posX;
+      hitUser.pos.y = posY;
+      hitUser.spawnPos.x = posX;
+      hitUser.spawnPos.y = posY;
 
-        hitUser.health = 100;
-        io.to(hitUser.roomId).emit("respawn", { hitId, x: hitUser.pos.x, y: hitUser.pos.y });
-        // hitUser.onCooldown = true;
-        // setTimeout(function() {hitUser.onCooldown = false}, 3000);
-      }
+      hitUser.health = 100;
+      io.to(hitUser.roomId).emit("respawn", { hitId, x: hitUser.pos.x, y: hitUser.pos.y });
     } else {
       socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot", { fromX, fromY, toX, toY, id: socket.id});
     }
