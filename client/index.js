@@ -7,9 +7,10 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let reloadPressed = false;
-let infoPressed = false;
+let leaderboardPressed = false;
 let mapPressed = false;
 let weaponChange = false;
+let infoPressed = false;
 let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
 let obstacles = [];
 let mousePos = {
@@ -37,8 +38,10 @@ const glock = new Image();
 glock.src = "glock.png";
 const frame = new Image();
 frame.src = "frame.png";
+const info = new Image();
+info.src = "help.png";
 
-gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame);
+gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info);
 
 // constants
 const canvas = document.getElementById("myCanvas");
@@ -49,10 +52,11 @@ const KeyboardHelper = {
   up: 87,
   down: 83,
   reload: 82,
-  info: 81,
+  leaderboard: 81,
   map: 69,
   mainW: 49,
-  sideW: 50
+  sideW: 50,
+  info: 70
 };
 const mapSize = {
   width: 4000,
@@ -286,8 +290,11 @@ function redraw() {
   player.draw_health();
 
   // draw the ui
-  if (infoPressed) {
+  if (leaderboardPressed) {
     drawInfoScreen(camX, camY, player, players);
+  }
+  if (infoPressed){
+    informationUi(camX, camY);
   }
   drawWeaponComplex(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY);
   if (mapPressed) {

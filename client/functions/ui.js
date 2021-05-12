@@ -32,6 +32,19 @@ function drawInfoScreen(camX, camY, player, players) {
   ctx.fillStyle = player.color;
 }
 
+//draws help ui
+function informationUi(camX, camY){
+  const x = 288 - camX;
+  const y = 162 - camY;
+  const width = 1024;
+  const height = 576;
+  ctx.fillStyle = "#272525";
+  ctx.globalAlpha = 0.85;
+  ctx.fillRect(x, y, width, height);
+  ctx.globalAlpha = 1;
+  ctx.drawImage(info, x, y);
+}
+
 // draw a circle
 function drawCircle(x, y, r, start, finish, filled=false) {
   if (filled) {

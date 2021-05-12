@@ -12,8 +12,8 @@ function keyDownChecker(event) {
     if (event.keyCode == KeyboardHelper.up) {
         upPressed = true;
     }
-    if (event.keyCode == KeyboardHelper.info) {
-        infoPressed = true;
+    if (event.keyCode == KeyboardHelper.leaderboard) {
+        leaderboardPressed = true;
     }
     if (event.keyCode == KeyboardHelper.reload) {
         reloadPressed = true;
@@ -28,6 +28,9 @@ function keyDownChecker(event) {
     if (event.keyCode == KeyboardHelper.sideW){
         player.weapon = player.sideWeapon;
         weaponChange = true;
+    }
+    if (event.keyCode == KeyboardHelper.info){
+        infoPressed = true;
     }
   }
   
@@ -47,8 +50,8 @@ function keyDownChecker(event) {
     if (event.keyCode == KeyboardHelper.up) {
         upPressed = false;
     };
-    if (event.keyCode == KeyboardHelper.info) {
-        infoPressed = false;
+    if (event.keyCode == KeyboardHelper.leaderboard) {
+        leaderboardPressed = false;
     };
     if (event.keyCode == KeyboardHelper.reload) {
         reloadPressed = false;
@@ -56,4 +59,7 @@ function keyDownChecker(event) {
     if (event.keyCode == KeyboardHelper.map) {
         mapPressed = false;
     };
+    if (event.keyCode == KeyboardHelper.info){
+        infoPressed = false;
+    }
   };
