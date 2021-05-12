@@ -44,7 +44,6 @@ class client {
     this.health = 100; // current health
     this.maxHealth = 100;// max health
     this.healthBarH = 8;// health bar height
-    this.onCooldown = false; // player spawn cooldown
   }
 
   // Draws the player's body
