@@ -209,10 +209,10 @@ function redraw() {
   });
 
   // checks if players collide with obstacles
-  clientObsCheck(player);
+  //clientObsCheck(player);
   borderCheck(player);
   players.forEach(function(cplayer) {
-    clientObsCheck(cplayer);
+    //clientObsCheck(cplayer);
     borderCheck(cplayer);
   });
 
