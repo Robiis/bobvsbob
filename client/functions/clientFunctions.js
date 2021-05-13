@@ -143,7 +143,63 @@ CanvasRenderingContext2D.prototype.triangle = function(x1, y1, x2, y2, x3, y3) {
   return this;
 }
 
+// create the results screen
+function createResultsScreen(users, user) {
+  const parent = document.getElementById("results-list");
+  parent.innerHTML = "";
+
+  // create the results list
+  const results = [];
+  results.push({
+    kills: user.kills,
+    username: user.username,
+    damage: user.damage,
+    id: user.id
+  });
+  users.forEach(function(cuser) {
+    results.push({
+      kills: cuser.kills,
+      username: cuser.username,
+      damage: cuser.damage,
+      id: cuser.id
+    });
+  });
+
+  // sort the results list
+  results.sort(compare);
+
+  // create the results text 
+  let resultCount = 1;
+  results.forEach(function(result) {
+    const resultTag = document.createElement("li");
+    let resultText = "";
+
+    if (result.id !== user.id) {
+      resultText = document.createTextNode(`${resultCount}. ${result.username}: ${result.kills} Kills, ${result.damage} Damage dealt`);
+    } else {
+      resultText = document.createTextNode(`${resultCount}. ${result.username}(you): ${result.kills} Kills, ${result.damage} Damage dealt`);
+    }
+
+    resultTag.appendChild(resultText);
+    parent.appendChild(resultTag);
+
+    resultCount++;
+  }); 
+
+}
+
 // get user object by id
 function getUserById(users, id) {
   return users.find(user => user.id === id);
+}
+
+// compare function for sorting the kills in a list
+function compare(a, b) {
+  if (a.kills > b.kills) {
+    return -1;
+  }
+  if (a.kills < b.kills) {
+    return 1;
+  }
+  return 0;
 }

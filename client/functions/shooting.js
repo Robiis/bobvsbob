@@ -181,6 +181,7 @@ function shootingCheck(shoot) {
       if (cplayer.crossPointDistance === closePList[0] && shoot === true && cplayer.health > 0) {
         shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage);
         cplayer.health -= player.weapon.damage;
+        user.damage += player.weapon.damage;
          if (cplayer.health < 0) {
             cplayer.health = 0;
         }

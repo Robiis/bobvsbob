@@ -14,6 +14,8 @@
 </head>
 <body>
   <div class="loader"></div>
+
+  <!-- lobby -->
   <div id="lobby" class="box lobby">
     <h1>Lobby</h1>
 
@@ -34,6 +36,14 @@
     </div>
   </div>
 
+  <!-- results -->
+  <div id="results" class="box lobby">
+    <h1>Results</h1>
+    <ul id="results-list">
+    </ul>
+  </div>
+
+  <!-- errors -->
   <div id="err" class="box">
     <p id="err-msg"></p>
   </div>
@@ -46,7 +56,7 @@
   <script src="classes/player.js"></script>
   <script src="classes/obstacles.js"></script>
   <!--functions-->
-  <script src="functions/weaponComplex.js"></script>
+  <script src="functions/weaponComplexUi.js"></script>
   <script src="functions/shooting.js"></script>
   <script src="functions/border.js"></script>
   <script src="functions/imageWaiting.js"></script>

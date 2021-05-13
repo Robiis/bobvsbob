@@ -4,8 +4,8 @@ const { room, newroom } = Qs.parse(location.search, {
 });
 
 // variables
-const clientState = { gameStarted: false };
-const user = {};
+const clientState = { gameStarted: false, gameStartTime: 0, gameLength: 60 };
+const user = {kills: 0, damage: 0};
 let lastUpdate;
 let players = [];
 let player;
@@ -18,6 +18,7 @@ const playerCountDiv = document.getElementById("players-count");
 const errDiv = document.getElementById("err");
 const errMsg = document.getElementById("err-msg");
 const loader = document.querySelector(".loader");
+const resultsDiv = document.getElementById("results");
 
 // generate a random username
 user.username = `bob${Math.floor(Math.random() * 9999)}`;
@@ -44,6 +45,10 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
   console.log(`Joined room: ${roomId}, admin: ${admin}`);
 
   users = newUsers;
+  users.forEach(function(cuser) {
+    cuser.kills = 0;
+    cuser.damage = 0;
+  });
   user.id = id;
   player = new client(id, 0, 0, "#FC766AFF", user.username);
 
@@ -75,7 +80,7 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
 socket.on("connect-user", function({ id, username, admin }) {
   console.log(`User ${username} connected`);
   createAPlayerUsername(id, username);
-  users.push({ id, username, admin });
+  users.push({ id, username, admin, kills: 0, damage: 0 });
   players.push(new client(id, 0, 0, "#FC766AFF", username));
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
@@ -97,12 +102,14 @@ socket.on("err", function(err) {
     errMsg.innerHTML = "Error - Game already started <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
     canvasDiv.style.display = "none";
+    resultsDiv.style.display = "none";
   } else if (err === "err2") {
     console.log("Error - No room with that id found");
     errDiv.style.display = "block";
     errMsg.innerHTML = "Error - No room with that id found <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
     canvasDiv.style.display = "none";
+    resultsDiv.style.display = "none";
   } else if (err === "err3") {
     console.log("Error - Invalid username");
     errDiv.style.display = "block";
@@ -110,6 +117,7 @@ socket.on("err", function(err) {
     loader.style.display = "none";
     lobbyDiv.style.display = "none";
     canvasDiv.style.display = "none";
+    resultsDiv.style.display = "none";
   }
   clientState.gameStarted = false;
 });
@@ -156,14 +164,47 @@ socket.on("start-game", function(playersxy) {
     }
   });
 
+  clientState.gameStartTime = performance.now();
+
   // other game starting stuff
   clientState.gameStarted = true;
   lobbyDiv.style.display = "none";
   canvasDiv.style.display = "block";
+  resultsDiv.style.display = "none";
   document.title = "Bob vs Bob";
 
   lastUpdate = performance.now();
   redraw();
+});
+
+socket.on("stop-game", function() {
+  // screen and client setup
+  canvasDiv.style.display = "none";
+  lobbyDiv.style.display = "block";
+  resultsDiv.style.display = "block";
+  document.title = "Lobby - Bob vs Bob";
+  createResultsScreen(users, user);
+  clientState.gameStarted = false;
+
+  // weapon setup
+  player.mainWeapon.bullets = player.mainWeapon.maxBullets;
+  player.sideWeapon.bullets = player.sideWeapon.maxBullets;
+  // reload setup
+  lastShot = 1000; 
+  lastReload = 2000; 
+  reloading = false;
+  // health setup
+  player.health = 100;
+  players.forEach(function(cplayer) {
+    cplayer.health = 100;
+  });
+  // reset damage and kills
+  user.kills = 0;
+  user.damage = 0;
+  users.forEach(function(cuser) {
+    cuser.kills = 0;
+    cuser.damage = 0;
+  });
 });
 
 // when player starts moving
@@ -192,13 +233,15 @@ socket.on("shoot-hit", function({ fromX, fromY, toX, toY, sendId, hitId, damage 
   getUserById(players, sendId).shoot = {shoot: true, fromX, fromY, toX, toY};
   if (hitId === player.id){
     player.health -= damage;
-  } else{
+    getUserById(users, sendId).damage += damage;
+  } else {
     getUserById(players, hitId).health -= damage;
+    getUserById(users, sendId).damage += damage;
   }  
 });
 
 // when someone respawns
-socket.on("respawn", function({ hitId, x, y }) {
+socket.on("respawn", function({ sendId, hitId, x, y }) {
   if (player.id === hitId) {
     player.pos.x = x;
     player.pos.y = y;
@@ -207,11 +250,19 @@ socket.on("respawn", function({ hitId, x, y }) {
     lastReload = 2430;
     weapon.ak.bullets = weapon.ak.maxBullets;
     weapon.glock.bullets = weapon.glock.maxBullets;
+
+    getUserById(users, sendId).kills++;
   } else {
     const cplayer = getUserById(players, hitId);
     cplayer.pos.x = x;
     cplayer.pos.y = y;
     cplayer.health = 100;
+
+    if (sendId === user.id) {
+      user.kills++;
+    } else {
+      getUserById(users, sendId).kills++;
+    }
   }
 });
 
@@ -222,6 +273,7 @@ socket.on("disconnect", function() {
     errMsg.innerHTML = "Disconnected <br> <a href='/'>Back to menu</a>";
     lobbyDiv.style.display = "none";
     canvasDiv.style.display = "none";
+    resultsDiv.style.display = "none";
   }
   clientState.gameStarted = false;
 });

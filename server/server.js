@@ -45,6 +45,8 @@ io.on("connection", function(socket) {
           spawnPos: {x: posX, y: posY},
           movement: {dir: ""},
           health: 100,
+          kills: 0,
+          damage: 0
         });
 
         // connect user to the room
@@ -100,6 +102,8 @@ io.on("connection", function(socket) {
           spawnPos: {x: posX, y: posY},
           movement: {dir: ""},
           health: 100,
+          kills: 0,
+          damage: 0
         });
 
         const usersForClient = [];
@@ -142,6 +146,7 @@ io.on("connection", function(socket) {
     if (user.admin && room.gameStarted === false) {
       room.gameStarted = true;
 
+      // players x and y
       const playersxy = [];
       users.forEach(function(cuser) {
         if (cuser.roomId === room.roomId) {
@@ -153,7 +158,26 @@ io.on("connection", function(socket) {
         }
       });
         
+      // start the game
       io.to(room.roomId).emit("start-game", playersxy);
+
+      // stop the game
+      setTimeout(function() {
+        getRoomById(rooms, room.roomId).startRespawnPoints = respawnPoints.map((respP) => respP);
+        users.forEach(function(cuser) {
+          if (cuser.roomId === room.roomId) {
+            const [posX, posY] = newPos(room.roomId);
+
+            cuser.pos.x = posX;
+            cuser.pos.y = posY;
+            cuser.spawnPos.x = posX;
+            cuser.spawnPos.y = posY;
+          }
+        });
+
+        room.gameStarted = false;
+        io.to(room.roomId).emit("stop-game");
+      }, 60000);
     }
   });
 
@@ -181,10 +205,13 @@ io.on("connection", function(socket) {
 
   // when client shoots and hits
   socket.on("shoot-hit", function({ fromX, fromY, toX, toY, hitId, damage }) {
-    socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot-hit", { fromX, fromY, toX, toY, sendId: socket.id, hitId, damage });
-  
     const hitUser = getUserById(users, hitId);
+    const shootUser = getUserById(users, socket.id);
+
+    socket.broadcast.to(shootUser.roomId).emit("shoot-hit", { fromX, fromY, toX, toY, sendId: socket.id, hitId, damage });
+
     hitUser.health -= damage;
+    shootUser.damage += damage;
     if (hitUser.health <= 0) {
       // respawn the player
       let tempRespawnPoints = respawnPoints.map((respPoint) => respPoint);
@@ -201,10 +228,11 @@ io.on("connection", function(socket) {
       hitUser.spawnPos.x = posX;
       hitUser.spawnPos.y = posY;
 
+      shootUser.kills++;
       hitUser.health = 100;
-      io.to(hitUser.roomId).emit("respawn", { hitId, x: hitUser.pos.x, y: hitUser.pos.y });
+      io.to(hitUser.roomId).emit("respawn", { sendId: socket.id, hitId, x: hitUser.pos.x, y: hitUser.pos.y });
     } else {
-      socket.broadcast.to(getUserById(users, socket.id).roomId).emit("shoot", { fromX, fromY, toX, toY, id: socket.id});
+      socket.broadcast.to(shootUser.roomId).emit("shoot", { fromX, fromY, toX, toY, id: socket.id});
     }
   });
   // when client shoots

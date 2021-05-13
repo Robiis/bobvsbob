@@ -1,5 +1,5 @@
 // draws an info screen
-function drawInfoScreen(camX, camY, player, players) {
+function drawInfoScreen(camX, camY, users, user) {
   const x = 288 - camX;
   const y = 162 - camY;
   const width = 1024;
@@ -18,22 +18,44 @@ function drawInfoScreen(camX, camY, player, players) {
 
   ctx.fillText("LEADERBOARD", x + width/2, y + 130);
 
-  ctx.font = "50px Arial";
+  ctx.font = "20px Arial";
+
+  const tempUsers = [];
+  tempUsers.push({
+    username: user.username,
+    kills: user.kills,
+    id: user.id
+  });
+  users.forEach(function(cuser) {
+    tempUsers.push({
+      username: cuser.username,
+      kills: cuser.kills,
+      id: cuser.id
+    });
+  });
+
+  // sort the results list
+  tempUsers.sort(compare);
 
   // draws usernames
-  ctx.fillText(`${player.username}: 1 kill`, x + width/2, y + 210);
-  let yPosLoop = 290;
-  players.forEach(function(cplayer) {
-    ctx.fillText(`${cplayer.username}: 1 kill`, x + width/2, y + yPosLoop);
-    yPosLoop += 80;
+  let yPosLoop = 180;
+  let placeCount = 1;
+  tempUsers.forEach(function(cuser) {
+    if (cuser.id === user.id) {
+      ctx.fillText(`${placeCount}. ${cuser.username}(you): ${cuser.kills} Kills`, x + width/2, y + yPosLoop);
+    } else {
+      ctx.fillText(`${placeCount}. ${cuser.username}: ${cuser.kills} Kills`, x + width/2, y + yPosLoop);
+    }
+    yPosLoop += 30;
+    placeCount++;
   });
 
   ctx.textAlign = "start";
-  ctx.fillStyle = player.color;
+  ctx.fillStyle = "#FC766AFF";
 }
 
-//draws help ui
-function informationUi(camX, camY){
+// draws help ui
+function informationUi(camX, camY) {
   const x = 288 - camX;
   const y = 162 - camY;
   const width = 1024;
@@ -111,4 +133,12 @@ function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, player
       drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif, 0, 2*Math.PI, true);
     });
   }
+}
+
+// draw the timer
+function drawTimer(camX, camY, timeStarted, gameLength, timeIcon) {
+  ctx.font = "50px Arial";
+  ctx.fillStyle = "black";
+  ctx.drawImage(timeIcon, 20 - camX, 20 - camY);
+  ctx.fillText(((gameLength*1000 - (performance.now() - timeStarted))/1000).toFixed(2), 110 - camX, 95 - camY);
 }

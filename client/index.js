@@ -39,6 +39,8 @@ const frame = new Image();
 frame.src = "frame.png";
 const info = new Image();
 info.src = "help.png";
+const timeIcon = new Image();
+timeIcon.src = "timeIcon.png";
 
 gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info);
 
@@ -289,7 +291,7 @@ function redraw() {
 
   // draw the ui
   if (leaderboardPressed) {
-    drawInfoScreen(camX, camY, player, players);
+    drawInfoScreen(camX, camY, users, user);
   }
   if (infoPressed){
     informationUi(camX, camY);
@@ -300,6 +302,7 @@ function redraw() {
   } else {
     drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, bgs, false);
   }
+  drawTimer(camX, camY, clientState.gameStartTime, clientState.gameLength, timeIcon);
 
   lastUpdate = now;
   if (clientState.gameStarted) {
