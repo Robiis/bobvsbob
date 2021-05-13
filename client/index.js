@@ -12,7 +12,6 @@ let mapPressed = false;
 let weaponChange = false;
 let infoPressed = false;
 let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
-let obstacles = [];
 let mousePos = {
   x: 0,
   y: 0
@@ -112,9 +111,8 @@ const bgs = [
 ];
 const shakeLength = 3; // for how many pixels camera shakes diagonally
 const speeed = 1;
-
 // obstacles
-obstacles.push(
+const obstacles = [
   // borders
   new obstacle(0, - 1, mapSize.width, 1, "", false), // upper border
   new obstacle(0, mapSize.height, mapSize.width, 1, "", false), // lower border
@@ -141,7 +139,7 @@ obstacles.push(
   new obstacle(1700, 1700, 600, 350, "#A07855FF"),
   new obstacle(1300, 2200, 300, 600, "#A07855FF"),
   new obstacle(2400, 2200, 300, 600, "#A07855FF")
-);
+]
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
