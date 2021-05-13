@@ -327,7 +327,7 @@ camera shake -- done
 ieroči, scroll -- done
 sounds -- 
 grenade(goes through walls) -- not now
-help ui --
+help ui --  done
 weapon spray -- done
 players' obs check -- done
 */
