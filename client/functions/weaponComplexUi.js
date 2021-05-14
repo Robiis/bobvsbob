@@ -34,7 +34,10 @@ function drawWeaponComplex(reloading, reloadTime, lastReload, bullets, camX, cam
     ctx.drawImage(frame, canvas.width - player.mainWeapon.img.width - 30 - 4 - camX, canvas.height - player.mainWeapon.img.height - bulletIcon.height - 30 - 4 - camY);
   } else if (player.weapon == player.sideWeapon){
     ctx.drawImage(frame, canvas.width - player.sideWeapon.img.width - 30 - 4 - camX, canvas.height - player.sideWeapon.img.height - bulletIcon.height - 4 - player.mainWeapon.img.height - 30 - camY);
+  } else if (player.weapon == player.thirdWeapon){
+    ctx.drawImage(frame, canvas.width - player.sideWeapon.img.width - 30 - 4 - camX, canvas.height - player.sideWeapon.img.height - bulletIcon.height - 4 - player.mainWeapon.img.height - player.thirdWeapon.img.height -  30 - camY);
   }
   ctx.drawImage(player.mainWeapon.img, canvas.width - player.mainWeapon.img.width - 30 - camX, canvas.height - player.mainWeapon.img.height - bulletIcon.height - 30 - camY);
   ctx.drawImage(player.sideWeapon.img, canvas.width - player.sideWeapon.img.width - 30 - camX, canvas.height - player.sideWeapon.img.height - bulletIcon.height - player.mainWeapon.img.height - 30 - camY);
+  ctx.drawImage(player.thirdWeapon.img, canvas.width - player.sideWeapon.img.width - 30 - camX, canvas.height - player.sideWeapon.img.height - bulletIcon.height - player.mainWeapon.img.height- player.thirdWeapon.img.height - 30 - camY);
 }

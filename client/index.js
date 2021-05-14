@@ -35,6 +35,8 @@ const ak = new Image();
 ak.src = "ak.png";
 const glock = new Image();
 glock.src = "glock.png";
+const rpg = new Image();
+rpg.src = "rpg.png";
 const frame = new Image();
 frame.src = "frame.png";
 const info = new Image();
@@ -42,9 +44,10 @@ info.src = "help.png";
 const timeIcon = new Image();
 timeIcon.src = "timeIcon.png";
 
-gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info);
+gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info, rpg, timeIcon);
 
 // constants
+const decreaseDamageRatio = 3; // decrease the damage dealt
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 const KeyboardHelper = {
@@ -66,7 +69,7 @@ const mapSize = {
 const weapon = {
   ak: {
     rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
-    damage: 33,// damage dealt with each bullet
+    damage: 33/decreaseDamageRatio,// damage dealt with each bullet
     reloadTime: 2430, // reload time in milliseconds
     bullets: 30, 
     maxBullets: 30,
@@ -79,7 +82,7 @@ const weapon = {
   },
   glock:{
     rateOfFire: 1000/6.7,
-    damage: 24,
+    damage: 24/decreaseDamageRatio,
     reloadTime: 1570,
     bullets: 20,
     maxBullets: 20,
@@ -89,6 +92,19 @@ const weapon = {
     wWidth: 5,
     wLength: 20,
     wColor: "rgb(100, 113, 124)"
+  },
+  rpg:{
+    rateOfFire: 1000/0.5,
+    damage: 50,
+    reloadTime: 4000,
+    bullets: 5,
+    maxBullets: 5,
+    img: rpg,
+    shootingDist: 500,
+    spray: Math.PI / 180 * 0, // weapon's deviation, in degrees.
+    wWidth: 8,
+    wLength: 33,
+    wColor: "rgb(42, 179, 115)"
   }
 }
 const bgs = [
@@ -179,6 +195,8 @@ document.addEventListener("wheel", function(event){
   if (player.weapon == player.mainWeapon){
     player.weapon = player.sideWeapon;
   } else if (player.weapon == player.sideWeapon){
+    player.weapon = player.thirdWeapon;
+  } else if (player.weapon == player.thirdWeapon){
     player.weapon = player.mainWeapon;
   }
   weaponChange = true;
@@ -326,9 +344,12 @@ mape -- done by robis
 advenced level:
 camera shake -- done
 ieroči, scroll -- done
-sounds -- 
 grenade(goes through walls) -- not now
 help ui --  done
 weapon spray -- done
 players' obs check -- done
+sounds -- 
+random damage --
+grenade
+advanced spray(weapon follows bulletTrail) --
 */

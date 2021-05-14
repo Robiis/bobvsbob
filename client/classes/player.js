@@ -30,6 +30,7 @@ class client {
     // for shooting
     this.mainWeapon = weapon.ak; // player's main weapon
     this.sideWeapon = weapon.glock // player's pistol
+    this.thirdWeapon = weapon.rpg;
     this.weapon = this.mainWeapon;
     this.shootYes = false; // if mouse clicked
     this.theta = 0; // the angle between mouse and player
