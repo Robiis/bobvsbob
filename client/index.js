@@ -19,7 +19,7 @@ let mousePos = {
 let currentClosePoints = []; // the closest points from player to an obstacle(or to a player)
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
-let lastShot = 1000; // time lasted from the last shot(in milliseconds)
+let lastShot = 10; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
 let shake = {
@@ -60,6 +60,7 @@ const KeyboardHelper = {
   map: 69,
   mainW: 49,
   sideW: 50,
+  thirdW: 51,
   info: 70
 };
 const mapSize = {
@@ -74,7 +75,8 @@ const weapon = {
     bullets: 30, 
     maxBullets: 30,
     img: ak,
-    shootingDist: 600,
+    shootingDist: 500,
+    shootingMinDist: 0,
     spray: Math.PI / 180 * 5, // weapon's deviation, in degrees. Pēdējais koeficients norāda par cik grādiem ir spray
     wWidth: 7,
     wLength: 30,
@@ -87,7 +89,8 @@ const weapon = {
     bullets: 20,
     maxBullets: 20,
     img: glock,
-    shootingDist: 400,
+    shootingDist: 300,
+    shootingMinDist: 0,
     spray: Math.PI / 180 * 2, // weapon's deviation, in degrees.
     wWidth: 5,
     wLength: 20,
@@ -100,7 +103,9 @@ const weapon = {
     bullets: 5,
     maxBullets: 5,
     img: rpg,
-    shootingDist: 500,
+    shootingDist: 450,
+    shootingMinDist: 250,
+    damageRadius: 100, // radius of explosion
     spray: Math.PI / 180 * 0, // weapon's deviation, in degrees.
     wWidth: 8,
     wLength: 33,
@@ -262,7 +267,12 @@ function redraw() {
 
   // mouse
   mouseCoordsGet();
-  
+    
+  //draws obstacles
+  obstacles.forEach(function(obs) {
+    obs.draw();
+  });
+
   // shooting check
   if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
@@ -287,16 +297,13 @@ function redraw() {
     weaponChange = false;
   }
 
-  //draws obstacles
-  obstacles.forEach(function(obs) {
-    obs.draw();
-  });
-
   // draws players
   players.forEach(function(cplayer) {
     if (cplayer.shoot.shoot) {
       cplayer.shoot.shoot = false;
-      bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
+      if (cplayer.weapon != cplayer.thirdWeapon){
+        bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
+      }
     }
     cplayer.draw_body();
     cplayer.draw_name();
