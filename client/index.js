@@ -48,6 +48,10 @@ gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info, rpg, timeIc
 
 // constants
 const decreaseDamageRatio = 2; // decrease the damage dealt
+const bias = { // random damage
+  max: 3,
+  min: 1
+};
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 const KeyboardHelper = {
