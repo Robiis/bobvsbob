@@ -20,17 +20,17 @@ function shootingCheck(shoot) {
   if (shoot === false){
       trailColor = "rgb(255, 0, 0)";
       trailWidth = 2;
-      theta = player.theta
+      //player.theta = player.theta
   } else{
       trailColor = "black";
       trailWidth = 3;
-      theta = player.theta + (Math.random() * (player.weapon.spray + player.weapon.spray) - player.weapon.spray);
-  }
-  let coefficient = Math.tan(0 - theta);
+      player.theta += Math.random() * (player.weapon.spray + player.weapon.spray) - player.weapon.spray;
+    }
+  let coefficient = Math.tan(0 - player.theta);
   //trigonometry shit
   //gets the end point coords, if trajectory doesn't hit any obs or player
-  let eX = Math.cos(theta) * player.weapon.shootingDist;
-  let eY = Math.sin(theta) * player.weapon.shootingDist;
+  let eX = Math.cos(player.theta) * player.weapon.shootingDist;
+  let eY = Math.sin(player.theta) * player.weapon.shootingDist;
   //pushs this end point into the closest points' list, so that if no crosspoint with obs, then this will be the endpoint of trajectory
   closePList.push(eX ** 2 + eY ** 2);
   //checks the closest crosspoint with trajectory
@@ -46,19 +46,19 @@ function shootingCheck(shoot) {
             if (obs.x > player.pos.x) {
             if (obs.y + obs.height < player.pos.y) { //if obs is above player
                 //in this case the biggest angle is lu and rd, the LD is in the middles
-                if (theta >= angleLU && theta <= angleRD && theta <= angleLD) { //left of obs
+                if (player.theta >= angleLU && player.theta <= angleRD && player.theta <= angleLD) { //left of obs
                     currentClosePoints.push((obs.x - player.pos.x) ** 2 + (-coefficient * (obs.x - player.pos.x)) ** 2);
-                } else if (theta >= angleLU && theta <= angleRD && theta >= angleLD) { //down
+                } else if (player.theta >= angleLU && player.theta <= angleRD && player.theta >= angleLD) { //down
                     currentClosePoints.push((-(obs.y + obs.height - player.pos.y) / coefficient) ** 2 + (obs.y + obs.height - player.pos.y) ** 2);
                 };
             } else if (obs.y > player.pos.y) { //if it's under player
-                if (theta >= angleRU && theta <= angleLD && theta >= angleLU) { //left
+                if (player.theta >= angleRU && player.theta <= angleLD && player.theta >= angleLU) { //left
                     currentClosePoints.push((obs.x - player.pos.x) ** 2 + (-coefficient * (obs.x - player.pos.x)) ** 2);
-                } else if (theta >= angleRU && theta <= angleLD && theta <= angleLU) { //up
+                } else if (player.theta >= angleRU && player.theta <= angleLD && player.theta <= angleLU) { //up
                     currentClosePoints.push((-(obs.y - player.pos.y) / coefficient) ** 2 + (obs.y - player.pos.y) ** 2);
                 };
             } else if (obs.y + obs.height >= player.pos.y && obs.y <= player.pos.y) { //if obs is on the y = player.pos.y line
-                if (theta >= angleLU && theta <= angleLD) { //left
+                if (player.theta >= angleLU && player.theta <= angleLD) { //left
                     currentClosePoints.push((obs.x - player.pos.x) ** 2 + (-coefficient * (obs.x - player.pos.x)) ** 2);
                 };
             };
@@ -67,19 +67,19 @@ function shootingCheck(shoot) {
         else if (obs.x + obs.width < player.pos.x) {
             if (obs.y + obs.height < player.pos.y) { //if obs is above player
                 //in this case the biggest angle is lu and rd, the RD is in the middles
-                if (theta >= angleLD && theta <= angleRU && theta <= angleRD) { //down of obs
+                if (player.theta >= angleLD && player.theta <= angleRU && player.theta <= angleRD) { //down of obs
                     currentClosePoints.push((-(obs.y + obs.height - player.pos.y) / coefficient) ** 2 + (obs.y + obs.height - player.pos.y) ** 2);
-                } else if (theta >= angleLD && theta <= angleRU && theta >= angleRD) { //right
+                } else if (player.theta >= angleLD && player.theta <= angleRU && player.theta >= angleRD) { //right
                     currentClosePoints.push((-player.pos.x + obs.x + obs.width) ** 2 + (coefficient * (player.pos.x - obs.x - obs.width)) ** 2);
                 };
             } else if (obs.y > player.pos.y) { //if it's under player
-                if (theta >= angleRD && theta <= angleLU && theta >= angleRU) { //up
+                if (player.theta >= angleRD && player.theta <= angleLU && player.theta >= angleRU) { //up
                     currentClosePoints.push((-(obs.y - player.pos.y) / coefficient) ** 2 + (obs.y - player.pos.y) ** 2);
-                } else if (theta >= angleRD && theta <= angleLU && theta <= angleRU) { //right
+                } else if (player.theta >= angleRD && player.theta <= angleLU && player.theta <= angleRU) { //right
                     currentClosePoints.push((-player.pos.x + obs.x + obs.width) ** 2 + (coefficient * (player.pos.x - obs.x - obs.width)) ** 2);
                 }
             } else if (obs.y + obs.height >= player.pos.y && obs.y <= player.pos.y) { //if obs is on the y = player.pos.y line
-                if (theta >= angleRD || theta <= angleRU) { //right
+                if (player.theta >= angleRD || player.theta <= angleRU) { //right
                     currentClosePoints.push((-player.pos.x + obs.x + obs.width) ** 2 + (coefficient * (player.pos.x - obs.x - obs.width)) ** 2);
                 };
             }
@@ -87,17 +87,17 @@ function shootingCheck(shoot) {
         //if obs is in the same x line with player
         else if (obs.x + obs.width >= player.pos.x && obs.x < player.pos.x) {
             if (obs.y + obs.height < player.pos.y) { //above
-                if (theta == 1 / 2 * (0 - Math.PI)) { //if k --> -OO
+                if (player.theta == 1 / 2 * (0 - Math.PI)) { //if k --> -OO
                     currentClosePoints.push((player.pos.y - obs.y - obs.height) ** 2);
                 };
-                if (theta >= angleLD && theta <= angleRD) { //else, i.e. down
+                if (player.theta >= angleLD && player.theta <= angleRD) { //else, i.e. down
                     currentClosePoints.push((-(obs.y + obs.height - player.pos.y) / coefficient) ** 2 + (obs.y + obs.height - player.pos.y) ** 2);
                 };
             } else if (obs.y > player.pos.y) { //under
-                if (theta == 1 / 2 * Math.PI) { //if k --> OO
+                if (player.theta == 1 / 2 * Math.PI) { //if k --> OO
                     currentClosePoints.push((obs.y - player.pos.y) ** 2);
                 };
-                if (theta >= angleRU && theta <= angleLU) { //else, i.e. up
+                if (player.theta >= angleRU && player.theta <= angleLU) { //else, i.e. up
                     currentClosePoints.push((-(obs.y - player.pos.y) / coefficient) ** 2 + (obs.y - player.pos.y) ** 2);
                 };
             }
@@ -131,7 +131,7 @@ function shootingCheck(shoot) {
     let angleDelta = Math.asin(enemy.r / distance);
     let angleLarge = angle + angleDelta;
     let angleSmall = angle - angleDelta;
-    let alpha = Math.abs(theta - angle);
+    let alpha = Math.abs(player.theta - angle);
     let b = Math.sin(alpha) * distance;
     let a = Math.sqrt(enemy.r ** 2 - b ** 2);
 
@@ -139,19 +139,19 @@ function shootingCheck(shoot) {
     if (enemy.pos.x != player.pos.x || enemy.pos.y != player.pos.y) {
         //If both large and small angle are -PI < x < PI
         if (angleLarge <= Math.PI && angleSmall >= -Math.PI) {
-            if (theta >= angleSmall && theta <= angleLarge) {
+            if (player.theta >= angleSmall && player.theta <= angleLarge) {
                 currentClosePoints.push((Math.sqrt(distance ** 2 - b ** 2) - a) ** 2);
             };
         }
         //if the bigger angle is more than PI radians 
         else if (angleLarge > Math.PI) {
-            if (theta >= angleSmall || theta <= angleLarge - 2 * Math.PI) {
+            if (player.theta >= angleSmall || player.theta <= angleLarge - 2 * Math.PI) {
                 currentClosePoints.push((Math.sqrt(distance ** 2 - b ** 2) - a) ** 2);
             }
         }
         //if the smaller angle is less than -PI radians 
         else if (angleSmall < -Math.PI) {
-            if (theta <= angleLarge || theta >= angleSmall + 2 * Math.PI) {
+            if (player.theta <= angleLarge || player.theta >= angleSmall + 2 * Math.PI) {
                 currentClosePoints.push((Math.sqrt(distance ** 2 - b ** 2) - a) ** 2);
             }
         }
@@ -166,12 +166,10 @@ function shootingCheck(shoot) {
     if (currentClosePoints[0] <= player.weapon.shootingDist ** 2 && currentClosePoints[0] >= player.weapon.shootingMinDist ** 2) {
         closePList.push(currentClosePoints[0]);
         enemy.crossPointDistance = currentClosePoints[0];
-        console.log(1);
     } else if (player.weapon == player.thirdWeapon){
         if (Math.sqrt((enemy.pos.x - player.pos.x - eX) ** 2 + (enemy.pos.y - player.pos.y - eY) ** 2) <= player.weapon.damageRadius){
             if (shoot && enemy.health > 0){
-                console.log(currentClosePoints[0])
-                shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5), enemy.id, player.weapon.damage);
+                shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), enemy.id, player.weapon.damage);
                 enemy.health -= player.weapon.damage;
                 user.damage += player.weapon.damage;
                 if (enemy.health < 0) {
@@ -192,23 +190,24 @@ function shootingCheck(shoot) {
 
   // draw a bullet trail and send bullet trail to other clients
   if (player.weapon != player.thirdWeapon){
-    bulletTrail(player.pos.x, player.pos.y, player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5), trailColor, trailWidth);
+    bulletTrail(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), trailColor, trailWidth);
   } else{
-    rangeWeapon(player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5),player.weapon.damageRadius, trailColor, 3);
+    rangeWeapon(player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5),player.weapon.damageRadius, trailColor, 3);
   }
 
   //tells if the player is hurt
   players.forEach(function(cplayer) {
       if (cplayer.crossPointDistance === closePList[0] && shoot === true && cplayer.health > 0) {
-        shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage);
-        cplayer.health -= player.weapon.damage;
-        user.damage += player.weapon.damage;
+        let bias = Math.floor(Math.random() * (3-1+1)) + 1;
+        shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage + bias);
+        cplayer.health -= (player.weapon.damage + bias);
+        user.damage += (player.weapon.damage + bias);
          if (cplayer.health < 0) {
             cplayer.health = 0;
         }
       } else {
           if (shoot){
-            shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(theta) * (closePList[0] ** 0.5));
+            shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
           }
       }
       cplayer.crossPointDistance = 0;

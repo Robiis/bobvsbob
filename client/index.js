@@ -47,7 +47,7 @@ timeIcon.src = "timeIcon.png";
 gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info, rpg, timeIcon);
 
 // constants
-const decreaseDamageRatio = 3; // decrease the damage dealt
+const decreaseDamageRatio = 2; // decrease the damage dealt
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 const KeyboardHelper = {
@@ -350,13 +350,17 @@ mape -- done by robis
 
 advenced level:
 camera shake -- done
-ieroči, scroll -- done
-grenade(goes through walls) -- not now
 help ui --  done
-weapon spray -- done
-players' obs check -- done
+players' obs check -- lol no
+
 sounds -- 
-random damage --
-grenade
-advanced spray(weapon follows bulletTrail) --
+grenade(rpg) -- 
+
+optimizations:
+advanced spray(weapon follows bulletTrail) -- done
+weapon spray -- done
+ieroči, scroll -- done
+random damage -- done
+
+finite bullets count -- 
 */
