@@ -47,7 +47,9 @@ timeIcon.src = "timeIcon.png";
 gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info, rpg, timeIcon);
 
 // constants
+const shakeLength = 3; // for how many pixels camera shakes diagonally
 const decreaseDamageRatio = 2; // decrease the damage dealt
+const speeed = 1;
 const bias = { // random damage
   max: 3,
   min: 1
@@ -139,8 +141,6 @@ const bgs = [
     color: "#D4B996FF"
   }
 ];
-const shakeLength = 3; // for how many pixels camera shakes diagonally
-const speeed = 1;
 // obstacles
 const obstacles = [
   // borders
@@ -376,6 +376,5 @@ weapon spray -- done
 ieroči, scroll -- done
 random damage -- done
 finite bullets count -- done
-
-weapon shooting cooldown visual--
+weapon shooting cooldown visual -- done
 */
