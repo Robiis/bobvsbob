@@ -19,7 +19,7 @@ let mousePos = {
 let currentClosePoints = []; // the closest points from player to an obstacle(or to a player)
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
-let lastShot = 10; // time lasted from the last shot(in milliseconds)
+//let lastShot = 10; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
 let shake = {
@@ -87,7 +87,8 @@ const weapon = {
     spray: Math.PI / 180 * 5, // weapon's deviation, in degrees. Pēdējais koeficients norāda par cik grādiem ir spray
     wWidth: 7,
     wLength: 30,
-    wColor: "rgb(200, 115, 29)"
+    wColor: "rgb(200, 115, 29)",
+    lastShot: 10 // time lasted from the last shot(in milliseconds)
   },
   glock:{
     rateOfFire: 1000/6.7,
@@ -102,7 +103,8 @@ const weapon = {
     spray: Math.PI / 180 * 2, // weapon's deviation, in degrees.
     wWidth: 5,
     wLength: 20,
-    wColor: "rgb(100, 113, 124)"
+    wColor: "rgb(100, 113, 124)",
+    lastShot: 10 // time lasted from the last shot(in milliseconds)
   },
   rpg:{
     rateOfFire: 1000/0.5,
@@ -118,7 +120,8 @@ const weapon = {
     spray: Math.PI / 180 * 0, // weapon's deviation, in degrees.
     wWidth: 8,
     wLength: 33,
-    wColor: "rgb(42, 179, 115)"
+    wColor: "rgb(42, 179, 115)",
+    lastShot: 10 // time lasted from the last shot(in milliseconds)
   }
 }
 const bgs = [
@@ -281,11 +284,11 @@ function redraw() {
   });
 
   // shooting check
-  if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
+  if ((player.shootYes === true && performance.now() - player.weapon.lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
     if (player.shootYes === true){
       cameraShake();
-      lastShot = performance.now();
+      player.weapon.lastShot = performance.now();
       player.weapon.bullets--; 
     }
   }

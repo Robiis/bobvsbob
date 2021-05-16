@@ -38,28 +38,28 @@ function drawWeaponComplex(reloading, reloadTime, lastReload, bullets,remainingB
   // these image has the same rightside-margin as the mini map too
   if (player.weapon == player.mainWeapon){
     ctx.drawImage(frame, canvas.width - player.mainWeapon.img.width - 30 - 4 - camX, canvas.height - player.mainWeapon.img.height - bulletIcon.height - 30 - 8 - camY);
-    if (performance.now() - lastShot < player.weapon.rateOfFire){
+    if (performance.now() - player.weapon.lastShot < player.weapon.rateOfFire){
       // Robert nemaini šo uz let vai const jo nestrādās
       var x = canvas.width - player.weapon.img.width - 30 - camX;
-      var y = (canvas.height - player.weapon.img.height - bulletIcon.height - 30 - 4 - camY) + (1 - (performance.now() - lastShot) / player.weapon.rateOfFire) * player.weapon.img.height;
+      var y = (canvas.height - player.weapon.img.height - bulletIcon.height - 30 - 4 - camY) + (1 - (performance.now() - player.weapon.lastShot) / player.weapon.rateOfFire) * player.weapon.img.height;
     }
   } else if (player.weapon == player.sideWeapon){
     ctx.drawImage(frame, canvas.width - player.sideWeapon.img.width - 30 - 4 - camX, canvas.height - player.sideWeapon.img.height - bulletIcon.height - 8 - player.mainWeapon.img.height - 30 - camY);
-    if (performance.now() - lastShot < player.weapon.rateOfFire){
+    if (performance.now() - player.weapon.lastShot < player.weapon.rateOfFire){
       var x = canvas.width - player.weapon.img.width - 30 - camX;
-      var y = (canvas.height - player.sideWeapon.img.height - bulletIcon.height - 4 - player.mainWeapon.img.height - 30 - camY) + (1 - (performance.now() - lastShot) / player.weapon.rateOfFire) * player.weapon.img.height;
+      var y = (canvas.height - player.sideWeapon.img.height - bulletIcon.height - 4 - player.mainWeapon.img.height - 30 - camY) + (1 - (performance.now() - player.weapon.lastShot) / player.weapon.rateOfFire) * player.weapon.img.height;
       
     }
   } else if (player.weapon == player.thirdWeapon){
     ctx.drawImage(frame, canvas.width - player.sideWeapon.img.width - 30 - 4 - camX, canvas.height - player.sideWeapon.img.height - bulletIcon.height - 8 - player.mainWeapon.img.height - player.thirdWeapon.img.height -  30 - camY);
-    if (performance.now() - lastShot < player.weapon.rateOfFire){
+    if (performance.now() - player.weapon.lastShot < player.weapon.rateOfFire){
       var x = canvas.width - player.weapon.img.width - 30 - camX;
-      var y = (canvas.height - player.sideWeapon.img.height - bulletIcon.height - 4 - player.mainWeapon.img.height - player.thirdWeapon.img.height -  30 - camY) + (1 - (performance.now() - lastShot) / player.weapon.rateOfFire) * player.weapon.img.height;
+      var y = (canvas.height - player.sideWeapon.img.height - bulletIcon.height - 4 - player.mainWeapon.img.height - player.thirdWeapon.img.height -  30 - camY) + (1 - (performance.now() - player.weapon.lastShot) / player.weapon.rateOfFire) * player.weapon.img.height;
     }
   }
   
   ctx.globalAlpha = 0.30;
   ctx.fillStyle = "red";
-  ctx.fillRect(x, y, 96, (performance.now() - lastShot) / player.weapon.rateOfFire * player.weapon.img.height);
+  ctx.fillRect(x, y, 96, (performance.now() - player.weapon.lastShot) / player.weapon.rateOfFire * player.weapon.img.height);
   ctx.globalAlpha = 1;
 }
