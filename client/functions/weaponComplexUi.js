@@ -1,10 +1,10 @@
 // draws bullet count and reload animation
-function drawWeaponComplex(reloading, reloadTime, lastReload, bullets, camX, camY) {
+function drawWeaponComplex(reloading, reloadTime, lastReload, bullets,remainingBullets, camX, camY) {
   ctx.font = "40px sans-serif";
   if (!reloading) {
     // draws bullet count
     ctx.fillStyle = "black";
-    ctx.fillText(bullets, canvas.width - bulletIcon.width - 96 - 30 - camX, canvas.height - 30 - camY);
+    ctx.fillText(bullets + "/" + remainingBullets, canvas.width - bulletIcon.width - 96 - 30 - camX - 30, canvas.height - 30 - camY);
     // this image has the same margin as the mini map
     ctx.drawImage(bulletIcon, canvas.width - bulletIcon.width - 30 - camX, canvas.height - bulletIcon.height - 30 - camY);
   } else {

@@ -78,6 +78,7 @@ const weapon = {
     reloadTime: 2430, // reload time in milliseconds
     bullets: 30, 
     maxBullets: 30,
+    remainingBullets: 90,
     img: ak,
     shootingDist: 500,
     shootingMinDist: 0,
@@ -92,6 +93,7 @@ const weapon = {
     reloadTime: 1570,
     bullets: 20,
     maxBullets: 20,
+    remainingBullets: 100,
     img: glock,
     shootingDist: 300,
     shootingMinDist: 0,
@@ -106,6 +108,7 @@ const weapon = {
     reloadTime: 4000,
     bullets: 5,
     maxBullets: 5,
+    remainingBullets: 0,
     img: rpg,
     shootingDist: 450,
     shootingMinDist: 250,
@@ -288,13 +291,20 @@ function redraw() {
   }
 
   // reloading
-  if (reloadPressed && player.weapon.bullets !== player.weapon.maxBullets && reloading !== true) {
+  if (reloadPressed && player.weapon.bullets !== player.weapon.maxBullets && reloading !== true && player.weapon.remainingBullets > 0) {
     reloading = true;
     lastReload = performance.now();
   }
   if (reloading === true && performance.now() - lastReload >= player.weapon.reloadTime) {
     reloading = false;
-    player.weapon.bullets = player.weapon.maxBullets;
+    bulletsNeeded = player.weapon.maxBullets - player.weapon.bullets;
+    if (player.weapon.remainingBullets >= bulletsNeeded){
+      player.weapon.remainingBullets -= bulletsNeeded;
+      player.weapon.bullets += bulletsNeeded;
+    } else{
+      player.weapon.bullets += player.weapon.remainingBullets;
+      player.weapon.remainingBullets = 0;
+    }
   }
   if (weaponChange){  // if you change weapon, the reload stops
     reloading = false;
@@ -325,7 +335,7 @@ function redraw() {
   if (infoPressed){
     informationUi(camX, camY);
   }
-  drawWeaponComplex(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY);
+  drawWeaponComplex(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, player.weapon.remainingBullets, camX, camY);
   if (mapPressed) {
     drawMiniMap(300, 75, 1000, 750, camX, camY, player, players, obstacles, bgs, true);
   } else {
@@ -340,7 +350,7 @@ function redraw() {
 }
 
 /*
-basic level:
+**basic level**
 camera movement -- done
 map design -- kinda done
 map store -- no need 
@@ -352,7 +362,7 @@ obstacles -- done
 cartoon rooftop top view -- done
 mape -- done by robis
 
-advenced level:
+**advenced level**
 camera shake -- done
 help ui --  done
 players' obs check -- lol no
@@ -360,11 +370,12 @@ players' obs check -- lol no
 sounds -- 
 grenade(rpg) -- 
 
-optimizations:
+**optimizations**
 advanced spray(weapon follows bulletTrail) -- done
 weapon spray -- done
 ieroči, scroll -- done
 random damage -- done
+finite bullets count -- done
 
-finite bullets count -- 
+weapon shooting cooldown visual--
 */
