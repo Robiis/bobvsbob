@@ -198,10 +198,10 @@ function shootingCheck(shoot) {
   //tells if the player is hurt
   players.forEach(function(cplayer) {
       if (cplayer.crossPointDistance === closePList[0] && shoot === true && cplayer.health > 0) {
-        let bias = Math.floor(Math.random() * (bias.max-bias.min+1)) + bias.min;
-        shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage + bias);
-        cplayer.health -= (player.weapon.damage + bias);
-        user.damage += (player.weapon.damage + bias);
+        let b = Math.floor(Math.random() * (bias.max-bias.min+1)) + bias.min;
+        shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage + b);
+        cplayer.health -= (player.weapon.damage + b);
+        user.damage += (player.weapon.damage + b);
          if (cplayer.health < 0) {
             cplayer.health = 0;
         }
