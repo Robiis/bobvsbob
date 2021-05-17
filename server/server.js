@@ -163,20 +163,22 @@ io.on("connection", function(socket) {
 
       // stop the game
       setTimeout(function() {
-        getRoomById(rooms, room.roomId).startRespawnPoints = respawnPoints.map((respP) => respP);
-        users.forEach(function(cuser) {
-          if (cuser.roomId === room.roomId) {
-            const [posX, posY] = newPos(room.roomId);
+        if (getRoomById(rooms, room.roomId)) {
+          getRoomById(rooms, room.roomId).startRespawnPoints = respawnPoints.map((respP) => respP);
+          users.forEach(function(cuser) {
+            if (cuser.roomId === room.roomId) {
+              const [posX, posY] = newPos(room.roomId);
 
-            cuser.pos.x = posX;
-            cuser.pos.y = posY;
-            cuser.spawnPos.x = posX;
-            cuser.spawnPos.y = posY;
-          }
-        });
+              cuser.pos.x = posX;
+              cuser.pos.y = posY;
+              cuser.spawnPos.x = posX;
+              cuser.spawnPos.y = posY;
+            }
+          });
 
-        room.gameStarted = false;
-        io.to(room.roomId).emit("stop-game");
+          room.gameStarted = false;
+          io.to(room.roomId).emit("stop-game");
+        }
       }, 60000);
     }
   });
