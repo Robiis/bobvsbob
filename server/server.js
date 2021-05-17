@@ -162,7 +162,7 @@ io.on("connection", function(socket) {
       io.to(room.roomId).emit("start-game", playersxy);
 
       // stop the game
-      setTimeout(function() {
+      room.gameEndTimeout = setTimeout(function() {
         if (getRoomById(rooms, room.roomId)) {
           getRoomById(rooms, room.roomId).startRespawnPoints = respawnPoints.map((respP) => respP);
           users.forEach(function(cuser) {
@@ -253,6 +253,7 @@ io.on("connection", function(socket) {
 
       if (room.users.length <= 0) {
         // remove room if empty
+        clearTimeout(room.gameEndTimeout);
         rooms = rooms.filter(croom => croom.roomId !== user.roomId);
       } else {
         // set another player to admin, if player was admin
