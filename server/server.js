@@ -229,6 +229,13 @@ io.on("connection", function(socket) {
       hitUser.pos.y = posY;
       hitUser.spawnPos.x = posX;
       hitUser.spawnPos.y = posY;
+      hitUser.weapon = hitUser.mainWeapon;
+      hitUser.mainWeapon.bullets = 30;
+      hitUser.sideWeapon.bullets = 20;
+      hitUser.thirdWeapon.bullets = 5;
+      hitUser.mainWeapon.remainingBullets = 90;
+      hitUser.sideWeapon.remainingBullets = 100;
+
 
       shootUser.kills++;
       hitUser.health = 100;
