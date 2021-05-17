@@ -30,11 +30,12 @@ class client {
     // for shooting
     this.mainWeapon = weapon.ak; // player's main weapon
     this.sideWeapon = weapon.glock // player's pistol
+    this.thirdWeapon = weapon.rpg;
     this.weapon = this.mainWeapon;
     this.shootYes = false; // if mouse clicked
-    this.theta = 0; // the angle between mouse and player
     this.lastMouseX = this.pos.x + 1; // the last mouse x coordinate
     this.lastMouseY = this.pos.y;// the last mouse y coordinate
+    this.theta = Math.atan2(this.lastMouseY - this.pos.y, this.lastMouseX - this.pos.x); // the angle between mouse and player
     //this.wWidth = 5;
     //this.wLength = 25;
     //this.wColor = "black";
@@ -70,7 +71,6 @@ class client {
   draw_weapon() {
     // calculates the end point coords of weapon
     // be careful! You have to add this.r to this.weapon.wLength, because weapon.wLength is the length outside the player body(the circle)
-    this.theta = Math.atan2(this.lastMouseY - this.pos.y, this.lastMouseX - this.pos.x);
     let eX = this.pos.x + Math.cos(this.theta) * (this.weapon.wLength + this.r); // eX stands for endpoint X
     let eY = this.pos.y + Math.sin(this.theta) * (this.weapon.wLength + this.r);
     //draws the weapon

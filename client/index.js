@@ -19,7 +19,7 @@ let mousePos = {
 let currentClosePoints = []; // the closest points from player to an obstacle(or to a player)
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
-let lastShot = 1000; // time lasted from the last shot(in milliseconds)
+//let lastShot = 10; // time lasted from the last shot(in milliseconds)
 let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
 let shake = {
@@ -35,6 +35,8 @@ const ak = new Image();
 ak.src = "ak.png";
 const glock = new Image();
 glock.src = "glock.png";
+const rpg = new Image();
+rpg.src = "rpg.png";
 const frame = new Image();
 frame.src = "frame.png";
 const info = new Image();
@@ -42,9 +44,16 @@ info.src = "help.png";
 const timeIcon = new Image();
 timeIcon.src = "timeIcon.png";
 
-gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info);
+gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info, rpg, timeIcon);
 
 // constants
+const shakeLength = 3; // for how many pixels camera shakes diagonally
+const decreaseDamageRatio = 2; // decrease the damage dealt
+const speeed = 1;
+const bias = { // random damage
+  max: 3,
+  min: 1
+};
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 const KeyboardHelper = {
@@ -57,6 +66,7 @@ const KeyboardHelper = {
   map: 69,
   mainW: 49,
   sideW: 50,
+  thirdW: 51,
   info: 70
 };
 const mapSize = {
@@ -66,29 +76,52 @@ const mapSize = {
 const weapon = {
   ak: {
     rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
-    damage: 33,// damage dealt with each bullet
+    damage: 33/decreaseDamageRatio,// damage dealt with each bullet
     reloadTime: 2430, // reload time in milliseconds
     bullets: 30, 
     maxBullets: 30,
+    remainingBullets: 90,
     img: ak,
-    shootingDist: 600,
+    shootingDist: 500,
+    shootingMinDist: 0,
     spray: Math.PI / 180 * 5, // weapon's deviation, in degrees. Pēdējais koeficients norāda par cik grādiem ir spray
     wWidth: 7,
     wLength: 30,
-    wColor: "rgb(200, 115, 29)"
+    wColor: "rgb(200, 115, 29)",
+    lastShot: 10 // time lasted from the last shot(in milliseconds)
   },
   glock:{
     rateOfFire: 1000/6.7,
-    damage: 24,
+    damage: 24/decreaseDamageRatio,
     reloadTime: 1570,
     bullets: 20,
     maxBullets: 20,
+    remainingBullets: 100,
     img: glock,
-    shootingDist: 400,
+    shootingDist: 300,
+    shootingMinDist: 0,
     spray: Math.PI / 180 * 2, // weapon's deviation, in degrees.
     wWidth: 5,
     wLength: 20,
-    wColor: "rgb(100, 113, 124)"
+    wColor: "rgb(100, 113, 124)",
+    lastShot: 10 // time lasted from the last shot(in milliseconds)
+  },
+  rpg:{
+    rateOfFire: 1000/0.5,
+    damage: 50,
+    reloadTime: 4000,
+    bullets: 5,
+    maxBullets: 5,
+    remainingBullets: 0,
+    img: rpg,
+    shootingDist: 450,
+    shootingMinDist: 250,
+    damageRadius: 100, // radius of explosion
+    spray: Math.PI / 180 * 0, // weapon's deviation, in degrees.
+    wWidth: 8,
+    wLength: 33,
+    wColor: "rgb(42, 179, 115)",
+    lastShot: 10 // time lasted from the last shot(in milliseconds)
   }
 }
 const bgs = [
@@ -111,8 +144,6 @@ const bgs = [
     color: "#D4B996FF"
   }
 ];
-const shakeLength = 3; // for how many pixels camera shakes diagonally
-const speeed = 1;
 // obstacles
 const obstacles = [
   // borders
@@ -179,6 +210,8 @@ document.addEventListener("wheel", function(event){
   if (player.weapon == player.mainWeapon){
     player.weapon = player.sideWeapon;
   } else if (player.weapon == player.sideWeapon){
+    player.weapon = player.thirdWeapon;
+  } else if (player.weapon == player.thirdWeapon){
     player.weapon = player.mainWeapon;
   }
   weaponChange = true;
@@ -244,41 +277,50 @@ function redraw() {
 
   // mouse
   mouseCoordsGet();
-  
+    
+  //draws obstacles
+  obstacles.forEach(function(obs) {
+    obs.draw();
+  });
+
   // shooting check
-  if ((player.shootYes === true && performance.now() - lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
+  if ((player.shootYes === true && performance.now() - player.weapon.lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
     if (player.shootYes === true){
       cameraShake();
-      lastShot = performance.now();
+      player.weapon.lastShot = performance.now();
       player.weapon.bullets--; 
     }
   }
 
   // reloading
-  if (reloadPressed && player.weapon.bullets !== player.weapon.maxBullets && reloading !== true) {
+  if (reloadPressed && player.weapon.bullets !== player.weapon.maxBullets && reloading !== true && player.weapon.remainingBullets > 0) {
     reloading = true;
     lastReload = performance.now();
   }
   if (reloading === true && performance.now() - lastReload >= player.weapon.reloadTime) {
     reloading = false;
-    player.weapon.bullets = player.weapon.maxBullets;
+    bulletsNeeded = player.weapon.maxBullets - player.weapon.bullets;
+    if (player.weapon.remainingBullets >= bulletsNeeded){
+      player.weapon.remainingBullets -= bulletsNeeded;
+      player.weapon.bullets += bulletsNeeded;
+    } else{
+      player.weapon.bullets += player.weapon.remainingBullets;
+      player.weapon.remainingBullets = 0;
+    }
   }
   if (weaponChange){  // if you change weapon, the reload stops
     reloading = false;
     weaponChange = false;
   }
 
-  //draws obstacles
-  obstacles.forEach(function(obs) {
-    obs.draw();
-  });
-
   // draws players
   players.forEach(function(cplayer) {
     if (cplayer.shoot.shoot) {
       cplayer.shoot.shoot = false;
-      bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
+      if (cplayer.weapon != cplayer.thirdWeapon){
+        bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
+      }
     }
     cplayer.draw_body();
     cplayer.draw_name();
@@ -296,7 +338,7 @@ function redraw() {
   if (infoPressed){
     informationUi(camX, camY);
   }
-  drawWeaponComplex(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, camX, camY);
+  drawWeaponComplex(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, player.weapon.remainingBullets, camX, camY);
   if (mapPressed) {
     drawMiniMap(300, 75, 1000, 750, camX, camY, player, players, obstacles, bgs, true);
   } else {
@@ -311,7 +353,7 @@ function redraw() {
 }
 
 /*
-basic level:
+**basic level**
 camera movement -- done
 map design -- kinda done
 map store -- no need 
@@ -323,12 +365,19 @@ obstacles -- done
 cartoon rooftop top view -- done
 mape -- done by robis
 
-advenced level:
+**advenced level**
 camera shake -- done
-ieroči, scroll -- done
-sounds -- 
-grenade(goes through walls) -- not now
 help ui --  done
+players' obs check -- lol no
+
+sounds -- 
+grenade(rpg) -- 
+
+**optimizations**
+advanced spray(weapon follows bulletTrail) -- done
 weapon spray -- done
-players' obs check -- done
+ieroči, scroll -- done
+random damage -- done
+finite bullets count -- done
+weapon shooting cooldown visual -- done
 */

@@ -82,6 +82,7 @@ function drawCircle(x, y, r, start, finish, filled=false) {
 
 // draw a mini map
 function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, players, obstacles, bgs, fs=false) {
+  ctx.globalAlpha = 0.70;
   mapX = mapX - camX;
   mapY = mapY - camY;
   const mapDif = mapSize.width/mapWidth;
@@ -133,6 +134,7 @@ function drawMiniMap(mapX, mapY, mapWidth, mapHeight, camX, camY, player, player
       drawCircle(mapX+((cplayer.pos.x + mapSize.width/2)/mapDif), mapY+((cplayer.pos.y + mapSize.height/2)/mapDif), cplayer.r/mapDif, 0, 2*Math.PI, true);
     });
   }
+  ctx.globalAlpha = 1;
 }
 
 // draw the timer

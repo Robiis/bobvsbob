@@ -29,6 +29,10 @@ function keyDownChecker(event) {
         player.weapon = player.sideWeapon;
         weaponChange = true;
     }
+    if (event.keyCode == KeyboardHelper.thirdW){
+        player.weapon = player.thirdWeapon;
+        weaponChange = true;
+    }
     if (event.keyCode == KeyboardHelper.info){
         infoPressed = true;
     }
