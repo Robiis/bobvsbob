@@ -4,7 +4,8 @@ const { room, newroom } = Qs.parse(location.search, {
 });
 
 // variables
-const clientState = { gameStarted: false, gameStartTime: 0, gameLength: 60 };
+const laiks = 60;
+const clientState = { gameStarted: false, gameStartTime: 0, gameLength: laiks };
 const user = {kills: 0, damage: 0};
 let lastUpdate;
 let players = [];
@@ -189,12 +190,17 @@ socket.on("stop-game", function() {
   // weapon setup
   player.mainWeapon.bullets = player.mainWeapon.maxBullets;
   player.sideWeapon.bullets = player.sideWeapon.maxBullets;
+  player.thirdWeapon.bullets = player.thirdWeapon.maxBullets;
+  player.mainWeapon.remainingBullets = 90;
+  player.sideWeapon.remainingBullets = 100;
+  player.weapon = player.mainWeapon;
   // reload setup
   lastShot = 1000; 
   lastReload = 2000; 
   reloading = false;
   // health setup
   player.health = 100;
+
   players.forEach(function(cplayer) {
     cplayer.health = 100;
   });
@@ -248,8 +254,12 @@ socket.on("respawn", function({ sendId, hitId, x, y }) {
     player.health = 100;
     reloading = false;
     lastReload = 2430;
-    weapon.ak.bullets = weapon.ak.maxBullets;
-    weapon.glock.bullets = weapon.glock.maxBullets;
+    player.mainWeapon.bullets = player.mainWeapon.maxBullets;
+    player.sideWeapon.bullets = player.sideWeapon.maxBullets;
+    player.thirdWeapon.bullets = player.thirdWeapon.maxBullets;
+    player.mainWeapon.remainingBullets = 90;
+    player.sideWeapon.remainingBullets = 100;
+    player.weapon = player.mainWeapon;
 
     getUserById(users, sendId).kills++;
   } else {

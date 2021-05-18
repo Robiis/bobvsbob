@@ -16,6 +16,7 @@ server.listen(PORT, console.log(`Server started on port ${PORT}`));
 // rooms & users
 let rooms = [];
 let users = [];
+const laiks = 60000;
 
 // all possible player respawn points
 const respawnPoints = [
@@ -179,7 +180,7 @@ io.on("connection", function(socket) {
           room.gameStarted = false;
           io.to(room.roomId).emit("stop-game");
         }
-      }, 60000);
+      }, laiks);
     }
   });
 
