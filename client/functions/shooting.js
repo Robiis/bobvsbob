@@ -169,7 +169,7 @@ function shootingCheck(shoot) {
     } else if (player.weapon == player.thirdWeapon){
         if (Math.sqrt((enemy.pos.x - player.pos.x - eX) ** 2 + (enemy.pos.y - player.pos.y - eY) ** 2) <= player.weapon.damageRadius){
             if (shoot && enemy.health > 0){
-                shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), enemy.id, player.weapon.damage);
+                shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), enemy.id, player.weapon.damage, false);
                 enemy.health -= player.weapon.damage;
                 user.damage += player.weapon.damage;
                 if (enemy.health < 0) {
@@ -199,15 +199,24 @@ function shootingCheck(shoot) {
   players.forEach(function(cplayer) {
       if (cplayer.crossPointDistance === closePList[0] && shoot === true && cplayer.health > 0) {
         let b = Math.floor(Math.random() * (bias.max-bias.min+1)) + bias.min;
-        shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage + b);
+        if (player.weapon === player.thirdWeapon) {
+            sendRpgShoot(player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
+            shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage + b, false);
+        } else {
+            shootSendHit(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5), cplayer.id, player.weapon.damage + b, true);
+        }
         cplayer.health -= (player.weapon.damage + b);
         user.damage += (player.weapon.damage + b);
-         if (cplayer.health < 0) {
+        if (cplayer.health < 0) {
             cplayer.health = 0;
         }
       } else {
-          if (shoot){
-            shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
+          if (shoot) {
+            if (player.weapon === player.thirdWeapon) {
+                sendRpgShoot(player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
+            } else {
+                shootSend(player.pos.x, player.pos.y, player.pos.x + Math.cos(player.theta) * (closePList[0] ** 0.5), player.pos.y + Math.sin(player.theta) * (closePList[0] ** 0.5));
+            }
           }
       }
       cplayer.crossPointDistance = 0;

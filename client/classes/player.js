@@ -25,6 +25,11 @@ class client {
       toX: 0,
       toY: 0
     }
+    this.rpgShoot = {
+      shoot: false,
+      x: 0,
+      y: 0
+    }
     this.font = "20px Arial";
     this.nameColor = "black";
     // for shooting

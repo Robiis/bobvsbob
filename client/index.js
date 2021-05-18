@@ -318,9 +318,11 @@ function redraw() {
   players.forEach(function(cplayer) {
     if (cplayer.shoot.shoot) {
       cplayer.shoot.shoot = false;
-      if (cplayer.weapon != cplayer.thirdWeapon){
-        bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
-      }
+      bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
+    }
+    if (cplayer.rpgShoot.shoot) {
+      cplayer.rpgShoot.shoot = false;
+      rangeWeapon(cplayer.rpgShoot.x, cplayer.rpgShoot.y, cplayer.thirdWeapon.damageRadius, "red", 3);
     }
     cplayer.draw_body();
     cplayer.draw_name();

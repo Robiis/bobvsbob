@@ -231,12 +231,14 @@ socket.on("stop-move", function({ id, x, y }) {
 
 // when other client shoots
 socket.on("shoot", function({ fromX, fromY, toX, toY, id }) {
-  getUserById(players, id).shoot = {shoot: true, fromX, fromY, toX, toY};
+  getUserById(players, id).shoot = {shoot: true, fromX, fromY, toX, toY}
 });
 
 // when other client shoots
-socket.on("shoot-hit", function({ fromX, fromY, toX, toY, sendId, hitId, damage }) {
-  getUserById(players, sendId).shoot = {shoot: true, fromX, fromY, toX, toY};
+socket.on("shoot-hit", function({ fromX, fromY, toX, toY, sendId, hitId, damage, drawable }) {
+  if (drawable) {
+    getUserById(players, sendId).shoot = {shoot: true, fromX, fromY, toX, toY};
+  }
   if (hitId === player.id){
     player.health -= damage;
     getUserById(users, sendId).damage += damage;
@@ -244,6 +246,11 @@ socket.on("shoot-hit", function({ fromX, fromY, toX, toY, sendId, hitId, damage 
     getUserById(players, hitId).health -= damage;
     getUserById(users, sendId).damage += damage;
   }  
+});
+
+// when other client shoots rpg
+socket.on("rpg-shoot", function({ x, y, id }) {
+  getUserById(players, id).rpgShoot = { shoot: true, x, y };
 });
 
 // when someone respawns

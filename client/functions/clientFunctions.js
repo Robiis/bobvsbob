@@ -115,8 +115,13 @@ function shootSend(fromX, fromY, toX, toY) {
 }
 
 // send shooting and hit data to server
-function shootSendHit(fromX, fromY, toX, toY, hitId, damage) {
-  socket.emit("shoot-hit", { fromX, fromY, toX, toY, hitId, damage });
+function shootSendHit(fromX, fromY, toX, toY, hitId, damage, drawable) {
+  socket.emit("shoot-hit", { fromX, fromY, toX, toY, hitId, damage, drawable });
+}
+
+// send an rpg hit
+function sendRpgShoot(x, y) {
+  socket.emit("rpg-shoot", {x, y});
 }
 
 // draws a rounded rectangle
