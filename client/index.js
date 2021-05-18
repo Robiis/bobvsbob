@@ -371,9 +371,8 @@ mape -- done by robis
 camera shake -- done
 help ui --  done
 players' obs check -- lol no
-
-sounds -- 
-grenade(rpg) -- 
+sounds -- no need
+grenade(rpg) -- done
 
 **optimizations**
 advanced spray(weapon follows bulletTrail) -- done
