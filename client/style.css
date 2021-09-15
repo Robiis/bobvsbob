@@ -1,3 +1,5 @@
+/** @format */
+
 body {
   background-color: rgb(170, 222, 255);
   margin: 0;
@@ -10,30 +12,30 @@ body {
 }
 
 #myCanvas {
-  display: none;/*none/block*/
-  background-color: #A2A2A1FF;
+  display: none; /*none/block*/
+  background-color: #a2a2a1ff;
 }
 
 @media screen and (max-width: 1600px) {
   #myCanvas {
-    width: 1200px;/*Robert tu labāk neaiztiec šo citādāk būs ļoti slikti*/
+    width: 1200px; /*Robert tu labāk neaiztiec šo citādāk būs ļoti slikti*/
     height: 675px;
   }
 }
 
 @media screen and (max-width: 1200px) {
   #myCanvas {
-    width: 800px;/*šo arī neaiztiec*/
+    width: 800px; /*šo arī neaiztiec*/
     height: 450px;
   }
 }
 
-#admin { 
+#admin {
   display: none;
 }
 
-#lobby { 
-  display: none;/*none/block*/
+#lobby {
+  display: none; /*none/block*/
 }
 
 #err {
@@ -56,7 +58,8 @@ body {
   margin-bottom: 25px;
 }
 
-.box h1, h3 {
+.box h1,
+h3 {
   color: white;
   /* text-transform: uppercase; */
   font-weight: 500;
@@ -156,15 +159,54 @@ body {
 
 /* Safari */
 @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .crown {
-  color: rgb(255,215,0);
+  color: rgb(255, 215, 0);
+}
+/*joystick*/
+* {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#main {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  margin: auto;
+  width: 100vw;
+}
+
+#wrapper {
+  border: 1px solid black;
+  width: 100px;
+  height: 100px;
+}
+
+.joystick {
+  background-color: blue;
+  border-radius: 100%;
+  cursor: pointer;
+  height: 100%;
+  user-select: none;
+  width: 100%;
 }

@@ -1,71 +1,100 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="socket.io/socket.io.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js" integrity="sha512-aTKlYRb1QfU1jlF3k+aS4AqTpnTXci4R79mkdie/bp6Xm51O5O3ESAYhvg6zoicj/PD6VYY0XrYwsWLcvGiKZQ==" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-  <link rel="stylesheet" href="style.css">
+    <script src="socket.io/socket.io.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.10.1/qs.min.js"
+      integrity="sha512-aTKlYRb1QfU1jlF3k+aS4AqTpnTXci4R79mkdie/bp6Xm51O5O3ESAYhvg6zoicj/PD6VYY0XrYwsWLcvGiKZQ=="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
 
-  <title>Lobby - Bob vs Bob</title>
-</head>
-<body>
-  <div class="loader"></div>
+    <title>Lobby - Bob vs Bob</title>
+  </head>
+  <body>
+    <div class="loader"></div>
 
-  <!-- lobby -->
-  <div id="lobby" class="box lobby">
-    <h1>Lobby</h1>
+    <!-- lobby -->
+    <div id="lobby" class="box lobby">
+      <h1>Lobby</h1>
 
-    <h3>Lobby Link</h3>
-    <p id="lobby-link"></p>
-    <input type="submit" value="Copy" class="button" onclick="copyTextToClipboard(window.location.href); return false;">
+      <h3>Lobby Link</h3>
+      <p id="lobby-link"></p>
+      <input
+        type="submit"
+        value="Copy"
+        class="button"
+        onclick="copyTextToClipboard(window.location.href); return false;"
+      />
 
-    <h3 id="players-count">Players</h3>
-    <ul id="players-list"></ul>
+      <h3 id="players-count">Players</h3>
+      <ul id="players-list"></ul>
 
-    <h3>Username</h3>
-    <input type="username" class="input" id="username" autocomplete="off">
-    <input type="submit" value="Change Username" class="button" onclick="changeUsername(); return false;">
+      <h3>Username</h3>
+      <input type="username" class="input" id="username" autocomplete="off" />
+      <input
+        type="submit"
+        value="Change Username"
+        class="button"
+        onclick="changeUsername(); return false;"
+      />
 
-    <div id="admin">
-      <h3>Start</h3>
-      <input type="submit" value="Start the Game" class="button" onclick="startGame(); return false;">
+      <div id="admin">
+        <h3>Start</h3>
+        <input
+          type="submit"
+          value="Start the Game"
+          class="button"
+          onclick="startGame(); return false;"
+        />
+      </div>
+
+      <p>Tip: Press "F" in game to see the controls</p>
     </div>
 
-    <p>Tip: Press "F" in game to see the controls</p>
-  </div>
+    <!-- results -->
+    <div id="results" class="box lobby">
+      <h1>Results</h1>
+      <ul id="results-list"></ul>
+    </div>
 
-  <!-- results -->
-  <div id="results" class="box lobby">
-    <h1>Results</h1>
-    <ul id="results-list">
-    </ul>
-  </div>
+    <!-- errors -->
+    <div id="err" class="box">
+      <p id="err-msg"></p>
+    </div>
+    <!--basically, canvas size is the size of camera, but the actual size of map depends on the const "mapSize"-->
+    <canvas id="myCanvas" width="1600" height="900"></canvas>
+    <div id="main">
+      <div id="wrapper"></div>
+    </div>
 
-  <!-- errors -->
-  <div id="err" class="box">
-    <p id="err-msg"></p>
-  </div>
-  <!--basically, canvas size is the size of camera, but the actual size of map depends on the const "mapSize"-->
-  <canvas id="myCanvas" width=1600 height=900></canvas>
-
-  <script src="client.js"></script>
-  <script src="functions/clientFunctions.js"></script>
-  <!--classes-->
-  <script src="classes/player.js"></script>
-  <script src="classes/obstacles.js"></script>
-  <!--functions-->
-  <script src="functions/weaponComplexUi.js"></script>
-  <script src="functions/shooting.js"></script>
-  <script src="functions/border.js"></script>
-  <script src="functions/imageWaiting.js"></script>
-  <script src="functions/keys.js"></script>
-  <script src="functions/movement.js"></script>
-  <script src="functions/ui.js"></script>
-  <script src="index.js"></script>
-  <!--importē klases, funkcijas un tad main looop-->
-</body>
+    <script src="client.js"></script>
+    <script src="functions/clientFunctions.js"></script>
+    <!--classes-->
+    <script src="classes/player.js"></script>
+    <script src="classes/obstacles.js"></script>
+    <!--functions-->
+    <script src="functions/weaponComplexUi.js"></script>
+    <script src="functions/shooting.js"></script>
+    <script src="functions/border.js"></script>
+    <script src="functions/imageWaiting.js"></script>
+    <script src="functions/keys.js"></script>
+    <script src="functions/movement.js"></script>
+    <script src="functions/ui.js"></script>
+    <script src="functions/joystick.js"></script>
+    <script src="index.js"></script>
+    <!--importē klases, funkcijas un tad main looop-->
+  </body>
 </html>

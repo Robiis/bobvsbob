@@ -1,3 +1,5 @@
+/** @format */
+
 // settings
 focus();
 let canvasWidth = 1600; // in shooting.js it needs the REAL size of canvas, bacause sometimes style.css changes it
@@ -56,6 +58,7 @@ gaidaAtteluIeladi(
 );
 
 // constants
+const joystick = createJoystick(document.getElementById("wrapper"));
 const shakeLength = 3; // for how many pixels camera shakes diagonally
 const decreaseDamageRatio = 2; // decrease the damage dealt
 const speeed = 1;
