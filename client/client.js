@@ -313,7 +313,17 @@ socket.on("disconnect", function () {
   clientState.gameStarted = false;
 });
 
-window.addEventListener("resize", function () {
+// window.addEventListener("resize", function () {
+//   if (window.innerWidth * 9 < window.innerHeight * 16) {
+//     canvas.style.width = "100vw";
+//     canvas.style.height = "calc(100vw / 16 * 9)";
+//   } else {
+//     canvas.style.width = "calc(100vh / 9 * 16)";
+//     canvas.style.height = "100vh";
+//   }
+// });
+
+setInterval(function () {
   if (window.innerWidth * 9 < window.innerHeight * 16) {
     canvas.style.width = "100vw";
     canvas.style.height = "calc(100vw / 16 * 9)";
@@ -321,4 +331,4 @@ window.addEventListener("resize", function () {
     canvas.style.width = "calc(100vh / 9 * 16)";
     canvas.style.height = "100vh";
   }
-});
+}, 100);
