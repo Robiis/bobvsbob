@@ -1,6 +1,6 @@
 // settings
 focus();
-let canvasWidth = 1600;// in shooting.js it needs the REAL size of canvas, bacause sometimes style.css changes it
+let canvasWidth = 1600; // in shooting.js it needs the REAL size of canvas, bacause sometimes style.css changes it
 let canvasHeight = 900; // the REAL size of canvas.
 let rightPressed = false;
 let leftPressed = false;
@@ -11,11 +11,11 @@ let leaderboardPressed = false;
 let mapPressed = false;
 let weaponChange = false;
 let infoPressed = false;
-let canvasMagnificationRatio = 2;//how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
+let canvasMagnificationRatio = 2; //how many canvasMagnificationRatio ** 2 times canvas is bigger than the camera
 let mousePos = {
   x: 0,
-  y: 0
-}
+  y: 0,
+};
 let currentClosePoints = []; // the closest points from player to an obstacle(or to a player)
 let closePList = []; // the closest point from player to all obstacles and players
 let coefficient; // the slope of player's shooting trajectory
@@ -24,7 +24,7 @@ let lastReload = 2000; // time since last reload
 let reloading = false; // if reloading
 let shake = {
   x: 0,
-  y: 0
+  y: 0,
 }; // camera shake, in px
 let focused = true;
 
@@ -44,15 +44,25 @@ info.src = "help.png";
 const timeIcon = new Image();
 timeIcon.src = "timeIcon.png";
 
-gaidaAtteluIeladi(function() {}, bulletIcon, ak, glock, frame, info, rpg, timeIcon);
+gaidaAtteluIeladi(
+  function () {},
+  bulletIcon,
+  ak,
+  glock,
+  frame,
+  info,
+  rpg,
+  timeIcon
+);
 
 // constants
 const shakeLength = 3; // for how many pixels camera shakes diagonally
 const decreaseDamageRatio = 2; // decrease the damage dealt
 const speeed = 1;
-const bias = { // random damage
+const bias = {
+  // random damage
   max: 3,
-  min: 1
+  min: 1,
 };
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
@@ -67,32 +77,32 @@ const KeyboardHelper = {
   mainW: 49,
   sideW: 50,
   thirdW: 51,
-  info: 70
+  info: 70,
 };
 const mapSize = {
   width: 4000,
-  height: 3000
-}
+  height: 3000,
+};
 const weapon = {
   ak: {
-    rateOfFire: 1000/10,// 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
-    damage: 33/decreaseDamageRatio,// damage dealt with each bullet
+    rateOfFire: 1000 / 10, // 10 reizes sekundē, so katru 100 ms var izšaut vienu reizi
+    damage: 33 / decreaseDamageRatio, // damage dealt with each bullet
     reloadTime: 2430, // reload time in milliseconds
-    bullets: 30, 
+    bullets: 30,
     maxBullets: 30,
     remainingBullets: 90,
     img: ak,
     shootingDist: 500,
     shootingMinDist: 0,
-    spray: Math.PI / 180 * 5, // weapon's deviation, in degrees. Pēdējais koeficients norāda par cik grādiem ir spray
+    spray: (Math.PI / 180) * 5, // weapon's deviation, in degrees. Pēdējais koeficients norāda par cik grādiem ir spray
     wWidth: 7,
     wLength: 30,
     wColor: "rgb(200, 115, 29)",
-    lastShot: 10 // time lasted from the last shot(in milliseconds)
+    lastShot: 10, // time lasted from the last shot(in milliseconds)
   },
-  glock:{
-    rateOfFire: 1000/6.7,
-    damage: 24/decreaseDamageRatio,
+  glock: {
+    rateOfFire: 1000 / 6.7,
+    damage: 24 / decreaseDamageRatio,
     reloadTime: 1570,
     bullets: 20,
     maxBullets: 20,
@@ -100,14 +110,14 @@ const weapon = {
     img: glock,
     shootingDist: 300,
     shootingMinDist: 0,
-    spray: Math.PI / 180 * 2, // weapon's deviation, in degrees.
+    spray: (Math.PI / 180) * 2, // weapon's deviation, in degrees.
     wWidth: 5,
     wLength: 20,
     wColor: "rgb(100, 113, 124)",
-    lastShot: 10 // time lasted from the last shot(in milliseconds)
+    lastShot: 10, // time lasted from the last shot(in milliseconds)
   },
-  rpg:{
-    rateOfFire: 1000/0.5,
+  rpg: {
+    rateOfFire: 1000 / 0.5,
     damage: 50,
     reloadTime: 4000,
     bullets: 5,
@@ -117,13 +127,13 @@ const weapon = {
     shootingDist: 450,
     shootingMinDist: 250,
     damageRadius: 100, // radius of explosion
-    spray: Math.PI / 180 * 0, // weapon's deviation, in degrees.
+    spray: (Math.PI / 180) * 0, // weapon's deviation, in degrees.
     wWidth: 8,
     wLength: 33,
     wColor: "rgb(42, 179, 115)",
-    lastShot: 10 // time lasted from the last shot(in milliseconds)
-  }
-}
+    lastShot: 10, // time lasted from the last shot(in milliseconds)
+  },
+};
 const bgs = [
   {
     x1: 1600,
@@ -132,7 +142,7 @@ const bgs = [
     y2: 0,
     x3: 4000,
     y3: 3000,
-    color: "#9CC3D5FF"
+    color: "#9CC3D5FF",
   },
   {
     x1: 0,
@@ -141,13 +151,13 @@ const bgs = [
     y2: 1000,
     x3: 4000,
     y3: 3000,
-    color: "#D4B996FF"
-  }
+    color: "#D4B996FF",
+  },
 ];
 // obstacles
 const obstacles = [
   // borders
-  new obstacle(0, - 1, mapSize.width, 1, "", false), // upper border
+  new obstacle(0, -1, mapSize.width, 1, "", false), // upper border
   new obstacle(0, mapSize.height, mapSize.width, 1, "", false), // lower border
   new obstacle(-1, 0, 1, mapSize.height, "", false), // left border
   new obstacle(mapSize.width, 0, 1, mapSize.height, "", false), // right border
@@ -171,63 +181,83 @@ const obstacles = [
   new obstacle(1900, 2650, 400, 200, "#A07855FF"),
   new obstacle(1700, 1700, 600, 350, "#A07855FF"),
   new obstacle(1300, 2200, 300, 600, "#A07855FF"),
-  new obstacle(2400, 2200, 300, 600, "#A07855FF")
-]
+  new obstacle(2400, 2200, 300, 600, "#A07855FF"),
+];
 
 // eventListeners
 document.addEventListener("keydown", keyDownChecker, false);
 document.addEventListener("keyup", keyUpChecker, false);
 // gets the coords of mouse
-document.addEventListener("mousemove", function(event){
-  mousePos.x = event.clientX;
-  mousePos.y = event.clientY;
-}, false);
+document.addEventListener(
+  "mousemove",
+  function (event) {
+    mousePos.x = event.clientX;
+    mousePos.y = event.clientY;
+  },
+  false
+);
 // if click, then shooting check
-document.addEventListener("mousedown", function(event) {
-  if (event.button === 0){ // the left mouse button
-    player.shootYes = true;
-    if (player.scope){
-      player.scope = "hidden";
+document.addEventListener(
+  "mousedown",
+  function (event) {
+    if (event.button === 0) {
+      // the left mouse button
+      player.shootYes = true;
+      if (player.scope) {
+        player.scope = "hidden";
+      }
+    } else if (event.button === 2) {
+      if (player.scope) {
+        player.scope = false;
+      } else {
+        player.scope = true;
+      }
+      player.shootYes = false;
     }
-  } else if (event.button === 2){
-    if (player.scope){
-      player.scope = false;
-    }else{
-      player.scope = true;
+  },
+  false
+);
+document.addEventListener(
+  "mouseup",
+  function (event) {
+    if (event.button === 0) {
+      // the left mouse button
+      player.shootYes = false;
+      if (player.scope === "hidden") {
+        player.scope = true;
+      }
     }
-    player.shootYes = false
-  }
-}, false)
-document.addEventListener("mouseup", function(event) {
-  if (event.button === 0){ // the left mouse button
-    player.shootYes = false;
-    if (player.scope === "hidden"){
-      player.scope = true;
-    }
-  }
-}, false);
-document.addEventListener("wheel", function(event){
-  if (player.weapon == player.mainWeapon){
+  },
+  false
+);
+document.addEventListener("wheel", function (event) {
+  if (player.weapon == player.mainWeapon) {
     player.weapon = player.sideWeapon;
-  } else if (player.weapon == player.sideWeapon){
+  } else if (player.weapon == player.sideWeapon) {
     player.weapon = player.thirdWeapon;
-  } else if (player.weapon == player.thirdWeapon){
+  } else if (player.weapon == player.thirdWeapon) {
     player.weapon = player.mainWeapon;
   }
   weaponChange = true;
-})
+});
 // remove right click default actions
-window.addEventListener("contextmenu", function (e) { e.preventDefault() }, false);
+window.addEventListener(
+  "contextmenu",
+  function (e) {
+    e.preventDefault();
+  },
+  false
+);
 // checks if document has focus
-window.onblur = function() {
+window.onblur = function () {
   rightPressed = false;
   leftPressed = false;
   downPressed = false;
-  upPressed = false; 
+  upPressed = false;
   if (clientState.gameStarted) {
     socket.emit("stop-move", { x: player.pos.x, y: player.pos.y });
   }
-}
+};
 // loop--------------------------------------------------------------------------------------------------------------
 let now, dt;
 function redraw() {
@@ -237,14 +267,14 @@ function redraw() {
 
   // moves players
   movePlayer(player, dt);
-  players.forEach(function(cplayer) {
+  players.forEach(function (cplayer) {
     movePlayer(cplayer, dt);
   });
 
   // checks if players collide with obstacles
   //clientObsCheck(player);
   borderCheck(player);
-  players.forEach(function(cplayer) {
+  players.forEach(function (cplayer) {
     //clientObsCheck(cplayer);
     borderCheck(cplayer);
   });
@@ -253,76 +283,131 @@ function redraw() {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   // clears canvas
-  ctx.clearRect(-0.5*mapSize.width, -0.5*mapSize.height, mapSize.width, mapSize.height);
+  ctx.clearRect(
+    -0.5 * mapSize.width,
+    -0.5 * mapSize.height,
+    mapSize.width,
+    mapSize.height
+  );
 
   // camera movement
-  const camX = clamp(-player.pos.x + canvas.width/2 - shake.x, -0.5 * (mapSize.width - canvas.width), 0.5 * (mapSize.width + canvas.width));
-  const camY = clamp(-player.pos.y + canvas.height/2 - shake.y, -0.5 * (mapSize.height - canvas.height), 0.5 * (mapSize.height + canvas.height));
+  const camX = clamp(
+    -player.pos.x + canvas.width / 2 - shake.x,
+    -0.5 * (mapSize.width - canvas.width),
+    0.5 * (mapSize.width + canvas.width)
+  );
+  const camY = clamp(
+    -player.pos.y + canvas.height / 2 - shake.y,
+    -0.5 * (mapSize.height - canvas.height),
+    0.5 * (mapSize.height + canvas.height)
+  );
   ctx.translate(camX, camY);
 
   // resets camera shake
-  if (shake.x !== 0 && shake.y !== 0){
+  if (shake.x !== 0 && shake.y !== 0) {
     shake.x = 0;
     shake.y = 0;
   }
 
   // background
   ctx.fillStyle = "#97BC62FF";
-  ctx.fillRect(-mapSize.width/2, -mapSize.height/2, mapSize.width, mapSize.height);
+  ctx.fillRect(
+    -mapSize.width / 2,
+    -mapSize.height / 2,
+    mapSize.width,
+    mapSize.height
+  );
 
-  bgs.forEach(function(bg) {
+  bgs.forEach(function (bg) {
     ctx.fillStyle = bg.color;
-    ctx.triangle(bg.x1 - mapSize.width/2, bg.y1 - mapSize.height/2, bg.x2 - mapSize.width/2, bg.y2 - mapSize.height/2, bg.x3 - mapSize.width/2, bg.y3 - mapSize.height/2).fill();
+    ctx
+      .triangle(
+        bg.x1 - mapSize.width / 2,
+        bg.y1 - mapSize.height / 2,
+        bg.x2 - mapSize.width / 2,
+        bg.y2 - mapSize.height / 2,
+        bg.x3 - mapSize.width / 2,
+        bg.y3 - mapSize.height / 2
+      )
+      .fill();
   });
 
   // mouse
   mouseCoordsGet();
-    
+
   //draws obstacles
-  obstacles.forEach(function(obs) {
+  obstacles.forEach(function (obs) {
     obs.draw();
   });
 
   // shooting check
-  if ((player.shootYes === true && performance.now() - player.weapon.lastShot >= player.weapon.rateOfFire && reloading !== true && player.weapon.bullets > 0) || player.scope === true) {
+  if (
+    (player.shootYes === true &&
+      performance.now() - player.weapon.lastShot >= player.weapon.rateOfFire &&
+      reloading !== true &&
+      player.weapon.bullets > 0) ||
+    player.scope === true
+  ) {
     shootingCheck(player.shootYes); // if player is really shooting(not scope), then take damage from enemy
-    if (player.shootYes === true){
+    if (player.shootYes === true) {
       cameraShake();
       player.weapon.lastShot = performance.now();
-      player.weapon.bullets--; 
+      player.weapon.bullets--;
     }
   }
 
   // reloading
-  if (reloadPressed && player.weapon.bullets !== player.weapon.maxBullets && reloading !== true && player.weapon.remainingBullets > 0) {
+  if (
+    reloadPressed &&
+    player.weapon.bullets !== player.weapon.maxBullets &&
+    reloading !== true &&
+    player.weapon.remainingBullets > 0
+  ) {
     reloading = true;
     lastReload = performance.now();
   }
-  if (reloading === true && performance.now() - lastReload >= player.weapon.reloadTime) {
+  if (
+    reloading === true &&
+    performance.now() - lastReload >= player.weapon.reloadTime
+  ) {
     reloading = false;
     bulletsNeeded = player.weapon.maxBullets - player.weapon.bullets;
-    if (player.weapon.remainingBullets >= bulletsNeeded){
+    if (player.weapon.remainingBullets >= bulletsNeeded) {
       player.weapon.remainingBullets -= bulletsNeeded;
       player.weapon.bullets += bulletsNeeded;
-    } else{
+    } else {
       player.weapon.bullets += player.weapon.remainingBullets;
       player.weapon.remainingBullets = 0;
     }
   }
-  if (weaponChange){  // if you change weapon, the reload stops
+  if (weaponChange) {
+    // if you change weapon, the reload stops
     reloading = false;
     weaponChange = false;
   }
 
   // draws players
-  players.forEach(function(cplayer) {
+  players.forEach(function (cplayer) {
     if (cplayer.shoot.shoot) {
       cplayer.shoot.shoot = false;
-      bulletTrail(cplayer.shoot.fromX, cplayer.shoot.fromY, cplayer.shoot.toX, cplayer.shoot.toY, "black", 3);
+      bulletTrail(
+        cplayer.shoot.fromX,
+        cplayer.shoot.fromY,
+        cplayer.shoot.toX,
+        cplayer.shoot.toY,
+        "black",
+        3
+      );
     }
     if (cplayer.rpgShoot.shoot) {
       cplayer.rpgShoot.shoot = false;
-      rangeWeapon(cplayer.rpgShoot.x, cplayer.rpgShoot.y, cplayer.thirdWeapon.damageRadius, "red", 3);
+      rangeWeapon(
+        cplayer.rpgShoot.x,
+        cplayer.rpgShoot.y,
+        cplayer.thirdWeapon.damageRadius,
+        "red",
+        3
+      );
     }
     cplayer.draw_body();
     cplayer.draw_name();
@@ -337,16 +422,54 @@ function redraw() {
   if (leaderboardPressed) {
     drawInfoScreen(camX, camY, users, user);
   }
-  if (infoPressed){
+  if (infoPressed) {
     informationUi(camX, camY);
   }
-  drawWeaponComplex(reloading, player.weapon.reloadTime, lastReload, player.weapon.bullets, player.weapon.remainingBullets, camX, camY);
+  drawWeaponComplex(
+    reloading,
+    player.weapon.reloadTime,
+    lastReload,
+    player.weapon.bullets,
+    player.weapon.remainingBullets,
+    camX,
+    camY
+  );
   if (mapPressed) {
-    drawMiniMap(300, 75, 1000, 750, camX, camY, player, players, obstacles, bgs, true);
+    drawMiniMap(
+      300,
+      75,
+      1000,
+      750,
+      camX,
+      camY,
+      player,
+      players,
+      obstacles,
+      bgs,
+      true
+    );
   } else {
-    drawMiniMap(1270, 30, 300, 225, camX, camY, player, players, obstacles, bgs, false);
+    drawMiniMap(
+      1270,
+      30,
+      300,
+      225,
+      camX,
+      camY,
+      player,
+      players,
+      obstacles,
+      bgs,
+      false
+    );
   }
-  drawTimer(camX, camY, clientState.gameStartTime, clientState.gameLength, timeIcon);
+  drawTimer(
+    camX,
+    camY,
+    clientState.gameStartTime,
+    clientState.gameLength,
+    timeIcon
+  );
 
   lastUpdate = now;
   if (clientState.gameStarted) {
