@@ -318,9 +318,9 @@ window.addEventListener("resize", changeCanvasSize);
 function changeCanvasSize() {
   if (window.innerWidth * 9 < window.innerHeight * 16) {
     canvas.style.width = "100vw";
-    canvas.style.height = "calc(100vw / 16 * 9)";
+    canvas.style.height = `${(100 / 16) * 9}vw`;
   } else {
-    canvas.style.width = "calc(100vh / 9 * 16)";
+    canvas.style.width = `${(100 / 9) * 16}vh`;
     canvas.style.height = "100vh";
   }
 }
