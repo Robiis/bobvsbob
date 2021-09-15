@@ -10,22 +10,8 @@ body {
 }
 
 #myCanvas {
-  display: none; /*none/block*/
+  display: none;
   background-color: #a2a2a1ff;
-}
-
-@media screen and (max-width: 1600px) {
-  #myCanvas {
-    width: 1200px; /*Robert tu labāk neaiztiec šo citādāk būs ļoti slikti*/
-    height: 675px;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  #myCanvas {
-    width: 800px; /*šo arī neaiztiec*/
-    height: 450px;
-  }
 }
 
 #admin {

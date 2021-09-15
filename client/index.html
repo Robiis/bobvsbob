@@ -1,42 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./style.css">
-  <title>Bob vs Bob</title>
-</head>
-<body>
-  <div class="main">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Bob vs Bob</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="box">
+        <h1>Bob vs Bob</h1>
+        <form action="routes/joinRoom.html">
+          <input type="submit" class="button" value="Join a Room" />
+        </form>
+        <form action="routes/createRoom.html">
+          <input type="submit" class="button" value="Create a New Room" />
+        </form>
+      </div>
 
-    <div class="box">
-      <h1>Bob vs Bob</h1>
-      <form action="routes/joinRoom.html">
-        <input type="submit" class="button" value="Join a Room" />
-      </form>
-      <form action="routes/createRoom.html">
-        <input type="submit" class="button" value="Create a New Room" />
-      </form>
+      <div class="box" style="padding-top: 10px; padding-bottom: 30px">
+        <h2 style="color: white">Made by:</h2>
+        <a
+          href="https://robis.itch.io/"
+          style="font-size: 18px"
+          onmouseover="changeColor(this)"
+          onmouseout="changeColorBack(this)"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Roberts Pakārklis</a
+        ><br />
+        <a
+          href="https://jason-li.itch.io/"
+          style="font-size: 18px"
+          onmouseover="changeColor(this)"
+          onmouseout="changeColorBack(this)"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Chuhan Li</a
+        ><br />
+        <p style="font-size: 1px"></p>
+        <br />
+        <a
+          href="https://icons8.com/"
+          onmouseover="changeColor(this)"
+          onmouseout="changeColorBack(this)"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Icons from icons8.com</a
+        >
+      </div>
     </div>
 
-    <div class="box" style="padding-top: 10px;padding-bottom: 30px;">
-      <h2 style="color: white;">Made by:</h2>
-      <a href="https://robis.itch.io/" style="font-size: 18px;" onmouseover="changeColor(this)" onmouseout="changeColorBack(this)" target="_blank" rel="noopener noreferrer">Roberts Pakārklis</a><br>
-      <a href="https://jason-li.itch.io/" style="font-size: 18px;" onmouseover="changeColor(this)" onmouseout="changeColorBack(this)" target="_blank" rel="noopener noreferrer">Chuhan Li</a><br>
-      <p style="font-size: 1px;"></p><br>
-      <a href="https://icons8.com/" onmouseover="changeColor(this)" onmouseout="changeColorBack(this)" target="_blank" rel="noopener noreferrer">Icons from icons8.com</a>
-    </div>
-  </div>
-
-  <script>
-    function changeColor(x){
-      x.style.color = "rgb(170, 222, 255)";
-    }
-    function changeColorBack(x){
-      x.style.color = "white";
-    }
-
-  </script>
-</body>
+    <script>
+      function changeColor(x) {
+        x.style.color = "rgb(170, 222, 255)";
+      }
+      function changeColorBack(x) {
+        x.style.color = "white";
+      }
+    </script>
+  </body>
 </html>
