@@ -9,6 +9,11 @@ body {
   font-family: sans-serif;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 #myCanvas {
   display: none;
   background-color: #a2a2a1ff;
