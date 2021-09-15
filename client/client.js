@@ -6,7 +6,7 @@ const { room, newroom } = Qs.parse(location.search, {
 // variables
 const laiks = 60;
 const clientState = { gameStarted: false, gameStartTime: 0, gameLength: laiks };
-const user = {kills: 0, damage: 0};
+const user = { kills: 0, damage: 0 };
 let lastUpdate;
 let players = [];
 let player;
@@ -20,6 +20,7 @@ const errDiv = document.getElementById("err");
 const errMsg = document.getElementById("err-msg");
 const loader = document.querySelector(".loader");
 const resultsDiv = document.getElementById("results");
+const joymain = document.getElementById("joymain");
 
 // generate a random username
 user.username = `bob${Math.floor(Math.random() * 9999)}`;
@@ -40,13 +41,13 @@ if (newroom !== undefined) {
 }
 
 // if user joins a room
-socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
+socket.on("joined-room", function ({ id, roomId, admin, newUsers }) {
   loader.style.display = "none";
   // setTimeout(function() {loader.style.display = "none"}, 5000);
   console.log(`Joined room: ${roomId}, admin: ${admin}`);
 
   users = newUsers;
-  users.forEach(function(cuser) {
+  users.forEach(function (cuser) {
     cuser.kills = 0;
     cuser.damage = 0;
   });
@@ -63,13 +64,13 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
   }
   clientPlayerSign(id);
 
-  newUsers.forEach(function(cuser) {
+  newUsers.forEach(function (cuser) {
     createAPlayerUsername(cuser.id, cuser.username);
 
     if (cuser.admin) {
       adminPlayerCrown(cuser.id, cuser.username);
     }
-    
+
     players.push(new client(cuser.id, 0, 0, "#FC766AFF", cuser.username));
   });
 
@@ -78,7 +79,7 @@ socket.on("joined-room", function({ id, roomId, admin, newUsers }) {
 });
 
 // if another user joins the room
-socket.on("connect-user", function({ id, username, admin }) {
+socket.on("connect-user", function ({ id, username, admin }) {
   console.log(`User ${username} connected`);
   createAPlayerUsername(id, username);
   users.push({ id, username, admin, kills: 0, damage: 0 });
@@ -87,34 +88,37 @@ socket.on("connect-user", function({ id, username, admin }) {
 });
 
 // if a user disconnects from the room
-socket.on("disconnect-user", function(id) {
+socket.on("disconnect-user", function (id) {
   console.log(`User ${getUserById(users, id).username} disconnected`);
   removeAPlayerUsername(id);
-  users = users.filter(cuser => cuser.id !== id);
-  players = players.filter(cplayer => cplayer.id !== id);
+  users = users.filter((cuser) => cuser.id !== id);
+  players = players.filter((cplayer) => cplayer.id !== id);
   playerCountDiv.innerHTML = `Players (${users.length + 1})`;
 });
 
 // if an error from the server is sent
-socket.on("err", function(err) { 
+socket.on("err", function (err) {
   if (err === "err1") {
     console.log("Error - Game already started");
     errDiv.style.display = "block";
-    errMsg.innerHTML = "Error - Game already started <br> <a href='/'>Back to menu</a>";
+    errMsg.innerHTML =
+      "Error - Game already started <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
     canvasDiv.style.display = "none";
     resultsDiv.style.display = "none";
   } else if (err === "err2") {
     console.log("Error - No room with that id found");
     errDiv.style.display = "block";
-    errMsg.innerHTML = "Error - No room with that id found <br> <a href='/'>Back to menu</a>";
+    errMsg.innerHTML =
+      "Error - No room with that id found <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
     canvasDiv.style.display = "none";
     resultsDiv.style.display = "none";
   } else if (err === "err3") {
     console.log("Error - Invalid username");
     errDiv.style.display = "block";
-    errMsg.innerHTML = "Error - Invalid username <br> <a href='/'>Back to menu</a>";
+    errMsg.innerHTML =
+      "Error - Invalid username <br> <a href='/'>Back to menu</a>";
     loader.style.display = "none";
     lobbyDiv.style.display = "none";
     canvasDiv.style.display = "none";
@@ -124,12 +128,12 @@ socket.on("err", function(err) {
 });
 
 // if server asks to redirect, redirect
-socket.on("redirect", function(destination) {
+socket.on("redirect", function (destination) {
   window.location.href = destination;
 });
 
 // if admin changes...
-socket.on("admin-change", function(id) {
+socket.on("admin-change", function (id) {
   if (user.id !== id) {
     const username = getUserById(users, id).username;
     adminPlayerCrown(id, username);
@@ -143,19 +147,19 @@ socket.on("admin-change", function(id) {
 });
 
 // if a player updates their username
-socket.on("change-username", function({ id, newUsername }) {
+socket.on("change-username", function ({ id, newUsername }) {
   getUserById(users, id).username = newUsername;
   getUserById(players, id).username = newUsername;
   updatePlayerUsername(id, newUsername);
   if (getUserById(users, id).admin) {
     adminPlayerCrown(id, newUsername);
-  } 
-}); 
+  }
+});
 
 // when admin starts the game
-socket.on("start-game", function(playersxy) {
+socket.on("start-game", function (playersxy) {
   // change players position
-  playersxy.forEach(function(cplayer) {
+  playersxy.forEach(function (cplayer) {
     if (cplayer.id !== player.id) {
       getUserById(players, cplayer.id).pos.x = cplayer.x;
       getUserById(players, cplayer.id).pos.y = cplayer.y;
@@ -172,17 +176,19 @@ socket.on("start-game", function(playersxy) {
   lobbyDiv.style.display = "none";
   canvasDiv.style.display = "block";
   resultsDiv.style.display = "none";
+  joymain.style.display = "flex";
   document.title = "Bob vs Bob";
 
   lastUpdate = performance.now();
   redraw();
 });
 
-socket.on("stop-game", function() {
+socket.on("stop-game", function () {
   // screen and client setup
   canvasDiv.style.display = "none";
   lobbyDiv.style.display = "block";
   resultsDiv.style.display = "block";
+  joymain.style.display = "none";
   document.title = "Lobby - Bob vs Bob";
   createResultsScreen(users, user);
   clientState.gameStarted = false;
@@ -195,26 +201,26 @@ socket.on("stop-game", function() {
   player.sideWeapon.remainingBullets = 100;
   player.weapon = player.mainWeapon;
   // reload setup
-  lastShot = 1000; 
-  lastReload = 2000; 
+  lastShot = 1000;
+  lastReload = 2000;
   reloading = false;
   // health setup
   player.health = 100;
 
-  players.forEach(function(cplayer) {
+  players.forEach(function (cplayer) {
     cplayer.health = 100;
   });
   // reset damage and kills
   user.kills = 0;
   user.damage = 0;
-  users.forEach(function(cuser) {
+  users.forEach(function (cuser) {
     cuser.kills = 0;
     cuser.damage = 0;
   });
 });
 
 // when player starts moving
-socket.on("start-move", function({ id, dir, x, y }) {
+socket.on("start-move", function ({ id, dir, x, y }) {
   const cplayer = getUserById(players, id);
   cplayer.pos.x = x;
   cplayer.pos.y = y;
@@ -222,7 +228,7 @@ socket.on("start-move", function({ id, dir, x, y }) {
 });
 
 // when player stops moving
-socket.on("stop-move", function({ id, x, y }) {
+socket.on("stop-move", function ({ id, x, y }) {
   const cplayer = getUserById(players, id);
   cplayer.pos.x = x;
   cplayer.pos.y = y;
@@ -230,31 +236,40 @@ socket.on("stop-move", function({ id, x, y }) {
 });
 
 // when other client shoots
-socket.on("shoot", function({ fromX, fromY, toX, toY, id }) {
-  getUserById(players, id).shoot = {shoot: true, fromX, fromY, toX, toY}
+socket.on("shoot", function ({ fromX, fromY, toX, toY, id }) {
+  getUserById(players, id).shoot = { shoot: true, fromX, fromY, toX, toY };
 });
 
 // when other client shoots
-socket.on("shoot-hit", function({ fromX, fromY, toX, toY, sendId, hitId, damage, drawable }) {
-  if (drawable) {
-    getUserById(players, sendId).shoot = {shoot: true, fromX, fromY, toX, toY};
+socket.on(
+  "shoot-hit",
+  function ({ fromX, fromY, toX, toY, sendId, hitId, damage, drawable }) {
+    if (drawable) {
+      getUserById(players, sendId).shoot = {
+        shoot: true,
+        fromX,
+        fromY,
+        toX,
+        toY,
+      };
+    }
+    if (hitId === player.id) {
+      player.health -= damage;
+      getUserById(users, sendId).damage += damage;
+    } else {
+      getUserById(players, hitId).health -= damage;
+      getUserById(users, sendId).damage += damage;
+    }
   }
-  if (hitId === player.id){
-    player.health -= damage;
-    getUserById(users, sendId).damage += damage;
-  } else {
-    getUserById(players, hitId).health -= damage;
-    getUserById(users, sendId).damage += damage;
-  }  
-});
+);
 
 // when other client shoots rpg
-socket.on("rpg-shoot", function({ x, y, id }) {
+socket.on("rpg-shoot", function ({ x, y, id }) {
   getUserById(players, id).rpgShoot = { shoot: true, x, y };
 });
 
 // when someone respawns
-socket.on("respawn", function({ sendId, hitId, x, y }) {
+socket.on("respawn", function ({ sendId, hitId, x, y }) {
   if (player.id === hitId) {
     player.pos.x = x;
     player.pos.y = y;
@@ -284,7 +299,7 @@ socket.on("respawn", function({ sendId, hitId, x, y }) {
 });
 
 // if user is diconnected from the server
-socket.on("disconnect", function() {
+socket.on("disconnect", function () {
   if (errDiv.style.display !== "block") {
     errDiv.style.display = "block";
     errMsg.innerHTML = "Disconnected <br> <a href='/'>Back to menu</a>";
