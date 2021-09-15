@@ -315,6 +315,11 @@ socket.on("disconnect", function () {
 
 window.addEventListener("resize", changeCanvasSize);
 
+window.onresize = function () {
+  document.body.height = window.innerHeight;
+};
+window.onresize(); // called to initially set the height.
+
 function changeCanvasSize() {
   if (window.innerWidth * 9 < window.innerHeight * 16) {
     canvas.style.width = "100vw";
