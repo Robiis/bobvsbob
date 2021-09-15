@@ -177,10 +177,10 @@ socket.on("start-game", function (playersxy) {
   lobbyDiv.style.display = "none";
   canvasDiv.style.display = "block";
   resultsDiv.style.display = "none";
-  canvas.style.width = "calc(100vh / 9 * 16)";
-  canvas.style.height = "100vh";
   // joymain.style.display = "flex";
   document.title = "Bob vs Bob";
+
+  changeCanvasSize();
 
   lastUpdate = performance.now();
   redraw();
@@ -313,17 +313,9 @@ socket.on("disconnect", function () {
   clientState.gameStarted = false;
 });
 
-// window.addEventListener("resize", function () {
-//   if (window.innerWidth * 9 < window.innerHeight * 16) {
-//     canvas.style.width = "100vw";
-//     canvas.style.height = "calc(100vw / 16 * 9)";
-//   } else {
-//     canvas.style.width = "calc(100vh / 9 * 16)";
-//     canvas.style.height = "100vh";
-//   }
-// });
+window.addEventListener("resize", changeCanvasSize);
 
-setInterval(function () {
+function changeCanvasSize() {
   if (window.innerWidth * 9 < window.innerHeight * 16) {
     canvas.style.width = "100vw";
     canvas.style.height = "calc(100vw / 16 * 9)";
@@ -331,4 +323,4 @@ setInterval(function () {
     canvas.style.width = "calc(100vh / 9 * 16)";
     canvas.style.height = "100vh";
   }
-}, 100);
+}
