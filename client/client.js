@@ -159,6 +159,8 @@ socket.on("change-username", function ({ id, newUsername }) {
 
 // when admin starts the game
 socket.on("start-game", function (playersxy) {
+  document.body.style.overflow = "hidden";
+
   // change players position
   playersxy.forEach(function (cplayer) {
     if (cplayer.id !== player.id) {
@@ -187,6 +189,8 @@ socket.on("start-game", function (playersxy) {
 });
 
 socket.on("stop-game", function () {
+  document.body.style.overflow = "auto";
+
   // screen and client setup
   canvasDiv.style.display = "none";
   lobbyDiv.style.display = "block";
