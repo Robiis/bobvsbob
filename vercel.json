@@ -1,10 +1,16 @@
 {
-   "version": 2,
-   "name": "bobvsbob",
-   "builds": [
-      { "src": "server/server.js", "use": "@vercel/node" }
-   ],
-   "routes": [
-      { "src": "/server", "dest": "/server.js" }
-   ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "./server/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    
+    {
+      "src": "/(.*)",
+      "dest": "./server/server.js"
+    }
+  ]
 }
